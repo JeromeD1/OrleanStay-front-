@@ -1,1 +1,82 @@
 /* You can add global styles to this file, and also import other style files */
+@import "../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
+
+
+:root {
+--h1FontSize:3rem;
+--h2FontSize:2rem;
+--gpFontSize:1.5rem;
+--mpFontSize:1.25rem;
+--ppFontSize: 1.1rem;
+--tppFontSize: 1rem;
+--colorBrand: #FFC2BA;
+--colorDarkest: #4D5460;
+--colorDark: #8F8B90;
+--colorMid: #C1D6D6;
+--colorLight:#FAE7E1;
+--colorLightest: #FAFAFA;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+p, label, input, select, textarea, a {
+    font-size: var(--ppFontSize);
+    text-decoration: none;
+}
+
+span {
+    font-size: var(--tppFontSize);
+    color: rgb(150,0,0);
+}
+
+button {
+    font-size: var(--mpFontSize);
+}
+
+h1{
+    font-size: var(--h2FontSize);
+}
+
+@media screen and (max-width:1000px) {
+
+
+    :root {
+        --h1FontSize:2.55rem;
+        --h2FontSize:1.8rem;
+        --gpFontSize:1.4rem;
+        --mpFontSize:1.1rem;
+        --ppFontSize: 1rem;
+        --tppFontSize: 0.9rem;
+        }
+}
+
+@media screen and (max-width:800px) {
+:root {
+    --h1FontSize:2.2rem;
+    --h2FontSize:1.6rem;
+    --gpFontSize:1.3rem;
+    --buttonFontSize:1rem;
+    --ppFontSize: 0.9rem;
+    --tppFontSize: 0.85rem;
+
+    }
+}
+
+@media screen and (max-width:600px) {
+:root {
+    --h1FontSize:1.9rem;
+    --h2FontSize:1.4rem;
+    --gpFontSize:1.2rem;
+    --buttonFontSize:0.9rem;
+    --ppFontSize: 0.85rem;
+    --tppFontSize: 0.8rem;
+
+    }
+}

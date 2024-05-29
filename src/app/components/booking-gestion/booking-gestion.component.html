@@ -1,0 +1,22 @@
+<main class="main-booking-gestion">
+
+    <section class="travellingChoices" *ngIf="userReservation()">
+        <app-travelling-choices [userReservation]="userReservation()" (reservationChange)="updateTravellerData($event)" ></app-travelling-choices>
+    </section>
+    
+
+    <section class="showAppartments">
+        <p *ngIf="!userReservation()?.checkinDate || !userReservation()?.checkoutDate || userReservation()?.nbAdult === 0" >Utilisez la barre de recherche ci-dessus pour rechercher uniquement les logements disponibles.</p>
+    </section>
+    
+    <!-- <section class="section-show-appartments-cards">
+        <div *ngFor="let appartment of filteredAppartments">
+            <app-appartment-card 
+            [appartment]="appartment" 
+            [traveller]="traveller" 
+            [appartments]="appartments"
+            [discount]="discount"
+            ></app-appartment-card>
+        </div>
+    </section> -->
+</main>

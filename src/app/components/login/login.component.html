@@ -1,0 +1,29 @@
+<main>
+    <form #loginForm="ngForm" (ngSubmit)="loginForm.valid && onSubmit()">
+        <h1>Connexion</h1>
+        <div>
+            <label>Login : </label>
+            <input type="text" placeholder="Votre email" #inputLogin="ngModel" [(ngModel)]="login" name="inputLogin" required>
+        </div>
+
+        <ng-container *ngIf="inputLogin.errors && loginForm.submitted">
+            <span *ngIf="inputLogin.errors?.['required']">Champ obligatoire</span>
+        </ng-container>
+
+        <div>
+            <label>Mot de passe : </label>
+            <input type="password" placeholder="Votre mot de passe" #inputPassword="ngModel" [(ngModel)]="password" name="inputPassword" required>
+        </div>
+
+        <ng-container *ngIf="inputPassword.errors && loginForm.submitted">
+            <span *ngIf="inputPassword.errors?.['required']">Champ obligatoire</span>
+        </ng-container>
+
+        <span *ngIf="wrongUserMessage">{{wrongUserMessage}}</span>
+
+        <div class="div-button">
+            <button type="button" (click)="closeLogin()" >Annuler</button>
+            <button type="submit">Se connecter</button>
+        </div>
+    </form>
+</main>

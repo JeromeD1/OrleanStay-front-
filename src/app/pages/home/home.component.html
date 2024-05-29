@@ -1,0 +1,28 @@
+<main>
+    <section class="openImage" (click)="onClickSeveralTimes()">
+        <div id="landingPage">
+            <img src="../assets/global-pictures/landingPagePicture2.png" alt="locations à Orléans" (load)="onImageLoad($event)">
+
+        </div>
+        <div id="nuage">
+            <img src="../assets/global-pictures/nuages.png" alt="nuages" >
+        </div>
+    </section>
+
+
+    <section class="description">
+        <h1>Location de type airbnb à Orléans</h1>
+        <p>Vous recherchez un appartement pour un ou plusieurs jours à Orléans,</p>
+        <p>vous trouverez ci dessous les logements que nous vous proposons !</p>
+    </section>
+
+    <section class="home-booking-gestion">
+        <app-booking-gestion></app-booking-gestion>
+    </section>
+
+    <app-login
+    *ngIf="showLogin"
+    (closeEmitter)="closeLogin()"
+    ></app-login>
+    
+</main>

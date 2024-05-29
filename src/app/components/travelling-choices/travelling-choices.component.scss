@@ -1,0 +1,286 @@
+main {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 95vw;
+    max-width: 1600px;
+    padding: 10px 50px;
+    height: 150px;
+    border-radius: 150px;
+    background-color: var(--colorMid);
+
+    .titre {
+        display: flex;
+        align-items: center;
+        width: 10%;
+        height: 80px;
+        border-right: 3px solid var(--colorDark);
+
+        h1 {
+            margin: 0;
+            font-size: var(--gpFontSize);
+
+        }
+
+      
+    }
+
+
+    .data {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        width: 70%;
+
+        .choiceContainer {
+            position: relative;
+            width: 30%;
+            height: 130px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px;
+            align-items: center;
+            // border: 1px solid blue;
+
+            h2 {
+                margin: 0;
+                font-size: var(--mpFontSize);
+            }
+
+            .button-container {
+                position: relative;
+                width: 100%;
+                max-width: 250px;
+                // border: 1px solid red;
+               
+
+                img {
+                    position: absolute;
+                    top: 12px;
+                    right: -31px;
+                    width: 31px;
+                    height: auto;
+    
+                    &:hover {
+                        cursor: pointer;
+                        filter: sepia();
+                    }
+                }
+            }
+
+            .formFieldContainer {
+                height: 55px;
+                width: 100%;
+                margin: 0;
+                max-width: 250px;
+                position: relative;
+
+                mat-form-field {
+                    width: 100%;
+                    max-width: 250px;
+                    font-size: var(--ppFontSize);
+                }
+
+                img {
+                    position: absolute;
+                    top: 12px;
+                    right: -31px;
+                    width: 31px;
+                    height: auto;
+
+                    &:hover {
+                        cursor: pointer;
+                        filter: sepia();
+                    }
+                }
+            }
+
+            button {
+                width: 100%;
+                max-width: 250px;
+                height: 55px;
+                margin: 0;
+                background-color: var(--colorLightest);
+                border: none;
+                box-shadow: 0px 1px 0px 1px rgb(230, 230, 230);
+                background-color: rgb(245, 245, 245);
+                color: rgb(98, 98, 98);
+                font-family: 700;
+                font-size: 1rem;
+                text-align: left;
+                padding: 20px;
+
+                &:hover {
+                    background-color: rgb(236, 236, 236);
+                    cursor: pointer;
+                }
+            }
+           
+            .voyagerNumber {
+                position: absolute;
+                z-index: 5;
+                right: 0;
+                top: 180px;
+            }
+        }
+    }
+
+    .validation {
+        width: 10%;
+        height: 75px;
+        border-left: 3px solid var(--colorDark);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+            height: 60px;
+            width: auto;
+            cursor: pointer;
+            transition: transform ease 0.5s;
+
+            &:hover {
+                
+                filter: sepia();
+                transform: scale(1.1);
+            }
+
+            &.disabled {
+                cursor: auto;
+                opacity: 0.3;
+                
+                &:hover {
+                    transform: none;
+                    filter: none;
+                }
+            }
+
+            &.animated {
+                border-radius: 35%;
+                animation: clickMe 2.5s ease infinite;
+            }
+        }
+
+    }
+}
+
+
+.smallScreen {
+    display: none;
+}
+
+
+
+@keyframes clickMe {
+    0%{
+        box-shadow: 0 0 1px 1px red;
+    }
+    50%{
+        box-shadow: 0 0 10px 10px red;
+    }
+    100%{
+        box-shadow: 0 0 1px 1px red;
+    }
+}
+
+
+@media screen and (max-width:1000px) {
+    main {
+
+        padding: 16px;
+
+    
+        .titre {
+            width: 10%;
+        }
+    
+    
+        .data {
+            width: 74%;
+        }
+    
+        .validation {
+            width: 10%;
+    
+        }
+    }
+}
+
+@media screen and (max-width:800px) {
+    main {
+
+
+        .data {
+            width: 78%;
+        }
+
+    }
+}
+
+
+@media screen and (max-width:700px) {
+
+    .bigscreen {
+        display: none;
+    }
+
+    .smallScreen{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 24px;
+        box-sizing: border-box;
+        // border: 8px solid var(--colorMid;
+        box-shadow: 0px 0px 6px 8px var(--colorMid);
+        background-color: var(--colorLightest);
+        padding: 8px;
+        height: auto;
+    
+        &:hover {
+            background-color: var(--colorLight);
+            box-shadow: 0px 0px 6px 8px var(--colorDark);
+    
+            cursor: pointer;
+    
+            img {
+                filter: sepia();
+            }
+    
+            div {
+    
+                p {
+                    color: var(--colorDark);
+                }
+            }
+      
+        }
+    
+        img {
+            width: 40px;
+            height: auto;
+            border-radius: 50%;
+        }
+    
+        div {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            gap: 4px;
+            margin: 0;
+    
+            h2, p {
+                margin: 0;
+                padding: 0;
+            }
+    
+            p {
+                color: var(--colorDarkest);
+            }
+        }
+    }
+}

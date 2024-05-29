@@ -1,0 +1,46 @@
+<main class="main-chooseVoyager">
+    <section class="chooseVoyager-adult">
+        <div class="chooseVoyager-who">
+            <h1>Adultes</h1>
+            <p>13 ans et plus</p>
+        </div>
+        <div class="chooseVoyager-number">
+            <img src="../../../../../../assets/icons/icon-moins.png" 
+            (click)="travellerNumbers.numberAdult > 0 && removeAdult()" 
+            [class.minusDisabled]="travellerNumbers.numberAdult === 0"
+            alt="moins">
+            <p>{{travellerNumbers.numberAdult}} </p>
+            <img src="../../../../../../assets/icons/icon-plus.png" (click)="addAdult()" alt="plus">
+        </div>
+    </section>
+
+    <section>
+        <div class="chooseVoyager-who">
+            <h1>Enfants</h1>
+            <p>De 2 à 12 ans</p>
+        </div>
+        <div class="chooseVoyager-number">
+            <img src="../../../../../../assets/icons/icon-moins.png" 
+            (click)="travellerNumbers.numberChild > 0 && removeChild()" 
+            [class.minusDisabled]="travellerNumbers.numberChild === 0"
+            alt="moins">
+            <p>{{travellerNumbers.numberChild}}</p>
+            <img src="../../../../../../assets/icons/icon-plus.png"  (click)="addChild()"alt="plus">
+        </div>
+    </section>
+
+    <section>
+        <div class="chooseVoyager-who">
+            <h1>Bébés</h1>
+            <p>- de 2 ans</p>
+        </div>
+        <div class="chooseVoyager-number">
+            <img src="../../../../../../assets/icons/icon-moins.png" 
+            (click)="travellerNumbers.numberBaby >0 && removeBaby()" 
+            [class.minusDisabled]="travellerNumbers.numberBaby === 0"
+            alt="moins">
+            <p>{{travellerNumbers.numberBaby}}</p>
+            <img src="../../../../../../assets/icons/icon-plus.png" (click)="addBaby()" alt="plus">
+        </div>
+    </section>
+</main>

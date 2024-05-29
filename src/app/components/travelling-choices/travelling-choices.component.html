@@ -1,0 +1,92 @@
+<main class="bigscreen">
+    <section class="titre">
+        <h1>Votre séjour</h1>
+    </section>
+    
+        <section class="data">
+           
+       
+       <div class="choiceContainer">
+        <h2>Arrivée</h2>
+        <div class="formFieldContainer">
+            <mat-form-field >
+                <input matInput [matDatepicker]="checkinDate" 
+                [(ngModel)]="checkinDateValue" 
+                placeholder="Quand ?"
+                [min]="minCheckinDate"
+                [max]="maxCheckinDate"
+                >
+
+                <mat-datepicker-toggle matSuffix [for]="checkinDate"></mat-datepicker-toggle>
+                <mat-datepicker #checkinDate></mat-datepicker>
+              </mat-form-field>
+              <img [src]="imgBalai" alt="effacer" *ngIf="checkinDateValue" (click)="deleteCheckinDateValue()" title="Effacer"/>
+
+        </div>
+       </div>
+
+       <div class="choiceContainer">
+        <h2>Départ</h2>
+        <div class="formFieldContainer">
+            <mat-form-field >
+                <input matInput [matDatepicker]="checkoutDate" 
+                [(ngModel)]="checkoutDateValue" 
+                placeholder="Quand ?"
+                [min]="minCheckoutDate"
+                [max]="maxCheckoutDate"
+                >
+                <mat-datepicker-toggle matSuffix [for]="checkoutDate"></mat-datepicker-toggle>
+                <mat-datepicker #checkoutDate></mat-datepicker>
+              </mat-form-field>
+              <img [src]="imgBalai" alt="effacer" *ngIf="checkoutDateValue" (click)="deleteCheckoutDateValue()" title="Effacer"/>
+        </div>
+       </div>
+
+       <div class="choiceContainer">
+            <h2>Voyageurs</h2>
+            <div class="button-container">
+                <button type="button" (click)="changeChooseVoyager()" >{{textTravellerNumber}} </button>
+                <img [src]="imgBalai" alt="effacer" *ngIf="textTravellerNumber !== 'Combien ?'" (click)="deleteTravellers()" title="Effacer"/>
+            </div>
+
+           <div class="voyagerNumber" *ngIf="showChooseVoyager" (mouseleave)="changeChooseVoyager()" >
+            <app-choose-voyagers [travellerNumbers]="travellerNumbers" (travellerUpdate)="updateTravellerNumbers($event)" ></app-choose-voyagers>
+           </div>
+       </div>
+       
+       
+       
+        </section>
+
+        <section class="validation">
+            <img  [class.disabled]="!checkinDateValue || !checkoutDateValue || travellerNumbers.numberAdult === 0"  
+            [class.animated]="isResearchAnimated"
+            src="../../../../../../assets/icons/icons8-loupe.png" 
+            alt="rechercher" 
+            [title]="!checkinDateValue || !checkoutDateValue || travellerNumbers.numberAdult === 0 ? 'Veuillez remplir tous les champs pour lancer une recherche' : 'Rechercher les logements disponibles' "
+            (click)="onStartResearch()"> 
+        </section>
+    
+</main>
+
+
+
+<main class="smallScreen" (click)="setShowTravellingChoiceSmallScreen()">
+    <img   
+    src="../../../../../../assets/icons/icons8-loupe.png" 
+    alt="rechercher" 
+    > 
+    <div>
+        <h2>Rechercher</h2>
+        <p>Choix des dates et des voyageurs</p>
+    </div>
+</main>
+
+
+<!-- <app-travelling-choice-small-screen
+*ngIf="showTravellingChoiceSmallScreen"
+(showComponentEmitter)="setShowTravellingChoiceSmallScreen()"
+(travellerChangeEmitter)="onReceiveTravellerChangeFromSmallScreenTravellerChoice($event)"
+[traveller]="traveller"
+></app-travelling-choice-small-screen> -->
+
