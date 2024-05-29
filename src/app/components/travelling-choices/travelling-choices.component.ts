@@ -24,11 +24,21 @@ import { MY_DATE_FORMAT } from '../../models/DateFormat.model';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ChooseVoyagersComponent } from '../choose-voyagers/choose-voyagers.component';
+import { TravellingChoiceSmallScreenComponent } from '../travelling-choice-small-screen/travelling-choice-small-screen.component';
 
 @Component({
   selector: 'app-travelling-choices',
   standalone: true,
-  imports: [MatNativeDateModule, MatDatepickerModule, MatFormFieldModule, MatInputModule, FormsModule, CommonModule, ChooseVoyagersComponent],
+  imports: [
+    MatNativeDateModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule, 
+    CommonModule, 
+    ChooseVoyagersComponent,
+    TravellingChoiceSmallScreenComponent
+  ],
   templateUrl: './travelling-choices.component.html',
   styleUrl: './travelling-choices.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

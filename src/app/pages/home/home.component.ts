@@ -84,9 +84,7 @@ export class HomeComponent implements OnInit{
   updateImageHeight() :void {
     this.landingPageImage.set(this.el.nativeElement.querySelector('#landingPage img'))    
     const openImageSection = this.el.nativeElement.querySelector('.openImage')
-    this.renderer.setStyle(openImageSection,'height', this.imageHeight() + 'px')
-    console.log("height", this.imageHeight(), "landingPageImage", this.el.nativeElement.querySelector('#landingPage img').offsetHeight);
-    
+    this.renderer.setStyle(openImageSection,'height', this.imageHeight() + 'px')    
   }
   
   closeLogin(): void {
