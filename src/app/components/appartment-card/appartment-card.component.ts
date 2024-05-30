@@ -4,11 +4,12 @@ import { SomeFunctionsService } from '../../shared/some-functions.service';
 import { Traveller } from '../../models/Traveller.model';
 import { Reservation } from '../../models/Reservation.model';
 import { CommonModule } from '@angular/common';
+import { PlusDeDetailsComponent } from '../plus-de-details/plus-de-details.component';
 
 @Component({
   selector: 'app-appartment-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, PlusDeDetailsComponent],
   templateUrl: './appartment-card.component.html',
   styleUrl: './appartment-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -99,8 +100,6 @@ export class AppartmentCardComponent {
 
 @HostListener('window:resize', ['$event'])
 onResize(event: any) {
-  console.log("resize");
-  
   this.setWithAndHeight();
 }
 
@@ -109,9 +108,6 @@ ngAfterViewInit(): void {
 }
 
 setWithAndHeight() {
-  console.log("caroussel width", this.caroussel?.nativeElement.offsetWidth);
-  console.log("imgcaroussel width", this.imgCaroussel?.nativeElement.offsetWidth);
-
   if(this.caroussel && this.imgCaroussel){ // on rajoute cette condition car caroussel peut être undefined d'après sa déclaration
     const carousselWidth = this.caroussel.nativeElement.offsetWidth;
     const imgCarousselWidth = this.imgCaroussel.nativeElement.offsetWidth;

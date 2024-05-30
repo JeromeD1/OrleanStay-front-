@@ -1,0 +1,40 @@
+<main class="main-plusDeDetails">
+
+    <section class="moreDetails-container">
+            <img src="../../../../../../assets/icons/icon-close-window.png" (click)="closeMoreDetails()" alt="close" class="img-close">
+        
+    
+        <div class="info-container">
+            <h1>{{appartment.description}}</h1>
+            <h2>Tarification</h2>
+            <p>Prix / nuit : {{appartment.nightPrice}}€ + 10€ / personne supplémentaire</p>
+            <p>(Gratuit pour les enfants de moins de 2 ans)</p>
+            <p>Ménage : 50€ (30€ pour les séjours inférieurs à 3 jours) </p>
+            <p>Caution : {{appartment.caution}}€ par chèque (non encaissé) ou liquide</p>
+            <br>
+            <h2>Localisation</h2>
+            <p>{{appartment.distanceCityCenter}}</p>
+            <p>{{appartment.distanceTram}}</p>
+            <p>{{appartment.distanceTrain}} </p>
+            <br>
+            <h2>Autres</h2>
+            <p *ngFor="let info of infos" >{{info.info}} </p>
+        </div>
+
+        <div class="localisation-container">
+            <div class="address">
+                <h1>Adresse :</h1>
+                <p>{{appartment.address}} </p>
+                <p>{{appartment.zipcode}}, {{appartment.city}} </p>
+            </div>
+
+            <div class="googleMap">
+                <iframe [src]="googleMapUrl | safeUrl:'resourceurl' "  allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+
+    
+    </section>
+
+
+</main>
