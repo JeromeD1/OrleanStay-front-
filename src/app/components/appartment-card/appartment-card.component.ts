@@ -5,11 +5,12 @@ import { Traveller } from '../../models/Traveller.model';
 import { Reservation } from '../../models/Reservation.model';
 import { CommonModule } from '@angular/common';
 import { PlusDeDetailsComponent } from '../plus-de-details/plus-de-details.component';
+import { ToutesLesDispoComponent } from '../toutes-les-dispo/toutes-les-dispo.component';
 
 @Component({
   selector: 'app-appartment-card',
   standalone: true,
-  imports: [CommonModule, PlusDeDetailsComponent],
+  imports: [CommonModule, PlusDeDetailsComponent, ToutesLesDispoComponent],
   templateUrl: './appartment-card.component.html',
   styleUrl: './appartment-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

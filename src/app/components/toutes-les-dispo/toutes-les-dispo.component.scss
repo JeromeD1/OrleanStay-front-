@@ -1,0 +1,60 @@
+@import '../../styles/mixins';
+
+.main-toutes-les-dispo {
+    @include flex-row-center-center;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    background-color: #fae7e181;
+    backdrop-filter: blur(10px);
+
+    .dispo-container {
+        @include flex-row-center-center;
+        position: relative;
+        width: 1600px;
+        max-width: 95vw;
+        box-shadow: 0 1px 0 2px var(--colorMid);
+        min-height: 50vh;
+        background-color: #fafafa9e;
+        backdrop-filter: blur(40px);
+        gap: 64px;
+        padding: 16px;
+        border-radius: 24px;
+
+        .img-close {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 40px;
+            height: auto;
+
+            &:hover {
+                cursor: pointer;
+                filter: hue-rotate(110deg);
+            }
+        }
+
+        .calendar {
+            width: 800px;
+            max-width: 90%;
+            border: 1px solid var(--colorMid);            
+        }
+        
+    }
+}
+
+
+::ng-deep.highlight-date {
+    background-color: var(--colorBrand) !important;
+    box-sizing: border-box;
+    position: relative;
+    
+}
+
+
+::ng-deep.mat-calendar-body-disabled > .mat-calendar-body-cell-content {
+    background-color: #fcd2cc !important; 
+}
