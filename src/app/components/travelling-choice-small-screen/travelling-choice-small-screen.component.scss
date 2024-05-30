@@ -1,22 +1,19 @@
+@import "../../styles/mixins";
+
 main {
+    @include flex-column-around-center;
     position: fixed;
     top: 0;
     left: 0;
     z-index: 2;
-    box-sizing: border-box;
     width: 100vw;
     height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
     background-color: #fae7e181;
     backdrop-filter: blur(10px);
 
     .img-close {
         position: absolute;
-        top: 8px;
-        
+        top: 8px; 
         right: 8px;
         width: 40px;
         height: auto;
@@ -28,10 +25,7 @@ main {
     }
 
     div {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        @include flex-column-center-center;
         gap: 8px;
         margin: 0;
 
@@ -42,8 +36,7 @@ main {
       }
 
         &.buttons {
-            flex-direction: row;
-            justify-content: space-around;
+            @include flex-row-around-center;
             width: 80vw;
             gap: 24px;
 
