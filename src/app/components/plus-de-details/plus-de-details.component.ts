@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, output } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, output, input } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Info } from '../../models/Info.model';
 import { Appartment } from '../../models/Appartment.model';
@@ -20,13 +20,10 @@ export class PlusDeDetailsComponent {
   constructor(private sanitizer: DomSanitizer){}
 
   @Input()
-  googleMapUrl!: string;
+  googleMapUrl!: string; //ne fonctionne pas en le passant en input signal
 
-  @Input()
-  infos! : Info[];
-
-  @Input()
-  appartment!: Appartment;
+  infos = input.required<Info[]>()
+  appartment = input.required<Appartment>()
 
   showMoreDetails = output<boolean>()
 
