@@ -61,7 +61,7 @@ export class AppartmentsService {
   getActiveAppartments():Observable<Appartment[]> {
     return this.http.get<Appartment[]>(environment.BACKEND_BASE_URL + '/activeAppartments').pipe(
       map((appartments) => appartments.map(appartment => {
-        
+
         //conversion de checkinDate et checkoutDate de reservations qui arrivent en string en Date
         const reservations = appartment.reservations.map(resa =>(
           resa.checkinDate && resa.checkoutDate ? 

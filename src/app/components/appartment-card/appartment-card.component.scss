@@ -1,0 +1,179 @@
+@import '../../styles/mixins';
+
+.main-appartment-card {
+    max-width: 90vw;
+    width: 700px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--colorLight);
+    border-radius: 50px;
+    box-shadow: 1px 1px 0 2px var(--colorMid);
+    padding: 16px;
+
+    h1 {
+        text-align: center;
+    }
+
+
+    .caroussel {
+        position: relative;
+        width: 90%;
+        // height: 400px;
+        object-fit: contain;
+        overflow: hidden;
+        // border: 1px solid red;
+
+
+        .img-caroussel {
+            max-width: 100%;
+            height: auto;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 32px;
+        }
+
+
+        .fleche-caroussel {
+            position: absolute;
+            top: calc(50% - 20px);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+
+            &:hover {
+                cursor: pointer;
+                filter: hue-rotate(110deg);
+            }
+        }
+
+        .fleche-gauche {
+            left: 5%;
+        }
+
+        .fleche-droite {
+                right: 5%;            
+        }
+    }
+
+    .infoResa-container {
+        width: 90%;
+        margin-top: 16px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        p {
+            margin-bottom: 4px;
+        }
+
+        .div-resa {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+
+            .infoPrixSejour {
+                padding: 8px;
+                background-color: var(--colorLightest);
+                border: 1px solid var(--colorMid);
+                border-radius: 8px;
+                font-weight: 550;
+                color: darkred;
+            }
+
+            button {
+                padding: 12px;
+                border: 3px outset var(--colorMid);
+                border-radius: 16px;
+                background-color: var(--colorMid);
+                font-weight: bold;
+
+                &:hover {
+                    filter: sepia();
+                    cursor: pointer;
+                }
+
+                &:active {
+                    border: 3px inset var(--colorMid);
+
+                }
+
+            }
+        }
+
+    }
+
+    .otherInfo-container{
+        display: flex;
+        flex-direction: row;
+        width: 90%;
+        justify-content: space-around;
+        align-items: center;
+        margin-top: 32px;
+    
+        button {
+            width: 200px;
+            max-width: 45%;
+            background-color: var(--colorBrand);
+            border: 3px outset var(--colorMid);
+            font-weight: bold;
+            padding: 8px;
+            border-radius: 16px;
+    
+            &:hover {
+                cursor: pointer;
+                filter: sepia();
+            }
+    
+            &:active {
+                border: 3px inset var(--colorMid);
+            }
+        }
+    }
+}
+
+
+@media screen and (max-width:600px) {
+    .main-appartment-card {
+       
+    
+        .infoResa-container {
+            width: 90%;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            // border: 1px solid red;
+            gap: 16px;
+    
+           
+    
+            .div-resa {
+                width: 100%;
+                padding: 0;
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                box-sizing: border-box;
+                // border: 1px solid blue;
+    
+                
+    
+                button {
+                    padding: 8px;
+                }
+            }
+    
+        }
+    
+        .otherInfo-container{
+            margin-top: 16px;
+        }
+    }
+}

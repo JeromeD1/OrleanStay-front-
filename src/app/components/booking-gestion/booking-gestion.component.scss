@@ -1,8 +1,7 @@
+@import '../../styles/mixins';
+
 .main-booking-gestion {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
+    @include flex-column-start-center;
 
     .travellingChoices {
         position: sticky;
@@ -22,14 +21,14 @@
 
 
     .section-show-appartments-cards {
+        @include flex-row-around-start-wrap;
         margin-top: 64px;
-        // border: 1px solid black;
         max-width: 1600px;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-        align-items: flex-start;
-        flex-wrap: wrap;
+        // display: flex;
+        // flex-direction: row;
+        // justify-content: space-around;
+        // align-items: flex-start;
+        // flex-wrap: wrap;
         gap: 96px;
     }
 }

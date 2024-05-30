@@ -46,7 +46,7 @@ export class HomeComponent implements OnInit{
   onResize(event: Event) {
     this.numberResize.update(value => value + 1)
     this.updateImageHeight()
-    // this.onWindowScroll(event)    
+    // this.onWindowScroll(event)        
   }
   
   @HostListener('window:scroll', ['$event'])

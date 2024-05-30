@@ -21,6 +21,7 @@ import { TravellingChoicesComponent } from '../travelling-choices/travelling-cho
     CommonModule,
     AppartmentCardComponent,
     TravellingChoicesComponent,
+    AppartmentCardComponent
   ],
   templateUrl: './booking-gestion.component.html',
   styleUrl: './booking-gestion.component.scss'
