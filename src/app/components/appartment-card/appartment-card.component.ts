@@ -6,11 +6,12 @@ import { Reservation } from '../../models/Reservation.model';
 import { CommonModule } from '@angular/common';
 import { PlusDeDetailsComponent } from '../plus-de-details/plus-de-details.component';
 import { ToutesLesDispoComponent } from '../toutes-les-dispo/toutes-les-dispo.component';
+import { DemandeReservationComponent } from '../demande-reservation/demande-reservation.component';
 
 @Component({
   selector: 'app-appartment-card',
   standalone: true,
-  imports: [CommonModule, PlusDeDetailsComponent, ToutesLesDispoComponent],
+  imports: [CommonModule, PlusDeDetailsComponent, ToutesLesDispoComponent, DemandeReservationComponent],
   templateUrl: './appartment-card.component.html',
   styleUrl: './appartment-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

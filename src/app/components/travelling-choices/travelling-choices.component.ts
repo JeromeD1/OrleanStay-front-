@@ -1,5 +1,4 @@
 import { Component, Input, EventEmitter, Output, ViewChild, ElementRef, HostListener, input, ChangeDetectionStrategy, output, signal, computed } from '@angular/core';
-import { Traveller } from '../../models/Traveller.model';
 import { TravellerNumbers } from '../../models/TravellerNumbers.model';
 import { Reservation } from '../../models/Reservation.model';
 import { MatDatepickerModule } from '@angular/material/datepicker';

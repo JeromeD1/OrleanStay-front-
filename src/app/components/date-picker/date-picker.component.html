@@ -1,0 +1,22 @@
+<mat-form-field >
+    <!-- <input matInput [matDatepicker]="checkDate" 
+    [(ngModel)]="dateType === 'checkin' ? checkinDateValue : checkoutDateValue" 
+    (dateChange)="emitNewDate($event)"
+    placeholder="Quand ?"
+    [min]="dateType === 'checkin' ? minCheckinDate : minCheckoutDate"
+    [max]="dateType === 'checkin' ? maxCheckinDate : maxCheckoutDate"
+    [matDatepickerFilter]="filterBookedDates"
+    > -->
+    <input matInput [matDatepicker]="checkDate" 
+    [(ngModel)]="checkoutDateValue" 
+    (dateChange)="emitNewDate($event)"
+    placeholder="Quand ?"
+    [min]="dateType === 'checkin' ? minCheckinDate : minCheckoutDate"
+    [max]="dateType === 'checkin' ? maxCheckinDate : maxCheckoutDate"
+    [matDatepickerFilter]="filterBookedDates"
+    >
+    <mat-datepicker-toggle matSuffix [for]="checkDate"></mat-datepicker-toggle>
+    <mat-datepicker #checkDate
+        [dateClass]="dateClass"
+    ></mat-datepicker>
+  </mat-form-field>

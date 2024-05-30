@@ -27,4 +27,14 @@ userReservation = signal<Reservation>({
   nbChild: 0
 })
 
+resetUserReservation(): void {
+  this.userReservation.set({
+    checkinDate: null,
+    checkoutDate: null,
+    nbAdult: 0,
+    nbBaby: 0,
+    nbChild: 0
+  })
+}
+
 }
