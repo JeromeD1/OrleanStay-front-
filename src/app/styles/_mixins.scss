@@ -28,6 +28,20 @@
     align-items: center;
 }
 
+@mixin flex-column-center-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin flex-column-start-start {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
 //----------flex row-------------------
 
 

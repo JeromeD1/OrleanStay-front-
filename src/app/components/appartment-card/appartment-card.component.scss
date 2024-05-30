@@ -1,13 +1,10 @@
 @import '../../styles/mixins';
 
 .main-appartment-card {
+    @include flex-column-between-center;
     max-width: 90vw;
     width: 700px;
     height: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
     background-color: var(--colorLight);
     border-radius: 50px;
     box-shadow: 1px 1px 0 2px var(--colorMid);
@@ -21,10 +18,8 @@
     .caroussel {
         position: relative;
         width: 90%;
-        // height: 400px;
         object-fit: contain;
         overflow: hidden;
-        // border: 1px solid red;
 
 
         .img-caroussel {
@@ -59,22 +54,16 @@
     }
 
     .infoResa-container {
+        @include flex-row-between-center;
         width: 90%;
         margin-top: 16px;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
 
         p {
             margin-bottom: 4px;
         }
 
         .div-resa {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            @include flex-column-center-center;
             gap: 8px;
 
             .infoPrixSejour {
@@ -105,15 +94,11 @@
 
             }
         }
-
     }
 
     .otherInfo-container{
-        display: flex;
-        flex-direction: row;
+        @include flex-row-around-center;
         width: 90%;
-        justify-content: space-around;
-        align-items: center;
         margin-top: 32px;
     
         button {
@@ -139,37 +124,20 @@
 
 
 @media screen and (max-width:600px) {
-    .main-appartment-card {
-       
-    
+    .main-appartment-card {   
         .infoResa-container {
             width: 90%;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: flex-start;
-            // border: 1px solid red;
+            @include flex-column-start-start;
             gap: 16px;
-    
-           
-    
+      
             .div-resa {
+                @include flex-column-center-center;
                 width: 100%;
-                padding: 0;
-                margin: 0;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                box-sizing: border-box;
-                // border: 1px solid blue;
-    
-                
     
                 button {
                     padding: 8px;
                 }
             }
-    
         }
     
         .otherInfo-container{
