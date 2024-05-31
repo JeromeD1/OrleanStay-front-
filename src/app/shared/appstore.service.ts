@@ -27,4 +27,26 @@ userReservation = signal<Reservation>({
   nbChild: 0
 })
 
+resetUserReservation(): void {
+  this.userReservation.set({
+    checkinDate: null,
+    checkoutDate: null,
+    nbAdult: 0,
+    nbBaby: 0,
+    nbChild: 0
+  })
+}
+
+resetUserReservationTravellers(): void {
+  this.userReservation.update(value => (
+    {...value, nbAdult:0, nbBaby:0, nbChild:0}
+  ))
+}
+
+updateUserReservationKey<T>(key: keyof Reservation, value: T){
+  this.userReservation.update(previousState => (
+    {...previousState, [key]: value}
+  ))
+}
+
 }

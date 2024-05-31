@@ -1,0 +1,13 @@
+::ng-deep.highlight-date-accepted {
+    background-color: var(--colorBrand) !important;
+    box-sizing: border-box;
+    position: relative;
+}
+
+::ng-deep.highlight-date-not-accepted {
+    background-color: yellow !important;
+    box-sizing: border-box;
+    position: relative;
+}
+
+

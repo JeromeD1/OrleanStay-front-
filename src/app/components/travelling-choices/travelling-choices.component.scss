@@ -1,8 +1,7 @@
+@import "../../styles/mixins";
+
 main {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    @include flex-row-between-center;
     width: 95vw;
     max-width: 1600px;
     padding: 10px 50px;
@@ -11,8 +10,7 @@ main {
     background-color: var(--colorMid);
 
     .titre {
-        display: flex;
-        align-items: center;
+        @include flex-row-start-center;
         width: 10%;
         height: 80px;
         border-right: 3px solid var(--colorDark);
@@ -28,22 +26,15 @@ main {
 
 
     .data {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-        align-items: center;
+        @include flex-row-around-center;
         width: 70%;
 
         .choiceContainer {
+            @include flex-column-center-center;
             position: relative;
             width: 30%;
             height: 130px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 10px;
-            align-items: center;
-            // border: 1px solid blue;
+            gap: 12px;
 
             h2 {
                 margin: 0;
@@ -53,9 +44,7 @@ main {
             .button-container {
                 position: relative;
                 width: 100%;
-                max-width: 250px;
-                // border: 1px solid red;
-               
+                max-width: 250px;               
 
                 img {
                     position: absolute;
@@ -102,11 +91,9 @@ main {
                 width: 100%;
                 max-width: 250px;
                 height: 55px;
-                margin: 0;
                 background-color: var(--colorLightest);
                 border: none;
                 box-shadow: 0px 1px 0px 1px rgb(230, 230, 230);
-                background-color: rgb(245, 245, 245);
                 color: rgb(98, 98, 98);
                 font-family: 700;
                 font-size: 1rem;
@@ -129,12 +116,10 @@ main {
     }
 
     .validation {
+        @include flex-row-center-center;
         width: 10%;
         height: 75px;
         border-left: 3px solid var(--colorDark);
-        display: flex;
-        justify-content: center;
-        align-items: center;
 
         img {
             height: 60px;
@@ -189,10 +174,8 @@ main {
 
 @media screen and (max-width:1000px) {
     main {
-
         padding: 16px;
 
-    
         .titre {
             width: 10%;
         }
@@ -204,19 +187,15 @@ main {
     
         .validation {
             width: 10%;
-    
         }
     }
 }
 
 @media screen and (max-width:800px) {
     main {
-
-
         .data {
             width: 78%;
         }
-
     }
 }
 
@@ -228,22 +207,17 @@ main {
     }
 
     .smallScreen{
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        align-items: center;
+        @include flex-row-start-center;
         gap: 24px;
-        box-sizing: border-box;
-        // border: 8px solid var(--colorMid;
         box-shadow: 0px 0px 6px 8px var(--colorMid);
         background-color: var(--colorLightest);
         padding: 8px;
         height: auto;
+        margin-top: 4px;
     
         &:hover {
             background-color: var(--colorLight);
             box-shadow: 0px 0px 6px 8px var(--colorDark);
-    
             cursor: pointer;
     
             img {
@@ -251,7 +225,6 @@ main {
             }
     
             div {
-    
                 p {
                     color: var(--colorDark);
                 }
@@ -266,12 +239,8 @@ main {
         }
     
         div {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: flex-start;
+            @include flex-column-start-start;
             gap: 4px;
-            margin: 0;
     
             h2, p {
                 margin: 0;

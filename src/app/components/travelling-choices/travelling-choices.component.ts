@@ -1,5 +1,4 @@
-import { Component, Input, EventEmitter, Output, ViewChild, ElementRef, HostListener, input, ChangeDetectionStrategy, output, signal, computed } from '@angular/core';
-import { Traveller } from '../../models/Traveller.model';
+import { Component, Input, EventEmitter, Output, ViewChild, ElementRef, HostListener, input, ChangeDetectionStrategy, output, signal, computed, effect } from '@angular/core';
 import { TravellerNumbers } from '../../models/TravellerNumbers.model';
 import { Reservation } from '../../models/Reservation.model';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -25,6 +24,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ChooseVoyagersComponent } from '../choose-voyagers/choose-voyagers.component';
 import { TravellingChoiceSmallScreenComponent } from '../travelling-choice-small-screen/travelling-choice-small-screen.component';
+import { AppstoreService } from '../../shared/appstore.service';
 
 @Component({
   selector: 'app-travelling-choices',
@@ -46,207 +46,163 @@ import { TravellingChoiceSmallScreenComponent } from '../travelling-choice-small
   providers: [
     {provide:MAT_DATE_LOCALE, useValue:'fr-FR'},
     {provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT}
-    // dans les fournisseurs de votre composant, vous fournissez MY_DATE_FORMATS pour MAT_DATE_FORMATS et ‘fr-FR’ 
-    //pour MAT_DATE_LOCALE. Cela signifie que partout où MAT_DATE_FORMATS et MAT_DATE_LOCALE sont utilisés dans votre 
-    //composant, ils utiliseront les valeurs que vous avez fournies.
+    // dans les fournisseurs du composant, on fourni MY_DATE_FORMATS pour MAT_DATE_FORMATS et ‘fr-FR’ 
+    //pour MAT_DATE_LOCALE. Cela signifie que partout où MAT_DATE_FORMATS et MAT_DATE_LOCALE sont utilisés dans le 
+    //composant, ils utiliseront les valeurs fournies.
     //-------------------------------------------------
   ]
 })
 export class TravellingChoicesComponent {
 
-  //--------------------------------------------------
-  constructor(private adapter: DateAdapter<any>) {
-    this.adapter.setLocale('fr');
+  userReservation = input<Reservation>({
+    checkinDate: null,
+    checkoutDate: null,
+    nbAdult: 0,
+    nbBaby: 0,
+    nbChild: 0
+  })
+  
+  reservationChange = output<Reservation>()
+  
+  imgBalai = '../../../../../../assets/icons/icons8-balayer-gris.png';
+  showChooseVoyager: boolean = false;
+  isResearchAnimated: boolean = false;
+  initialNumberOfPayingTravellers: number = 0;
+  
+  travellerNumbers = computed<TravellerNumbers>(() =>({
+    numberAdult: this.userReservation().nbAdult,
+    numberChild: this.userReservation().nbChild,
+    numberBaby: this.userReservation().nbBaby
+  }))  
+  
+  
+  numberOfPayingTravellers = computed<number>(() => this.travellerNumbers().numberAdult + this.travellerNumbers().numberChild) 
+  
+  textTravellerNumber = computed<string>(() => {
+    if(this.userReservation().nbBaby == 0){
+      return   this.numberOfPayingTravellers() === 0 ? "Combien ?"
+      : this.numberOfPayingTravellers() === 1 ? "1 voyageur" : this.numberOfPayingTravellers() + " voyageurs"
+    } else if(this.userReservation().nbBaby == 1){
+      return   this.numberOfPayingTravellers() === 0 ? "Combien ?"
+      : this.numberOfPayingTravellers() === 1 ? `1 voyageur (+${this.userReservation().nbBaby} bébé)` : `${this.numberOfPayingTravellers()} voyageurs  (+${this.userReservation().nbBaby} bébé)`
+    } else {
+      return   this.numberOfPayingTravellers() === 0 ? "Combien ?"
+      : this.numberOfPayingTravellers() === 1 ? `1 voyageur (+${this.userReservation().nbBaby} bébés)` : `${this.numberOfPayingTravellers()} voyageurs  (+${this.userReservation().nbBaby} bébés)`
+    }
+  
+})  
+  
+  showTravellingChoiceSmallScreen: boolean = false;
+
+  private _minCheckinDate: Date = new Date();
+  private _maxCheckinDate: Date | null = null;
+  private _minCheckoutDate: Date = new Date();
+  private _maxCheckoutDate: Date | null = null;
+
+  get minCheckinDate(): Date {
+    return this._minCheckinDate;
   }
-  // Dans le constructeur de votre composant, vous injectez DateAdapter et utilisez sa méthode setLocale pour définir 
+
+  get maxCheckinDate(): Date | null {
+    return this._maxCheckinDate;
+  }
+
+  get minCheckoutDate(): Date | null {
+    return this._minCheckoutDate;
+  }
+
+  get maxCheckoutDate(): Date | null {
+    return this._maxCheckoutDate;
+  }
+
+  //--------------------------------------------------
+  constructor(private adapter: DateAdapter<any>, private appstore: AppstoreService) {
+    this.adapter.setLocale('fr');
+    this._minCheckoutDate.setDate(this._minCheckoutDate.getDate() + 1)
+  }
+  // Dans le constructeur, on injecte DateAdapter et utilise sa méthode setLocale pour définir 
   //la locale à ‘fr’ (pour le français). Cela signifie que toutes les opérations de date effectuées par 
   //DateAdapter utiliseront désormais le format de date français.
   //-----------------------------------------------
 
-
-//   @Input()
-//   traveller: Traveller = {firstname: '',
-//   lastname: '',
-//   email: '',
-//   phone: '',
-//   address: '',
-//   zipcode: '',
-//   city: '',
-//   country: '',
-//   checkinDate: new Date(),
-//   checkoutDate: new Date(),
-//   nbAdult: 0,
-//   nbChild: 0,
-//   nbBaby: 0,
-//   message: ''
-// }
-
-// userReservation = input.required<Reservation>()
-@Input()
-userReservation: Reservation = {
-  checkinDate: null,
-  checkoutDate: null,
-  nbAdult: 0,
-  nbBaby: 0,
-  nbChild: 0
+/******Fonctions liées à la loupe et au lancement de la recherche ********/
+/////La recherche s'active si les dates d'arrivées et de départ sont définies et se désactive lorsqu'elle est lancée/////
+activateResearchButton(): void {  
+  if(this.appstore.userReservation().checkinDate && this.appstore.userReservation().checkoutDate){
+    this.isResearchAnimated = true
+  } else {
+    this.isResearchAnimated = false
+  }
 }
 
-reservationChange = output<Reservation>()
-
-
-imgBalai = '../../../../../../assets/icons/icons8-balayer-gris.png';
-showChooseVoyager: boolean = false;
-isResearchAnimated: boolean = false;
-initialNumberOfPayingTravellers: number = 0;
-
-travellerNumbers: TravellerNumbers = {
-  numberAdult: this.userReservation.nbAdult,
-  numberChild: this.userReservation.nbChild,
-  numberBaby: this.userReservation.nbBaby
+onStartResearch():void {
+  this.reservationChange.emit(this.userReservation())
+  this.isResearchAnimated = false
 }
 
-textTravellerNumber: string = "Combien ?";
 
-showTravellingChoiceSmallScreen: boolean = false;
+/****** Fonctions liées à la modification des dates d'entrée et de sortie, et du nombre de voyageur ******/
+changeCheckin(date: Date): void {
+  this.appstore.updateUserReservationKey<Date>("checkinDate", date)
 
-
-
-
-private _checkinDateValue: Date | null = null;
-private _checkoutDateValue: Date | null = null;
-private _minCheckinDate: Date = new Date();
-private _maxCheckinDate: Date | null = null;
-private _minCheckoutDate: Date | null = null;
-private _maxCheckoutDate: Date | null = null;
-
-get checkinDateValue(): Date | null {
-  return this._checkinDateValue;
-}
-
-get checkoutDateValue(): Date | null {
-  return this._checkoutDateValue;
-}
-
-get minCheckinDate(): Date {
-  return this._minCheckinDate;
-}
-
-get maxCheckinDate(): Date | null {
-  return this._maxCheckinDate;
-}
-
-get minCheckoutDate(): Date | null {
-  return this._minCheckoutDate;
-}
-
-get maxCheckoutDate(): Date | null {
-  return this._maxCheckoutDate;
-}
-
-set checkinDateValue(date: Date) {
-  this._checkinDateValue = date;
-  if(this._checkinDateValue) {
+  if(this.userReservation().checkinDate) {
     this._minCheckoutDate = new Date(date); // On crée une nouvelle instance de Date pour éviter 
     //la mutation de l'objet original c'est pour que _minCheckinDate et minCheckoutDate ne fassent pas référence à la même 
     //instance de Date
     this._minCheckoutDate.setDate(this._minCheckoutDate.getDate() + 1);
   } else {
-    this._minCheckoutDate = null;
+    this._minCheckoutDate.setDate(this._minCheckoutDate.getDate() + 1)
   }
 
-  if(this.checkoutDateValue && this.travellerNumbers.numberAdult > 0) {
-    this.isResearchAnimated = true;
-  }
+  this.activateResearchButton()
 }
 
-set checkoutDateValue(date: Date) {
-  this._checkoutDateValue = date;
-  if(this._checkoutDateValue) {
+changeCheckout(date: Date): void {
+  this.appstore.updateUserReservationKey<Date>("checkoutDate", date)
+  if(this.userReservation().checkoutDate) {
     this._maxCheckinDate = new Date(date);
     this._maxCheckinDate.setDate(this._maxCheckinDate.getDate() - 1);
   } else {
     this._maxCheckinDate = null;
   }
 
-  if(this._checkinDateValue && this.travellerNumbers.numberAdult > 0) {
-    this.isResearchAnimated = true;
-  }
+  this.activateResearchButton()
 }
 
 deleteCheckinDateValue():void {
-  this._checkinDateValue = null;
-  this.isResearchAnimated = false;
-
-  const newReservation: Reservation | null = {...this.userReservation, 
-    checkinDate: this.checkinDateValue,
-  };
-
-  this.reservationChange.emit(newReservation);
+  this.appstore.updateUserReservationKey<null>("checkinDate", null);
+  this.activateResearchButton()
 }
 
 deleteCheckoutDateValue():void {
-  this._checkoutDateValue = null;
-  this.isResearchAnimated = false;
+  this.appstore.updateUserReservationKey<null>("checkoutDate", null);
+  this.activateResearchButton()
+}
 
-  const newReservation: Reservation | null = {...this.userReservation, 
-    checkoutDate: this.checkoutDateValue,
-  };
-  
-  this.reservationChange.emit(newReservation);
+updateTravellerNumbers(event: TravellerNumbers): void {
+  this.appstore.updateUserReservationKey<number>("nbAdult", event.numberAdult)
+  this.appstore.updateUserReservationKey<number>("nbChild", event.numberChild)
+  this.appstore.updateUserReservationKey<number>("nbBaby", event.numberBaby)
+
+  if(this.numberOfPayingTravellers() !== this.initialNumberOfPayingTravellers) {
+    this.initialNumberOfPayingTravellers = this.numberOfPayingTravellers(); 
+    }
 }
 
 deleteTravellers():void {
-  this.travellerNumbers.numberAdult = 0;
-  this.travellerNumbers.numberBaby = 0;
-  this.travellerNumbers.numberChild = 0;
-  this.textTravellerNumber = "Combien ?";
-  this.isResearchAnimated = false;
+  this.appstore.resetUserReservationTravellers()
 }
+/***** */
+
+
 
 setShowTravellingChoiceSmallScreen():void {
   this.showTravellingChoiceSmallScreen = ! this.showTravellingChoiceSmallScreen;
 }
 
-onStartResearch():void {
-
-  if(!this._checkinDateValue || !this._checkoutDateValue || this.travellerNumbers.numberAdult === 0) return;
-
-  const newReservation: Reservation = {...this.userReservation, 
-    checkinDate: this.checkinDateValue, 
-    checkoutDate: this.checkoutDateValue,
-    nbAdult:this.travellerNumbers.numberAdult,
-    nbChild: this.travellerNumbers.numberChild,
-    nbBaby: this.travellerNumbers.numberBaby
-  };
-
-  
-  this.reservationChange.emit(newReservation);
-  this.isResearchAnimated = false;
-}
-
 changeChooseVoyager():void {
   this.showChooseVoyager = !this.showChooseVoyager;
   
-}
-
-updateTravellerNumbers(event: TravellerNumbers): void {
-this.travellerNumbers = event;
-
-const numberOfPayingTravellers: number = this.travellerNumbers.numberAdult + this.travellerNumbers.numberChild;
-this.textTravellerNumber = numberOfPayingTravellers === 0 ? "Combien ?"
-: numberOfPayingTravellers === 1 ? "1 voyageur" : numberOfPayingTravellers + " voyageurs";
-
-  if(numberOfPayingTravellers !== this.initialNumberOfPayingTravellers) {
-  this.initialNumberOfPayingTravellers = numberOfPayingTravellers;
-  if(this.checkinDateValue && this.checkoutDateValue && this.travellerNumbers.numberAdult > 0){
-    this.isResearchAnimated = true;
-  } 
-}
-
-if(this.travellerNumbers.numberAdult === 0) {
-  this.isResearchAnimated = false;
-}
-
 }
 
 
