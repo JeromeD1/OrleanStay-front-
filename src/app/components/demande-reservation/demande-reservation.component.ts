@@ -101,6 +101,11 @@ changeShowPickerDeparture():void {
   this.showPickerDeparture = !this.showPickerDeparture;
 }
 
+closeAllPicker(): void {
+  this.showPickerarrival = false;
+  this.showPickerDeparture = false;
+}
+
 handleChangeCheckinOrCheckout(event: DateFromPicker): void {
   
   if(event.type === 'checkin') {
