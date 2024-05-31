@@ -42,6 +42,7 @@
                     [importedReservations]="appartment.reservations"
                     [dateType]="'checkin'"
                     (dateEmitter)="handleChangeCheckinOrCheckout($event)"
+                    (closeEmitter)="closeAllPicker()"
                     ></app-date-picker>
                 </div>
 
@@ -58,6 +59,7 @@
                     [importedReservations]="appartment.reservations"
                     [dateType]="'checkout'"
                     (dateEmitter)="handleChangeCheckinOrCheckout($event)"
+                    (closeEmitter)="closeAllPicker()"
                     ></app-date-picker>
                 </div>
 
