@@ -2,6 +2,7 @@ import { Injectable, signal } from '@angular/core'
 import { Traveller } from '../models/Traveller.model'
 import { Reservation } from '../models/Reservation.model'
 import { Appartment } from '../models/Appartment.model'
+import { User } from '../models/User.model'
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +32,8 @@ export class AppstoreService {
 
   activeAppartments = signal<Appartment[]>([])
   allAppartments = signal<Appartment[]>([])
+
+  currentUser = signal<User | null>(null)
 
 
   /*************Functions related to userReservation *************/
@@ -89,6 +92,24 @@ export class AppstoreService {
       })
     )
   }
-  
+
+  /********Functions related to currentUser *************/
+  setCurrentUser(user: User): void {
+    this.currentUser.set(user)
+  }
+
+  updateCurrentUserKey<K extends keyof User>(key: K, value: User[K]): void {
+    if(this.currentUser()) {
+      this.currentUser.update((previousState) => {
+        const updatedState = {...previousState, [key]: value} as User;
+        return updatedState;
+      });
+    }
+  }  
+
+    /********Functions related to traveller *************/
+    setTraveller(traveller: Traveller): void {
+      this.traveller.set(traveller)
+    }
 
 }

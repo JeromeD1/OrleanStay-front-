@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { AppstoreService } from '../../shared/appstore.service';
 
 
 
@@ -19,7 +20,7 @@ import { CommonModule } from '@angular/common';
 })
 export class LoginComponent implements OnDestroy {
 
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(private loginService: LoginService, private router: Router, private appstore: AppstoreService) {}
 
   destroy$: Subject<void> = new Subject()
 
@@ -40,13 +41,48 @@ export class LoginComponent implements OnDestroy {
       password: this.password
     }
 
-    this.loginService.login(formData).subscribe(data => {
-      if(data?.role === "admin"){
-        this.router.navigate(['/admin'])
-      } else {
-        this.wrongUserMessage = "Vous n'avez pas les droits pour vous connecter !"
+    this.loginService.login(formData).subscribe(
+      {
+        next: (data) => {
+          if(data?.role === "admin"){
+            this.router.navigate(['/admin'])
+          } else {
+            this.wrongUserMessage = "Vous n'avez pas les droits pour vous connecter !"
+          }
+        },
+
+        error: () => {
+          // FIXME / A SUPPRIMER 
+          this.appstore.setCurrentUser({
+            id: 0,
+            role: "user",
+            firstname: "Hector",
+            lastname: "Legrand",
+            email: "hector.legrand@gmail.com",
+            phone: "06 87 78 98 24",
+            address: "Dans ton cul",
+            zipcode: "99 999",
+            city: "Lune",
+            country: "Espace",
+            creationDate: new Date()
+          })
+
+          this.appstore.setTraveller(
+            {
+              firstname: "Hector",
+              lastname: "Legrand",
+              email: "hector.legrand@gmail.com",
+              phone: "06 87 78 98 24",
+              address: "Dans ton cul",
+              zipcode: "99 999",
+              city: "Lune",
+              country: "Espace",
+            }
+          )
+        }
       }
-    })
+      
+      )
 
   }
 

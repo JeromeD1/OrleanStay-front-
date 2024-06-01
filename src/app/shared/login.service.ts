@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { environment } from '../../environment/environment';
 import { Observable, tap } from 'rxjs';
+import { User } from '../models/User.model';
+import { AppstoreService } from './appstore.service';
 
 
 @Injectable({
@@ -9,27 +11,33 @@ import { Observable, tap } from 'rxjs';
 })
 export class LoginService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private appstore: AppstoreService) { }
 
-  userRole$$ = signal<"user" | "admin" | null>(null)
-
-  getUserRole(): "user" | "admin" | null {
-    return this.userRole$$()  }
-
-  login(data: any): Observable<{role: "user" | "admin" | null}> {
-    return this.http.post<{role: "user" | "admin" | null}>(environment.BACKEND_BASE_URL + '/login', data).pipe(
-      tap(res => {
-        console.log("res : ", res);
-        
-        this.userRole$$.set(res.role)
+  login(data: any): Observable<User> {
+    return this.http.post<User>(environment.BACKEND_BASE_URL + '/login', data).pipe(
+      tap(data => {
+        console.log("data : ", data);
+        this.appstore.setCurrentUser(data)
+        this.appstore.setTraveller(
+          {
+            firstname: data.firstname,
+            lastname: data.lastname,
+            email: data.email,
+            phone: data.phone,
+            address: data.address,
+            zipcode: data.zipcode,
+            city: data.city,
+            country: data.country,
+          }
+        )
       })
       )
   }
 
   logout():Observable<any> {
     return this.http.get(environment.BACKEND_BASE_URL + '/logout', { withCredentials: true }).pipe(
-      tap((res) => {
-        console.log("logged out", "res", res);
+      tap((data) => {
+        console.log("logged out", "data", data);
         
       })
       )
