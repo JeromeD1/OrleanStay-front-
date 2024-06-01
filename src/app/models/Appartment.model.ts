@@ -73,5 +73,9 @@ export class Appartment {
     
         return reservationPrice;
     }
+
+    addReservation(reservation: Reservation): void {
+        this.reservations.push(reservation)
+    }
 }
 

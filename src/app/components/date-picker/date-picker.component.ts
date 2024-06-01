@@ -44,8 +44,6 @@ export class DatePickerComponent implements OnInit, AfterViewInit{
 
 
 
-private _checkinDateValue: Date | null = null;
-private _checkoutDateValue: Date | null = null;
 private _pickerDateValue: Date | null = null;
 private _minCheckinDate: Date = new Date();
 private _maxCheckinDate: Date | null = null;
@@ -64,14 +62,6 @@ ngOnInit(): void {
     } else if(this.dateType === 'checkout'){
       this._minCheckoutDate.setDate(this._minCheckoutDate.getDate() + 1);
     }
-    // this.dateValue = this.initDateValue;
-
-    if(this.importedCheckinDate){
-      this._checkinDateValue = this.importedCheckinDate;
-    } 
-    if(this.importedCheckoutDate) this._checkoutDateValue = this.importedCheckoutDate;
-
-    console.log("importedCheckinDate",this.importedCheckinDate,"importedCheckoutDate", this.importedCheckoutDate,"initDateValue", this.initDateValue);
     
 }
 
@@ -84,15 +74,6 @@ ngAfterViewInit() {
 /********** ***************************************************/
 
 
-
-
-get checkinDateValue(): Date | null {
-  return this._checkinDateValue;
-}
-
-get checkoutDateValue(): Date | null {
-  return this._checkoutDateValue;
-}
 
 get pickerDateValue(): Date | null {
   return this._pickerDateValue;
@@ -114,30 +95,6 @@ get maxCheckoutDate(): Date | null {
   return this._maxCheckoutDate;
 }
 
-set checkinDateValue(date: Date) {  
-  this._checkinDateValue = date;
-  if(this._checkinDateValue) {
-    this._minCheckoutDate = new Date(date); // On crée une nouvelle instance de Date pour éviter 
-    //la mutation de l'objet original c'est pour que _minCheckinDate et minCheckoutDate ne fassent pas référence à la même 
-    //instance de Date
-    this._minCheckoutDate.setDate(this._minCheckoutDate.getDate() + 1);
-  } else {
-    this._minCheckoutDate.setDate(this._minCheckoutDate.getDate() + 1);
-  }
-
- 
-}
-
-set checkoutDateValue(date: Date) {
-  this._checkoutDateValue = date;
-  if(this._checkoutDateValue) {
-    this._maxCheckinDate = new Date(date);
-    this._maxCheckinDate.setDate(this._maxCheckinDate.getDate() - 1);
-  } else {
-    this._maxCheckinDate = null;
-  }
-
-}
 
 set pickerDateValue(date: Date) {
   this._pickerDateValue = date;
@@ -210,7 +167,6 @@ filterBookedDates = (date: Date | null): boolean => {
     if(time < closestCheckoutDate!.getTime() || time >= this.importedCheckoutDate.getTime()){
       return false;
     }
-    console.log("closestCheckoutDate", closestCheckoutDate);
     
      if(closestCheckoutDate && time < closestCheckoutDate!.getTime() || time >= this.importedCheckoutDate.getTime()){
       return false;
@@ -221,14 +177,12 @@ filterBookedDates = (date: Date | null): boolean => {
   if(this.dateType === "checkout" && this.importedCheckinDate){
     const sortedReservations = this.importedReservations.sort((a, b) => a.checkoutDate!.getTime() - b.checkoutDate!.getTime())
 
-    const closestNextCheckinDate = sortedReservations.filter(reservation => reservation.checkinDate!.getTime() > this.importedCheckinDate!.getTime())[0].checkinDate
+    const closestNextCheckinDate = sortedReservations.filter(reservation => reservation.checkinDate!.getTime() > this.importedCheckinDate!.getTime())[0]?.checkinDate
     
     if(closestNextCheckinDate && time > closestNextCheckinDate.getTime() || time <= this.importedCheckinDate.getTime()){
       return false
     }
   }
-
-
   return true;
 }
 
@@ -270,22 +224,10 @@ emitNewDate(event : MatDatepickerInputEvent<Date>):void {
   
 }
 
-leaveWithoutEmitNewDate(event: Event): void {
-  console.log("before");
-  
-  if(this.initDateValue){
-    console.log("after cond");
-    
+leaveWithoutEmitNewDate(event: Event): void {  
+  if(this.initDateValue){    
     this.closeEmitter.emit(false)
   }
-}
-
-deleteCheckinDateValue(): void {
-  this._checkinDateValue = null;
-}
-
-deleteCheckoutDateValue() {
-  this._checkoutDateValue = null;
 }
 
 }

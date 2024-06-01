@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 
 import { environment } from '../../environment/environment';
 
 import { Appartment } from '../models/Appartment.model';
 import { Reservation } from '../models/Reservation.model';
+import { AppstoreService } from './appstore.service';
 
 
 @Injectable({
@@ -13,7 +14,7 @@ import { Reservation } from '../models/Reservation.model';
 })
 export class AppartmentsService {
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient, private appstore: AppstoreService) { 
   }
 
   getAppartments():Observable<Appartment[]> {
@@ -58,7 +59,7 @@ export class AppartmentsService {
 
   }
 
-  getActiveAppartments():Observable<Appartment[]> {
+  getActiveAppartments():Observable<Appartment[]> {    
     return this.http.get<Appartment[]>(environment.BACKEND_BASE_URL + '/activeAppartments').pipe(
       map((appartments) => appartments.map(appartment => {
 
@@ -94,8 +95,14 @@ export class AppartmentsService {
           appartment.photos,
           reservations
       )}
+
       )
-    )
+    ),
+    tap((data: Appartment[]) => {
+      console.log("data appart", data)
+      this.appstore.setActiveAppartments(data)
+      
+    })
     )
 
   }

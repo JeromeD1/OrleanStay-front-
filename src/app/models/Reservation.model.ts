@@ -1,9 +1,6 @@
-import { Appartment } from "./Appartment.model";
-
 export interface Reservation {
     id?: number
     appartment_id?: number
-    appartment?: Appartment
     checkinDate: Date | null
     checkoutDate: Date | null
     nbAdult: number
