@@ -1,3 +1,5 @@
+import { Traveller } from "./Traveller.model"
+
 export interface Reservation {
     id?: number
     appartment_id?: number
@@ -12,4 +14,5 @@ export interface Reservation {
     isDepositAsked?: boolean
     isDepositReceived?: boolean
     travellerMessage?: string
+    traveller?: Traveller
 }

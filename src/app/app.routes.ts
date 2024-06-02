@@ -2,9 +2,9 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { TemplateEmailComponent } from './components/template-email/template-email.component';
 import { AdminInterfaceComponent } from './pages/admin-interface/admin-interface.component';
-import { AcceptReservationComponent } from './components/accept-reservation/accept-reservation.component';
-import { AddReservationComponent } from './components/add-reservation/add-reservation.component';
-import { AppartmentGestionComponent } from './components/appartment-gestion/appartment-gestion.component';
+import { AcceptReservationComponent } from './pages/admin-interface/accept-reservation/accept-reservation.component';
+import { AddReservationComponent } from './pages/admin-interface/add-reservation/add-reservation.component';
+import { AppartmentGestionComponent } from './pages/admin-interface/appartment-gestion/appartment-gestion.component';
 
 export const routes: Routes = 
 [

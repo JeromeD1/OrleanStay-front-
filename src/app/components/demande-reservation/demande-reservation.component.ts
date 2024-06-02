@@ -9,6 +9,7 @@ import { Reservation } from '../../models/Reservation.model';
 import { CommonModule } from '@angular/common';
 import { DatePickerComponent } from '../date-picker/date-picker.component';
 import { AppstoreService } from '../../shared/appstore.service';
+import { BookingService } from '../../shared/booking.service';
 // import { TravellerHasReservation } from '../../../../../models/travellerHasReservation.model';
 // import { BookingDataService
 
@@ -24,7 +25,7 @@ export class DemandeReservationComponent {
   router: Router = inject(Router);
 
   // constructor(private someFunctionService: SomeFunctionsService, private bookingDataService: BookingDataService) {}
-  constructor(private someFunctionService: SomeFunctionsService, private appstore: AppstoreService) {}
+  constructor(private someFunctionService: SomeFunctionsService, private appstore: AppstoreService, private bookingService: BookingService) {}
 
   @Input()
   traveller!: Traveller;
@@ -54,19 +55,6 @@ export class DemandeReservationComponent {
   showPickerarrival: boolean = false;
   showPickerDeparture: boolean = false;
   showPopup: boolean = false;
-  // reservation: Reservation = {
-  //   id:0,
-  //   appartment_id: 0,
-  //   checkinDate: new Date(),
-  //   checkoutDate: new Date(),
-  //   nbAdult:0,
-  //   nbChild:0,
-  //   nbBaby:0,
-  //   reservationPrice:0,
-  //   isAccepted: false
-  // };
-
-  // travellerHasReservation!: TravellerHasReservation;
 
   get numberNight(): number | null {
     return this.someFunctionService.getNumberOfDays(this.userReservation);
@@ -86,7 +74,6 @@ ngOnInit(): void {
 handleChangeAppartment(appartmentName : String): void {
     this.appartment = this.appartments.find(appartment => appartment.name === appartmentName) as Appartment;
     if(this.userReservation.checkinDate && this.userReservation.checkoutDate && this.userReservation.nbAdult > 0){
-      // this.travelPrice = this.appartment.calculateReservationPrice(this.traveller.nbAdult, this.traveller.nbChild, this.traveller.checkinDate, this.traveller.checkoutDate,1)
       this.travelPrice = this.appartment.calculateReservationPrice(this.userReservation.nbAdult, this.userReservation.nbChild, this.userReservation.checkinDate, this.userReservation.checkoutDate)
 
     }
@@ -132,9 +119,7 @@ handleChangeCheckinOrCheckout(event: DateFromPicker): void {
   }
 
 
-  onSubmit(event: Event):void {
-    console.log('reservation', this.userReservation,"traveller", this.traveller);
-    
+  onSubmit(event: Event):void {    
     const clickedButton = (event.target as Element).getAttribute('data-button-id');
     
     if(this.demandeResaForm.valid && this.userReservation.checkinDate && this.userReservation.checkoutDate && this.travelPrice){
@@ -143,29 +128,7 @@ handleChangeCheckinOrCheckout(event: DateFromPicker): void {
         this.router.navigate(['/templateEmail', this.appartment.id])
         
       } else if(clickedButton === 'button-envoiMail'){
-        // this.reservation = {
-        //   id:0,
-        //   appartment_id: this.appartment.id,
-        //   checkinDate: this.traveller.checkinDate,
-        //   checkoutDate: this.traveller.checkoutDate,
-        //   nbAdult:this.traveller.nbAdult,
-        //   nbChild: this.traveller.nbChild,
-        //   nbBaby: this.traveller.nbBaby,
-        //   reservationPrice: this.travelPrice,
-        //   accepted: false
-        // }
-
-
-        // this.travellerHasReservation = {
-        //   traveller: this.traveller,
-        //   reservation: this.reservation,
-        //   appartmentDescription: this.appartment.description,
-        //   numberNight: this.numberNight as number,
-        //   accepted: false
-        // };
-
-        
-        // this.bookingDataService.postTravellerReservation(this.travellerHasReservation);
+        this.bookingService.postTravellerReservation(this.userReservation,this.traveller);
         
         this.showPopup = true;
         this.appstore.resetUserReservation()

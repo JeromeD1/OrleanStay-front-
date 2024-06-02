@@ -8,20 +8,22 @@ import { environment } from '../../environment/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class BookingServiceService {
+export class BookingService {
 
-  constructor(private http: HttpClient, appstore: AppstoreService) { }
+  constructor(private http: HttpClient, private appstore: AppstoreService) { }
 
   postTravellerReservation(userReservation: Reservation, traveller: Traveller): void {
+    const currentUser = this.appstore.currentUser()
+
     const body = {
       reservation: userReservation,
-      traveller: traveller
+      traveller: currentUser ? {...traveller, userId: currentUser.id} : traveller
     }
     
-    this.http.post(environment.BACKEND_BASE_URL + '/reservationWithTraveller',body).subscribe(
+    this.http.post<Reservation>(environment.BACKEND_BASE_URL + '/reservationWithTraveller',body).subscribe(
       {
         next: (response) => {
-          
+          this.appstore.addReservationIntoAppartment(response)
         },
         error: (error) => {
           console.error('Erreur lors de la requete : ', error);
