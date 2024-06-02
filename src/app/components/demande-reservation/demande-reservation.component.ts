@@ -140,7 +140,7 @@ handleChangeCheckinOrCheckout(event: DateFromPicker): void {
     if(this.demandeResaForm.valid && this.userReservation.checkinDate && this.userReservation.checkoutDate && this.travelPrice){
 
       if(clickedButton === "button-modele"){
-        this.router.navigate(['/modeleEmail', this.appartment.id])
+        this.router.navigate(['/templateEmail', this.appartment.id])
         
       } else if(clickedButton === 'button-envoiMail'){
         // this.reservation = {
