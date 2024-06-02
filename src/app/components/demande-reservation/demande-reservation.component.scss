@@ -3,7 +3,6 @@
 main {
     width: 100vw;
     height: 100vh;
-    box-sizing: border-box;
     position: fixed;
     z-index: 10;
     top: 0;
@@ -11,11 +10,14 @@ main {
     background-color: #fae7e181;
     backdrop-filter: blur(10px);
     overflow-y: auto;
-    // display: flex;
-    // justify-content: center;
-    // align-items: center;
+
+
+    fieldset {
+        padding: 16px;
+    }
 
     .popupDemandeTransmise{
+        @include flex-column-center-center;
         margin: auto;
         width: 700px;
         max-width: 95vw;
@@ -23,10 +25,6 @@ main {
         margin-top: 25vh;
         background-color: #fafafa9e;
         backdrop-filter: blur(40px);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
         gap: 10%;
         border-radius: 24px;
         border: 1px solid var(--colorDark);
@@ -38,6 +36,7 @@ main {
     }
 
     .reservation-container {
+        @include flex-column-center-center;
         margin: auto;
         margin-top: 24px;
         margin-bottom: 32px;
@@ -46,14 +45,9 @@ main {
         max-width: 95vw;
         box-shadow: 0 1px 0 2px var(--colorMid);
         min-height: 50vh;
-        // max-height: 100vh;
         overflow-y: auto;
         background-color: #fafafa9e;
         backdrop-filter: blur(40px);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
         gap: 32px;
         padding: 16px 64px;
         border-radius: 24px;
@@ -62,7 +56,6 @@ main {
             .img-close {
                 position: absolute;
                 top: 8px;
-                
                 right: 8px;
                 width: 40px;
                 height: auto;
@@ -129,13 +122,10 @@ main {
                     }
 
                     .flex-input {
-                        display: flex;
-                        flex-direction: row;
-                        justify-content: space-between;
-                        align-items: center;
+                        @include flex-row-between-center;
                         gap: 16px;
                         margin-bottom: 8px;
-                        padding: 4px;
+                        padding: 8px;
                         border-radius: 8px;
 
                         &:focus-within {
@@ -146,7 +136,7 @@ main {
                         input, select {
                             width: 300px;
                             max-width: 100%;
-                            padding: 4px;
+                            padding: 8px;
                             border-radius: 8px;
                             border: none;
 
@@ -159,7 +149,7 @@ main {
                     textarea {
                         width: 100%;
                         height: 150px;
-                        padding: 4px;
+                        padding: 8px;
                         border-radius: 8px;
                         border: none;
                     }
@@ -167,10 +157,7 @@ main {
 
 
                 .div-submit{
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: center;
-                    align-items: center;
+                    @include flex-row-center-center;
                     gap: 32px;
                     margin-top: 16px;
                 }
@@ -207,12 +194,8 @@ main {
             form {
                 fieldset {
                     .flex-input {
-                        flex-direction: column;
-                        justify-content: flex-start;
-                        align-items: flex-start;
+                        @include flex-column-start-start;
                         gap: 4px;
-
-
 
                         input, select {
                             max-width: 80vw;
