@@ -4,6 +4,7 @@ import { AppstoreService } from './appstore.service';
 import { Traveller } from '../models/Traveller.model';
 import { Reservation } from '../models/Reservation.model';
 import { environment } from '../../environment/environment';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class BookingService {
 
   constructor(private http: HttpClient, private appstore: AppstoreService) { }
 
-  postTravellerReservation(userReservation: Reservation, traveller: Traveller): void {
+  postTravellerReservation(userReservation: Reservation, traveller: Traveller): Observable<Reservation> {
     const currentUser = this.appstore.currentUser()
 
     const body = {
@@ -20,14 +21,18 @@ export class BookingService {
       traveller: currentUser ? {...traveller, userId: currentUser.id} : traveller
     }
     
-    this.http.post<Reservation>(environment.BACKEND_BASE_URL + '/reservationWithTraveller',body).subscribe(
-      {
-        next: (response) => {
-          this.appstore.addReservationIntoAppartment(response)
-        },
-        error: (error) => {
-          console.error('Erreur lors de la requete : ', error);
-      }}
+    return this.http.post<Reservation>(environment.BACKEND_BASE_URL + '/reservationWithTraveller',body).pipe(
+      tap((response) => {
+        this.appstore.addReservationIntoAppartment(response)
+      })
+      )
+    
+  }
+
+  getReservationRequests(): Observable<Reservation[]> {
+    return this.http.get<Reservation[]>(environment.BACKEND_BASE_URL + '/reservationRequests').pipe(
+      tap((data) => this.appstore.setReservationRequests(data))
     )
   }
+
 }

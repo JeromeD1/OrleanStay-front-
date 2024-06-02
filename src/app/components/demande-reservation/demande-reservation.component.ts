@@ -1,4 +1,4 @@
-import { Component, Input,Output ,EventEmitter, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, Input,Output ,EventEmitter, OnInit, ViewChild, inject, OnDestroy } from '@angular/core';
 import { Traveller } from '../../models/Traveller.model';
 import { Appartment } from '../../models/Appartment.model';
 import { SomeFunctionsService } from '../../shared/some-functions.service';
@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { DatePickerComponent } from '../date-picker/date-picker.component';
 import { AppstoreService } from '../../shared/appstore.service';
 import { BookingService } from '../../shared/booking.service';
+import { Subject, takeUntil } from 'rxjs';
 // import { TravellerHasReservation } from '../../../../../models/travellerHasReservation.model';
 // import { BookingDataService
 
@@ -21,7 +22,7 @@ import { BookingService } from '../../shared/booking.service';
   templateUrl: './demande-reservation.component.html',
   styleUrl: './demande-reservation.component.scss'
 })
-export class DemandeReservationComponent {
+export class DemandeReservationComponent implements OnInit, OnDestroy{
   router: Router = inject(Router);
 
   // constructor(private someFunctionService: SomeFunctionsService, private bookingDataService: BookingDataService) {}
@@ -55,6 +56,7 @@ export class DemandeReservationComponent {
   showPickerarrival: boolean = false;
   showPickerDeparture: boolean = false;
   showPopup: boolean = false;
+  destroy$: Subject<void> = new Subject()
 
   get numberNight(): number | null {
     return this.someFunctionService.getNumberOfDays(this.userReservation);
@@ -128,13 +130,27 @@ handleChangeCheckinOrCheckout(event: DateFromPicker): void {
         this.router.navigate(['/templateEmail', this.appartment.id])
         
       } else if(clickedButton === 'button-envoiMail'){
-        this.bookingService.postTravellerReservation(this.userReservation,this.traveller);
+        this.bookingService.postTravellerReservation(this.userReservation,this.traveller).pipe(takeUntil(this.destroy$)).subscribe(
+          {
+            next: () => {console.log("Réservation transmise avec succès")
+            },
+            error: () => {
+              console.log("Il y a eu une erreur lors de la transmission de votre réservation. Réservation non transmise");
+              
+            }
+          }
+        )
         
         this.showPopup = true;
         this.appstore.resetUserReservation()
       }
     }
     
+  }
+
+  ngOnDestroy(): void {
+      this.destroy$.next()
+      this.destroy$.complete()
   }
 
 }

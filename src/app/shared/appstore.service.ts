@@ -34,6 +34,7 @@ export class AppstoreService {
   allAppartments = signal<Appartment[]>([])
 
   currentUser = signal<User | null>(null)
+  reservationRequests = signal<Reservation[]>([])
 
 
   /*************Functions related to userReservation *************/
@@ -112,4 +113,9 @@ export class AppstoreService {
       this.traveller.set(traveller)
     }
 
+
+    /*******Functions related to reservationRequests */
+    setReservationRequests(reservations:Reservation[]): void {
+      this.reservationRequests.set(reservations)
+    }
 }
