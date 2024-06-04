@@ -1,9 +1,7 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
-// import { BookingDataService
 import { Traveller } from '../../models/Traveller.model';
 import { Appartment } from '../../models/Appartment.model';
 import { ActivatedRoute, ParamMap, Router, RouterModule } from '@angular/router';
-import { AppartmentsService } from '../../shared/appartments.service';
 import { SomeFunctionsService } from '../../shared/some-functions.service';
 import { Reservation } from '../../models/Reservation.model';
 import { AppstoreService } from '../../shared/appstore.service';
@@ -17,10 +15,10 @@ import { CommonModule } from '@angular/common';
   templateUrl: './template-email.component.html',
   styleUrl: './template-email.component.scss'
 })
-export class TemplateEmailComponent {
-  traveller: Traveller = this.appstore.traveller()
-  reservation: Reservation = this.appstore.userReservation()
-  appartments: Appartment[] = this.appstore.activeAppartments()
+export class TemplateEmailComponent implements OnInit, OnDestroy{
+  traveller: Traveller = this.appstore.getTraveller()()
+  reservation: Reservation = this.appstore.getUserReservation()()
+  appartments: Appartment[] = this.appstore.getActiveAppartments()()
   appartment!: Appartment;
   imageRetour = '../../../../../assets/icons/icons8-flèche-gauche-gris.png';
   arrivalDate: string | undefined;
@@ -31,8 +29,6 @@ export class TemplateEmailComponent {
   destroy$: Subject<void> = new Subject()
 
   constructor(
-    // private bookingDataService: BookingDataService, 
-    private appartmentService: AppartmentsService, 
     private someFunctionService: SomeFunctionsService,
     private appstore: AppstoreService
     ) {
@@ -43,6 +39,13 @@ export class TemplateEmailComponent {
       this.getAppartment();
       this.arrivalDate = this.someFunctionService.formatDate(this.reservation.checkinDate, "arrive");
       this.departureDate = this.someFunctionService.formatDate(this.reservation.checkoutDate, "depart");
+      console.log("traveller", this.traveller);
+      console.log("reservation", this.reservation);
+      console.log("appartments", this.appartments);
+      console.log("appartment", this.appartment);
+      
+      
+      
   }
 
   get numberNight(): number | null {

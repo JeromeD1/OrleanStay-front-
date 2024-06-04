@@ -26,8 +26,11 @@ export class AdminNavbarComponent implements OnDestroy{
     console.log("quitter");
     
   this.loginService.logout().pipe(takeUntil(this.destroy$)).subscribe(
-    () => {this.router.navigate(['/'])},
-    (error) => console.error(error)
+    {
+      next: () => {this.router.navigate(['/'])},
+      error: (error) => console.error(error)
+    }
+    
     )
   }
 

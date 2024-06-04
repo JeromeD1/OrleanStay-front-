@@ -127,8 +127,9 @@ export class TravellingChoicesComponent {
 
 /******Fonctions liées à la loupe et au lancement de la recherche ********/
 /////La recherche s'active si les dates d'arrivées et de départ sont définies et se désactive lorsqu'elle est lancée/////
+
 activateResearchButton(): void {  
-  if(this.appstore.userReservation().checkinDate && this.appstore.userReservation().checkoutDate){
+  if(this.userReservation().checkinDate && this.userReservation().checkoutDate){
     this.isResearchAnimated = true
   } else {
     this.isResearchAnimated = false

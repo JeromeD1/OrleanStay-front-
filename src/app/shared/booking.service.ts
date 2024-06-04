@@ -14,7 +14,7 @@ export class BookingService {
   constructor(private http: HttpClient, private appstore: AppstoreService) { }
 
   postTravellerReservation(userReservation: Reservation, traveller: Traveller): Observable<Reservation> {
-    const currentUser = this.appstore.currentUser()
+    const currentUser = this.appstore.getCurrentUser()()
 
     const body = {
       reservation: userReservation,

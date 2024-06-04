@@ -19,7 +19,7 @@ import { BookingGestionComponent } from '../../components/booking-gestion/bookin
 export class HomeComponent implements OnInit{
   constructor(private renderer: Renderer2, private el: ElementRef, private appstore: AppstoreService) {}
 
-  traveller: WritableSignal<Traveller> = this.appstore.traveller
+  traveller: WritableSignal<Traveller> = this.appstore.getTraveller()
   showLogin: boolean = false
   clickCount: number = 0
   timerId: any = null

@@ -18,6 +18,8 @@ export class LoginService {
       tap(data => {
         console.log("data : ", data);
         this.appstore.setCurrentUser(data)
+        console.log("currentUser login", this.appstore.getCurrentUser()());
+        
         this.appstore.setTraveller(
           {
             firstname: data.firstname,
@@ -30,6 +32,8 @@ export class LoginService {
             country: data.country,
           }
         )
+        console.log("traveller login", this.appstore.getTraveller()());
+        
       })
       )
   }
