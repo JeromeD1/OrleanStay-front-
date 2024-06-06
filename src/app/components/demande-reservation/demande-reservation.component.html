@@ -176,7 +176,15 @@
         </fieldset>
 
         <div class="div-submit">
-            <button type="submit" id="button-modele" data-button-id="button-modele" (click)="onSubmit($event)" title="Que vous pouvez copier pour envoyer directement via votre mail perso">Modèle email</button>
+            <!-- <button type="submit" id="button-modele" data-button-id="button-modele" (click)="onSubmit($event)" title="Que vous pouvez copier pour envoyer directement via votre mail perso">Modèle email</button> -->
+            <button type="submit" id="button-modele" data-button-id="button-modele" (click)="onSubmit($event)" title="Que vous pouvez copier pour envoyer directement via votre mail perso">
+                @if(demandeResaForm.valid){
+                    <a [routerLink]="['/templateEmail', appartment.id]" title="Que vous pouvez copier pour envoyer directement via votre mail perso">Model email</a>
+                } @else {
+                    <p>Model email</p>
+                }
+            </button>
+            <!-- <a [routerLink]="['/templateEmail', appartment.id]" title="Que vous pouvez copier pour envoyer directement via votre mail perso">Model email</a> -->
             <button type="submit" id="button-envoiMail" data-button-id="button-envoiMail" (click)="onSubmit($event)" title="Un email sera envoyé au propriétaire pour qu'il puisse traiter votre demande">Envoyer la demande</button>
         </div>
     </form>

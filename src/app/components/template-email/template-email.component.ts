@@ -1,11 +1,11 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Traveller } from '../../models/Traveller.model';
 import { Appartment } from '../../models/Appartment.model';
 import { ActivatedRoute, ParamMap, Router, RouterModule } from '@angular/router';
 import { SomeFunctionsService } from '../../shared/some-functions.service';
 import { Reservation } from '../../models/Reservation.model';
 import { AppstoreService } from '../../shared/appstore.service';
-import { Subject, takeUntil } from 'rxjs';
+import { take } from 'rxjs';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -15,7 +15,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './template-email.component.html',
   styleUrl: './template-email.component.scss'
 })
-export class TemplateEmailComponent implements OnInit, OnDestroy{
+export class TemplateEmailComponent implements OnInit{
   traveller: Traveller = this.appstore.getTraveller()()
   reservation: Reservation = this.appstore.getUserReservation()()
   appartments: Appartment[] = this.appstore.getActiveAppartments()()
@@ -26,7 +26,6 @@ export class TemplateEmailComponent implements OnInit, OnDestroy{
 
   router: Router = inject(Router);
   route: ActivatedRoute = inject(ActivatedRoute);
-  destroy$: Subject<void> = new Subject()
 
   constructor(
     private someFunctionService: SomeFunctionsService,
@@ -63,19 +62,19 @@ export class TemplateEmailComponent implements OnInit, OnDestroy{
 
 
   getAppartment(): void {
-    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params: ParamMap) => {
-        const appartmentId: number = parseInt(params.get('appartmentId') as string);
-   
-        this.appartment = this.appartments.find(appartment => appartment.id === appartmentId) as Appartment;
+    //   this.route.paramMap.pipe(take(1)).subscribe((params: ParamMap) => {
+    //     const appartmentId: number = parseInt(params.get('appartmentId') as string);
+    //   console.log("appartmentId", appartmentId);
+      
+    //     this.appartment = this.appartments.find(appartment => appartment.id === appartmentId) as Appartment;
             
 
-    })
+    // })
+
+    const appartmentId: number = parseInt(this.route.snapshot.paramMap.get('appartmentId') as string);
+          console.log("appartmentId", appartmentId);
+
+    this.appartment = this.appartments.find(appartment => appartment.id === appartmentId) as Appartment;
   }
 
-
-
-  ngOnDestroy(): void {
-      this.destroy$.next()
-      this.destroy$.complete()
-  }
 }

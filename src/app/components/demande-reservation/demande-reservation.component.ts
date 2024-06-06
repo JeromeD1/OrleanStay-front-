@@ -4,7 +4,7 @@ import { Appartment } from '../../models/Appartment.model';
 import { SomeFunctionsService } from '../../shared/some-functions.service';
 import { DateFromPicker } from '../../models/DateFromPicker.model';
 import { FormsModule, NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Reservation } from '../../models/Reservation.model';
 import { CommonModule } from '@angular/common';
 import { DatePickerComponent } from '../date-picker/date-picker.component';
@@ -18,7 +18,7 @@ import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-demande-reservation',
   standalone: true,
-  imports: [CommonModule, FormsModule, DatePickerComponent],
+  imports: [CommonModule, FormsModule, DatePickerComponent, RouterModule],
   templateUrl: './demande-reservation.component.html',
   styleUrl: './demande-reservation.component.scss'
 })
@@ -126,10 +126,7 @@ handleChangeCheckinOrCheckout(event: DateFromPicker): void {
     
     if(this.demandeResaForm.valid && this.userReservation.checkinDate && this.userReservation.checkoutDate && this.travelPrice){
 
-      if(clickedButton === "button-modele"){
-        this.router.navigate(['/templateEmail', this.appartment.id])
-        
-      } else if(clickedButton === 'button-envoiMail'){
+      if(clickedButton === 'button-envoiMail'){
         this.bookingService.postTravellerReservation(this.userReservation,this.traveller).pipe(takeUntil(this.destroy$)).subscribe(
           {
             next: () => {console.log("Réservation transmise avec succès")
