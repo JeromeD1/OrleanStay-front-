@@ -37,6 +37,10 @@ export class LoginService {
           }
         )
         console.log("traveller login", this.appstore.getTraveller()());
+
+        this.appstore.setToken(`${data.token}`)
+        console.log("token :", this.appstore.getToken());
+        
         
       })
       )

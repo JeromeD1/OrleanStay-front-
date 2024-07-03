@@ -12,6 +12,8 @@ export class AppstoreService {
   constructor() { }
 
   /***************Signal declarations ***************************/
+    private _token = signal<string>("")
+
     private _traveller = signal<Traveller>({
       personalInformations: {
         firstname: '',
@@ -38,6 +40,16 @@ export class AppstoreService {
 
   private _currentUser = signal<User | null>(null)
   _reservationRequests = signal<Reservation[]>([])
+
+
+  /*************Functions related to token **********************/
+  getToken():string {
+    return this._token()
+  }
+
+  setToken(token: string): void {
+    this._token.set(token)
+  }
 
 
   /*************Functions related to userReservation *************/
