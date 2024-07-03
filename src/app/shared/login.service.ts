@@ -17,7 +17,8 @@ export class LoginService {
     return this.http.post<{token: string, utilisateur:User}>(environment.BACKEND_BASE_URL + '/login', data).pipe(
       tap(data => {
         console.log("data : ", data);
-        this.appstore.setCurrentUser(data.utilisateur)
+        const newUser:User = {...data.utilisateur, creationDate: new Date(data.utilisateur.creationDate)}
+        this.appstore.setCurrentUser(newUser)
         console.log("currentUser login", this.appstore.getCurrentUser()());
         
         this.appstore.setTraveller(
