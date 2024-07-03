@@ -18,7 +18,7 @@ export class AppartmentsService {
   }
 
   getAppartments():Observable<Appartment[]> {
-    return this.http.get<Appartment[]>(environment.BACKEND_BASE_URL + '/appartments').pipe(
+    return this.http.get<Appartment[]>(environment.BACKEND_BASE_URL + '/appartment/all').pipe(
       map((appartments) => appartments.map(appartment => {
         
         //conversion de checkinDate et checkoutDate de reservations qui arrivent en string en Date
@@ -31,7 +31,7 @@ export class AppartmentsService {
         
         return new Appartment(
         appartment.id,
-        appartment.owner,
+        appartment.ownerId,
         appartment.discounts,
         appartment.name,
         appartment.description,
@@ -44,14 +44,15 @@ export class AppartmentsService {
         appartment.googleMapUrl,
         appartment.nightPrice,
         appartment.caution,
-        appartment.menage_court_sejour,
-        appartment.menage_long_sejour,
-        appartment.menage_longue_duree,
+        appartment.menageCourtSejour,
+        appartment.menageLongSejour,
+        appartment.menageLongueDuree,
         appartment.type,
-        appartment.isActive,
+        appartment.active,
         appartment.infos,
         appartment.photos,
-        reservations
+        reservations,
+        appartment.comments
       )}
       )
     )
@@ -60,7 +61,9 @@ export class AppartmentsService {
   }
 
   getActiveAppartments():Observable<Appartment[]> {    
-    return this.http.get<Appartment[]>(environment.BACKEND_BASE_URL + '/activeAppartments').pipe(
+    console.log("environment.BACKEND_BASE_URL ", environment.BACKEND_BASE_URL);
+
+    return this.http.get<Appartment[]>(environment.BACKEND_BASE_URL + '/appartment/active').pipe(
       map((appartments) => appartments.map(appartment => {
 
         //conversion de checkinDate et checkoutDate de reservations qui arrivent en string en Date
@@ -73,7 +76,7 @@ export class AppartmentsService {
         
         return new Appartment(
           appartment.id,
-          appartment.owner,
+          appartment.ownerId,
           appartment.discounts,
           appartment.name,
           appartment.description,
@@ -86,14 +89,15 @@ export class AppartmentsService {
           appartment.googleMapUrl,
           appartment.nightPrice,
           appartment.caution,
-          appartment.menage_court_sejour,
-          appartment.menage_long_sejour,
-          appartment.menage_longue_duree,
+          appartment.menageCourtSejour,
+          appartment.menageLongSejour,
+          appartment.menageLongueDuree,
           appartment.type,
-          appartment.isActive,
+          appartment.active,
           appartment.infos,
           appartment.photos,
-          reservations
+          reservations,
+          appartment.comments
       )}
 
       )

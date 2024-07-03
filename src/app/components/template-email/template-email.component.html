@@ -26,11 +26,11 @@
         <p>Prix de la réservation : {{travelPrice}} €</p>
         <br>
         <h2>Coordonnées du voyageur</h2>
-        <p>Nom : {{traveller.lastname}} </p>
-        <p>Prénom : {{traveller.firstname}} </p>
-        <p>Abresse : {{traveller.address}}, {{traveller.zipcode}} {{traveller.city}}, {{traveller.country}} </p>
-        <p>email : {{traveller.email}}</p>
-        <p>Téléphone : {{traveller.phone}}</p>
+        <p>Nom : {{traveller.personalInformations.lastname}} </p>
+        <p>Prénom : {{traveller.personalInformations.firstname}} </p>
+        <p>Abresse : {{traveller.personalInformations.address}}, {{traveller.personalInformations.zipcode}} {{traveller.personalInformations.city}}, {{traveller.personalInformations.country}} </p>
+        <p>email : {{traveller.personalInformations.email}}</p>
+        <p>Téléphone : {{traveller.personalInformations.phone}}</p>
         <br>
         <br>
         <p *ngIf="reservation.travellerMessage" class="messageTextarea">{{reservation.travellerMessage}}</p>
@@ -39,7 +39,7 @@
             <br>
             <p>Dans l'attente de votre retour.</p>
             <p>Cordialement,</p>
-            <p>{{traveller.firstname}} {{traveller.lastname}} </p>
+            <p>{{traveller.personalInformations.firstname}} {{traveller.personalInformations.lastname}} </p>
         </div>
     </section>
 </main>

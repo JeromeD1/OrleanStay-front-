@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core'
+import { Injectable, WritableSignal, signal } from '@angular/core'
 import { Traveller } from '../models/Traveller.model'
 import { Reservation } from '../models/Reservation.model'
 import { Appartment } from '../models/Appartment.model'
@@ -12,17 +12,20 @@ export class AppstoreService {
   constructor() { }
 
   /***************Signal declarations ***************************/
-    traveller = signal<Traveller>({firstname: '',
-    lastname: '',
-    email: '',
-    phone: '',
-    address: '',
-    zipcode: '',
-    city: '',
-    country: '',
-  })
+    private _traveller = signal<Traveller>({
+      personalInformations: {
+        firstname: '',
+        lastname: '',
+        email: '',
+        phone: '',
+        address: '',
+        zipcode: '',
+        city: '',
+        country: ''
+      }
+    })
 
-  userReservation = signal<Reservation>({
+  private _userReservation = signal<Reservation>({
     checkinDate: null,
     checkoutDate: null,
     nbAdult: 0,
@@ -30,15 +33,21 @@ export class AppstoreService {
     nbChild: 0
   })
 
-  activeAppartments = signal<Appartment[]>([])
-  allAppartments = signal<Appartment[]>([])
+  private _activeAppartments = signal<Appartment[]>([])
+  private _allAppartments = signal<Appartment[]>([])
 
-  currentUser = signal<User | null>(null)
+  private _currentUser = signal<User | null>(null)
+  _reservationRequests = signal<Reservation[]>([])
 
 
   /*************Functions related to userReservation *************/
+
+  getUserReservation(): WritableSignal<Reservation> {
+    return this._userReservation
+  }
+
   resetUserReservation(): void {
-    this.userReservation.set({
+    this._userReservation.set({
       checkinDate: null,
       checkoutDate: null,
       nbAdult: 0,
@@ -48,33 +57,42 @@ export class AppstoreService {
   }
 
   resetUserReservationTravellers(): void {
-    this.userReservation.update(value => (
+    this._userReservation.update(value => (
       {...value, nbAdult:0, nbBaby:0, nbChild:0}
     ))
   }
 
   updateUserReservationKey<T>(key: keyof Reservation, value: T){
-    this.userReservation.update(previousState => (
+    this._userReservation.update(previousState => (
       {...previousState, [key]: value}
     ))
   }
 
   /************Functions related to Appartments ****************/
+  getActiveAppartments(): WritableSignal<Appartment[]> {
+    return this._activeAppartments
+  }
+
+  getAllAppartments(): WritableSignal<Appartment[]> {
+    return this._allAppartments
+  }
+
   setActiveAppartments(appartments: Appartment[]): void {
-    this.activeAppartments.set(appartments)
+    this._activeAppartments.set(appartments)
   }
 
   setAllAppartments(appartments: Appartment[]): void {
-    this.allAppartments.set(appartments)
+    this._allAppartments.set(appartments)
   }
 
 
-  addReservationIntoAppartment(reservation: Reservation): void {
+  addReservationIntoAppartment(reservation: any): void {
+    const newReservation: Reservation = {...reservation, checkinDate: new Date(reservation.checkinDate), checkoutDate: new Date(reservation.checkoutDate)}
     //Ajout dans activeAppartments dans l'appartment de bon id
-    this.activeAppartments.update(value => 
+    this._activeAppartments.update(value => 
       value.map(appartment => {
-        if (appartment.id === reservation.appartment_id) {
-          appartment.addReservation(reservation)
+        if (appartment.id === reservation.appartmentId) {
+          appartment.addReservation(newReservation)
           return appartment
         }
         return appartment
@@ -82,10 +100,10 @@ export class AppstoreService {
     )
 
      //Ajout dans allAppartments dans l'appartment de bon id
-     this.allAppartments.update(value => 
+     this._allAppartments.update(value => 
       value.map(appartment => {
-        if (appartment.id === reservation.appartment_id) {
-          appartment.addReservation(reservation)
+        if (appartment.id === reservation.appartmentId) {
+          appartment.addReservation(newReservation)
           return appartment
         }
         return appartment
@@ -94,13 +112,17 @@ export class AppstoreService {
   }
 
   /********Functions related to currentUser *************/
+  getCurrentUser(): WritableSignal<User | null> {
+    return this._currentUser
+  }
+
   setCurrentUser(user: User): void {
-    this.currentUser.set(user)
+    this._currentUser.set(user)
   }
 
   updateCurrentUserKey<K extends keyof User>(key: K, value: User[K]): void {
-    if(this.currentUser()) {
-      this.currentUser.update((previousState) => {
+    if(this._currentUser()) {
+      this._currentUser.update((previousState) => {
         const updatedState = {...previousState, [key]: value} as User;
         return updatedState;
       });
@@ -108,8 +130,21 @@ export class AppstoreService {
   }  
 
     /********Functions related to traveller *************/
-    setTraveller(traveller: Traveller): void {
-      this.traveller.set(traveller)
+    getTraveller(): WritableSignal<Traveller> {
+      return this._traveller
     }
 
+    setTraveller(traveller: Traveller): void {
+      this._traveller.set(traveller)
+    }
+
+
+    /*******Functions related to reservationRequests */
+    getReservationRequests(): WritableSignal<Reservation[]> {
+      return this._reservationRequests
+    }
+
+    setReservationRequests(reservations:Reservation[]): void {
+      this._reservationRequests.set(reservations)
+    }
 }

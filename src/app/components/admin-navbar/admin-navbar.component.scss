@@ -1,0 +1,130 @@
+@import "../../styles/mixins";
+
+nav {
+    @include flex-row-between-center;
+    gap: 24px;
+    padding: 0 24px 0 24px;
+    background-color: var(--colorMid);
+    width: 100vw;
+    max-width: 1800px;
+    height: 70px;
+    margin: auto;
+    margin-bottom: 16px;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+
+    .navBurger {
+        display: none;
+    }
+
+    .navPage {
+        @include flex-row-start-center;
+        gap: 24px;
+
+        a{
+            @include flex-row-center-center;
+            height: 70px;
+            color: black;
+            padding: 8px;
+    
+            &:hover {
+                background-color: var(--colorLight);
+                border-radius: 35px;
+            }
+    
+            p{
+                margin: 0 !important;
+                padding: 0;
+            }
+        }
+
+        a.leaveAdmin {
+            color: rgb(200, 0, 0);
+
+            &:hover {
+                background-color: var(--colorDarkest);
+                font-weight: bold;
+                color: var(--colorLight);
+            }
+        }
+    }
+
+    img {
+        height: 65px;
+        width: auto;
+
+        &:hover {
+            cursor: pointer;
+            filter: hue-rotate(110deg);
+        }
+    }
+}
+
+@media screen and (max-width: 700px) {
+    nav {
+        position: relative;
+
+        .keepOnRight {
+            position: absolute;
+            top: 5px;
+            right: 24px;
+        }
+
+        .navPage {
+            display: none;
+        }
+
+        img.navBurger {
+            display: block;
+
+        }
+
+        div.navBurger {
+            @include flex-column-center-center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 70vw;
+            height: 100vh;
+            padding: 16px;
+            background-color: var(--colorMid);
+            animation: fromLeft 0.3s ease;
+
+            a {
+                @include flex-row-center-center;
+                text-decoration: none;
+                color: black;
+                width: 100%;
+                height: 150px;
+                text-align: center;
+
+                p{
+                    font-size: var(--mpFontSize) !important;
+                }
+
+                &:hover {
+                    background-color: var(--colorLight);
+                }
+            }
+
+            a.leaveAdmin {
+                color: rgb(200, 0, 0);
+    
+                &:hover {
+                    background-color: var(--colorDarkest);
+                    font-weight: bold;
+                    color: var(--colorLight);
+                }
+            }
+        }
+    }
+}
+
+@keyframes fromLeft {
+    0% {
+        transform: translateX(-70vw);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}

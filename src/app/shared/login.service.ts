@@ -13,23 +13,31 @@ export class LoginService {
 
   constructor(private http: HttpClient, private appstore: AppstoreService) { }
 
-  login(data: any): Observable<User> {
-    return this.http.post<User>(environment.BACKEND_BASE_URL + '/login', data).pipe(
+  login(data: any): Observable<{token: string, utilisateur:User}> {
+    return this.http.post<{token: string, utilisateur:User}>(environment.BACKEND_BASE_URL + '/login', data).pipe(
       tap(data => {
         console.log("data : ", data);
-        this.appstore.setCurrentUser(data)
+        const newUser:User = {...data.utilisateur, creationDate: new Date(data.utilisateur.creationDate)}
+        this.appstore.setCurrentUser(newUser)
+        console.log("currentUser login", this.appstore.getCurrentUser()());
+        
         this.appstore.setTraveller(
           {
-            firstname: data.firstname,
-            lastname: data.lastname,
-            email: data.email,
-            phone: data.phone,
-            address: data.address,
-            zipcode: data.zipcode,
-            city: data.city,
-            country: data.country,
+            personalInformations: {
+              firstname: data.utilisateur.personalInformations.firstname,
+              lastname: data.utilisateur.personalInformations.lastname,
+              email: data.utilisateur.personalInformations.email,
+              phone: data.utilisateur.personalInformations.phone,
+              address: data.utilisateur.personalInformations.address,
+              zipcode: data.utilisateur.personalInformations.zipcode,
+              city: data.utilisateur.personalInformations.city,
+              country: data.utilisateur.personalInformations.country
+            }
+            
           }
         )
+        console.log("traveller login", this.appstore.getTraveller()());
+        
       })
       )
   }

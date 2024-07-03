@@ -1,0 +1,29 @@
+<nav>
+    <div class="navPage">
+        <a [routerLink]="['/admin/acceptReservation']" ><p>Demandes de réservation</p></a>
+        <a [routerLink]="['/admin/addReservation']" ><p>Enregistrement de réservations</p></a>
+        <a [routerLink]="['/admin/appartGestion']" ><p>Gestion globale</p></a>
+        <a class="leaveAdmin" (click)="logout()"><p>Quitter le mode admin</p></a>
+    </div>
+
+    <img src="../../../../../assets/icons/icons-menu.png" 
+    alt="menu-burger" 
+    *ngIf="!showMenuBurger" 
+    (click)="setShowMenuBurger()" 
+    class="navBurger"
+    >
+
+
+    <div class="navBurger" *ngIf="showMenuBurger">
+        <a [routerLink]="['/admin/acceptReservation']" (click)="setShowMenuBurger()"><p>Demandes de réservation</p></a>
+        <a [routerLink]="['/admin/addReservation']" (click)="setShowMenuBurger()"><p>Enregistrement de réservations</p></a>
+        <a [routerLink]="['/admin/appartGestion']" (click)="setShowMenuBurger()"><p>Gestion globale</p></a>
+        <a [routerLink]="['/']" class="leaveAdmin" (click)="logout()"><p>Quitter le mode admin</p></a>
+    </div>
+
+    <img src="../../../../../assets/icons/icon-calendrier.png" 
+    alt="open-calendar"
+    [class.keepOnRight]="showMenuBurger"
+    >
+
+</nav>

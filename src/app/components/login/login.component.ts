@@ -44,7 +44,9 @@ export class LoginComponent implements OnDestroy {
     this.loginService.login(formData).subscribe(
       {
         next: (data) => {
-          if(data?.role === "admin"){
+          console.log("data in loginComponent after login", data);
+          
+          if(data?.utilisateur.role === "ADMIN"){
             this.router.navigate(['/admin'])
           } else {
             this.wrongUserMessage = "Vous n'avez pas les droits pour vous connecter !"
@@ -55,28 +57,33 @@ export class LoginComponent implements OnDestroy {
           // FIXME / A SUPPRIMER 
           this.appstore.setCurrentUser({
             id: 0,
-            role: "user",
-            firstname: "Hector",
+            role: "USER",
+            personalInformations: {
+              firstname: "Hector",
             lastname: "Legrand",
             email: "hector.legrand@gmail.com",
             phone: "06 87 78 98 24",
             address: "Dans ton cul",
             zipcode: "99 999",
             city: "Lune",
-            country: "Espace",
+            country: "Espace"
+            },
             creationDate: new Date()
           })
 
           this.appstore.setTraveller(
             {
-              firstname: "Hector",
-              lastname: "Legrand",
-              email: "hector.legrand@gmail.com",
-              phone: "06 87 78 98 24",
-              address: "Dans ton cul",
-              zipcode: "99 999",
-              city: "Lune",
-              country: "Espace",
+              personalInformations: {
+                firstname: "Hector",
+                lastname: "Legrand",
+                email: "hector.legrand@gmail.com",
+                phone: "06 87 78 98 24",
+                address: "Dans ton cul",
+                zipcode: "99 999",
+                city: "Lune",
+                country: "Espace",
+              }
+              
             }
           )
         }

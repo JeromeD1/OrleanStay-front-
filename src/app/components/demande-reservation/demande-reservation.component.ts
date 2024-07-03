@@ -1,14 +1,17 @@
-import { Component, Input,Output ,EventEmitter, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, Input,Output ,EventEmitter, OnInit, ViewChild, inject, OnDestroy } from '@angular/core';
 import { Traveller } from '../../models/Traveller.model';
 import { Appartment } from '../../models/Appartment.model';
 import { SomeFunctionsService } from '../../shared/some-functions.service';
 import { DateFromPicker } from '../../models/DateFromPicker.model';
 import { FormsModule, NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Reservation } from '../../models/Reservation.model';
 import { CommonModule } from '@angular/common';
 import { DatePickerComponent } from '../date-picker/date-picker.component';
 import { AppstoreService } from '../../shared/appstore.service';
+import { BookingService } from '../../shared/booking.service';
+import { Subject, takeUntil } from 'rxjs';
+import { ReservationRequest } from '../../models/Request/ReservationRequest.model';
 // import { TravellerHasReservation } from '../../../../../models/travellerHasReservation.model';
 // import { BookingDataService
 
@@ -16,15 +19,15 @@ import { AppstoreService } from '../../shared/appstore.service';
 @Component({
   selector: 'app-demande-reservation',
   standalone: true,
-  imports: [CommonModule, FormsModule, DatePickerComponent],
+  imports: [CommonModule, FormsModule, DatePickerComponent, RouterModule],
   templateUrl: './demande-reservation.component.html',
   styleUrl: './demande-reservation.component.scss'
 })
-export class DemandeReservationComponent {
+export class DemandeReservationComponent implements OnInit, OnDestroy{
   router: Router = inject(Router);
 
   // constructor(private someFunctionService: SomeFunctionsService, private bookingDataService: BookingDataService) {}
-  constructor(private someFunctionService: SomeFunctionsService, private appstore: AppstoreService) {}
+  constructor(private someFunctionService: SomeFunctionsService, private appstore: AppstoreService, private bookingService: BookingService) {}
 
   @Input()
   traveller!: Traveller;
@@ -54,19 +57,7 @@ export class DemandeReservationComponent {
   showPickerarrival: boolean = false;
   showPickerDeparture: boolean = false;
   showPopup: boolean = false;
-  // reservation: Reservation = {
-  //   id:0,
-  //   appartment_id: 0,
-  //   checkinDate: new Date(),
-  //   checkoutDate: new Date(),
-  //   nbAdult:0,
-  //   nbChild:0,
-  //   nbBaby:0,
-  //   reservationPrice:0,
-  //   isAccepted: false
-  // };
-
-  // travellerHasReservation!: TravellerHasReservation;
+  destroy$: Subject<void> = new Subject()
 
   get numberNight(): number | null {
     return this.someFunctionService.getNumberOfDays(this.userReservation);
@@ -86,7 +77,6 @@ ngOnInit(): void {
 handleChangeAppartment(appartmentName : String): void {
     this.appartment = this.appartments.find(appartment => appartment.name === appartmentName) as Appartment;
     if(this.userReservation.checkinDate && this.userReservation.checkoutDate && this.userReservation.nbAdult > 0){
-      // this.travelPrice = this.appartment.calculateReservationPrice(this.traveller.nbAdult, this.traveller.nbChild, this.traveller.checkinDate, this.traveller.checkoutDate,1)
       this.travelPrice = this.appartment.calculateReservationPrice(this.userReservation.nbAdult, this.userReservation.nbChild, this.userReservation.checkinDate, this.userReservation.checkoutDate)
 
     }
@@ -132,46 +122,51 @@ handleChangeCheckinOrCheckout(event: DateFromPicker): void {
   }
 
 
-  onSubmit(event: Event):void {
-    console.log('reservation', this.userReservation,"traveller", this.traveller);
-    
+  onSubmit(event: Event):void {    
     const clickedButton = (event.target as Element).getAttribute('data-button-id');
     
     if(this.demandeResaForm.valid && this.userReservation.checkinDate && this.userReservation.checkoutDate && this.travelPrice){
 
-      if(clickedButton === "button-modele"){
-        this.router.navigate(['/templateEmail', this.appartment.id])
+      if(clickedButton === 'button-envoiMail'){
+        const currentUser = this.appstore.getCurrentUser()()
+        this.traveller.utilisateurId = currentUser?.id
+        console.log("userReservation",this.userReservation);
         
-      } else if(clickedButton === 'button-envoiMail'){
-        // this.reservation = {
-        //   id:0,
-        //   appartment_id: this.appartment.id,
-        //   checkinDate: this.traveller.checkinDate,
-        //   checkoutDate: this.traveller.checkoutDate,
-        //   nbAdult:this.traveller.nbAdult,
-        //   nbChild: this.traveller.nbChild,
-        //   nbBaby: this.traveller.nbBaby,
-        //   reservationPrice: this.travelPrice,
-        //   accepted: false
-        // }
 
-
-        // this.travellerHasReservation = {
-        //   traveller: this.traveller,
-        //   reservation: this.reservation,
-        //   appartmentDescription: this.appartment.description,
-        //   numberNight: this.numberNight as number,
-        //   accepted: false
-        // };
-
+        const reservationRequest: ReservationRequest = {
+          appartmentId: this.appartment.id as number,
+          traveller: this.traveller,
+          checkinDate: this.userReservation.checkinDate,
+          checkoutDate: this.userReservation.checkoutDate,
+          nbAdult: this.userReservation.nbAdult,
+          nbChild: this.userReservation.nbChild,
+          nbBaby: this.userReservation.nbBaby,
+          reservationPrice: this.travelPrice,
+          travellerMessage: this.userReservation.travellerMessage
+        }
+        this.bookingService.postTravellerReservation(reservationRequest).pipe(takeUntil(this.destroy$)).subscribe(
+          {
+            next: () => {
+              console.log("Réservation transmise avec succès")
+              this.showPopup = true;
+              this.appstore.resetUserReservation()
+            },
+            error: () => {
+              console.log("Il y a eu une erreur lors de la transmission de votre réservation. Réservation non transmise");
+              
+            }
+          }
+        )
         
-        // this.bookingDataService.postTravellerReservation(this.travellerHasReservation);
         
-        this.showPopup = true;
-        this.appstore.resetUserReservation()
       }
     }
     
+  }
+
+  ngOnDestroy(): void {
+      this.destroy$.next()
+      this.destroy$.complete()
   }
 
 }

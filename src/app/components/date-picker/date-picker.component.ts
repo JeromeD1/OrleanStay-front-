@@ -198,7 +198,7 @@ dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
             if(this.whoIsWatching === "user"){
               return 'highlight-date-accepted';
             }else {
-              if(reservation.isAccepted){
+              if(reservation.accepted){
                 return 'highlight-date-accepted';
               } else {
                 return 'highlight-date-not-accepted';

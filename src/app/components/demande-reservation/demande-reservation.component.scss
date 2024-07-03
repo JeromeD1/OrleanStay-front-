@@ -160,6 +160,13 @@ main {
                     @include flex-row-center-center;
                     gap: 32px;
                     margin-top: 16px;
+
+                    a {
+                        color: black;
+                    }
+                    p{
+                        margin: 0;
+                    }
                 }
             }
 

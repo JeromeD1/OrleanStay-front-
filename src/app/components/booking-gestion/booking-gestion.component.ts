@@ -30,10 +30,11 @@ export class BookingGestionComponent implements OnInit, OnDestroy{
     })
   }
 
-  traveller: WritableSignal<Traveller> = this.appstore.traveller
-  userReservation: WritableSignal<Reservation> = this.appstore.userReservation
+  traveller: WritableSignal<Traveller> = this.appstore.getTraveller()
+  userReservation: WritableSignal<Reservation> = this.appstore.getUserReservation()
 
-  appartments: WritableSignal<Appartment[]> = this.appstore.activeAppartments
+
+  appartments: WritableSignal<Appartment[]> = this.appstore.getActiveAppartments()
   filteredAppartments :Appartment[] = []
   destroy$: Subject<void> = new Subject()
 
