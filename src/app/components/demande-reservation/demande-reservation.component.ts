@@ -11,6 +11,7 @@ import { DatePickerComponent } from '../date-picker/date-picker.component';
 import { AppstoreService } from '../../shared/appstore.service';
 import { BookingService } from '../../shared/booking.service';
 import { Subject, takeUntil } from 'rxjs';
+import { ReservationRequest } from '../../models/Request/ReservationRequest.model';
 // import { TravellerHasReservation } from '../../../../../models/travellerHasReservation.model';
 // import { BookingDataService
 
@@ -127,9 +128,28 @@ handleChangeCheckinOrCheckout(event: DateFromPicker): void {
     if(this.demandeResaForm.valid && this.userReservation.checkinDate && this.userReservation.checkoutDate && this.travelPrice){
 
       if(clickedButton === 'button-envoiMail'){
-        this.bookingService.postTravellerReservation(this.userReservation,this.traveller).pipe(takeUntil(this.destroy$)).subscribe(
+        const currentUser = this.appstore.getCurrentUser()()
+        this.traveller.utilisateurId = currentUser?.id
+        console.log("userReservation",this.userReservation);
+        
+
+        const reservationRequest: ReservationRequest = {
+          appartmentId: this.appartment.id as number,
+          traveller: this.traveller,
+          checkinDate: this.userReservation.checkinDate,
+          checkoutDate: this.userReservation.checkoutDate,
+          nbAdult: this.userReservation.nbAdult,
+          nbChild: this.userReservation.nbChild,
+          nbBaby: this.userReservation.nbBaby,
+          reservationPrice: this.travelPrice,
+          travellerMessage: this.userReservation.travellerMessage
+        }
+        this.bookingService.postTravellerReservation(reservationRequest).pipe(takeUntil(this.destroy$)).subscribe(
           {
-            next: () => {console.log("Réservation transmise avec succès")
+            next: () => {
+              console.log("Réservation transmise avec succès")
+              this.showPopup = true;
+              this.appstore.resetUserReservation()
             },
             error: () => {
               console.log("Il y a eu une erreur lors de la transmission de votre réservation. Réservation non transmise");
@@ -138,8 +158,7 @@ handleChangeCheckinOrCheckout(event: DateFromPicker): void {
           }
         )
         
-        this.showPopup = true;
-        this.appstore.resetUserReservation()
+        
       }
     }
     

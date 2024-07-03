@@ -1,13 +1,8 @@
+import { PersonalInformation } from "./PersonalInformation.model"
+
 export interface User {
     id: number
-    role: "admin" | "owner" | "user"
-    firstname: string
-    lastname: string
-    email: string
-    phone: string
-    address: string
-    zipcode: string
-    city: string
-    country: string
+    role: "ADMIN" | "OWNER" | "USER"
+    personalInformations: PersonalInformation
     creationDate: Date
 }

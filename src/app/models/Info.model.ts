@@ -1,5 +1,6 @@
 export interface Info {
     id: number;
-    appartment_id: number;
+    appartmentId: number;
+    positionOrder: number;
     info: string;
 }

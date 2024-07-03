@@ -1,18 +1,17 @@
-import { Traveller } from "./Traveller.model"
+import { Traveller } from "../Traveller.model"
 
-export interface Reservation {
-    id?: number
-    appartmentId?: number
+export interface ReservationRequest {
+    appartmentId: number
+    traveller: Traveller
     checkinDate: Date | null
     checkoutDate: Date | null
     nbAdult: number
     nbChild: number
     nbBaby: number
-    reservationPrice?: number
+    reservationPrice: number
     accepted?: boolean
     cancelled?: boolean
     depositAsked?: boolean
     depositReceived?: boolean
     travellerMessage?: string
-    traveller?: Traveller
 }

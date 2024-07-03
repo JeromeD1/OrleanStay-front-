@@ -12,15 +12,18 @@ export class AppstoreService {
   constructor() { }
 
   /***************Signal declarations ***************************/
-    private _traveller = signal<Traveller>({firstname: '',
-    lastname: '',
-    email: '',
-    phone: '',
-    address: '',
-    zipcode: '',
-    city: '',
-    country: '',
-  })
+    private _traveller = signal<Traveller>({
+      personalInformations: {
+        firstname: '',
+        lastname: '',
+        email: '',
+        phone: '',
+        address: '',
+        zipcode: '',
+        city: '',
+        country: ''
+      }
+    })
 
   private _userReservation = signal<Reservation>({
     checkinDate: null,
@@ -83,12 +86,13 @@ export class AppstoreService {
   }
 
 
-  addReservationIntoAppartment(reservation: Reservation): void {
+  addReservationIntoAppartment(reservation: any): void {
+    const newReservation: Reservation = {...reservation, checkinDate: new Date(reservation.checkinDate), checkoutDate: new Date(reservation.checkoutDate)}
     //Ajout dans activeAppartments dans l'appartment de bon id
     this._activeAppartments.update(value => 
       value.map(appartment => {
-        if (appartment.id === reservation.appartment_id) {
-          appartment.addReservation(reservation)
+        if (appartment.id === reservation.appartmentId) {
+          appartment.addReservation(newReservation)
           return appartment
         }
         return appartment
@@ -98,8 +102,8 @@ export class AppstoreService {
      //Ajout dans allAppartments dans l'appartment de bon id
      this._allAppartments.update(value => 
       value.map(appartment => {
-        if (appartment.id === reservation.appartment_id) {
-          appartment.addReservation(reservation)
+        if (appartment.id === reservation.appartmentId) {
+          appartment.addReservation(newReservation)
           return appartment
         }
         return appartment

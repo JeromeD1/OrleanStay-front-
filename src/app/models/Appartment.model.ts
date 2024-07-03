@@ -10,7 +10,7 @@ export class Appartment {
 
     constructor(
         public id: number,
-        public owner: Owner,
+        public ownerId: number,
         public discounts: Discount,
         public name: string,
         public description: string,
@@ -23,14 +23,15 @@ export class Appartment {
         public googleMapUrl: string,
         public nightPrice: number,
         public caution: number,
-        public menage_court_sejour: number,
-        public menage_long_sejour: number,
-        public menage_longue_duree: number,
+        public menageCourtSejour: number,
+        public menageLongSejour: number,
+        public menageLongueDuree: number,
         public type: string,
-        public isActive: boolean,
+        public active: boolean,
         public infos: Info[],
         public photos: Photo[],
         public reservations: Reservation[],
+        public comments: Comment[]
     ) {
     }
 
@@ -48,11 +49,11 @@ export class Appartment {
         }
     
         if(numberOfDays < 3) {
-            cleaningPrice = this.menage_court_sejour;
+            cleaningPrice = this.menageCourtSejour;
         } else if(numberOfDays < 190) {
-            cleaningPrice = this.menage_long_sejour;
+            cleaningPrice = this.menageLongSejour;
         } else {
-            cleaningPrice = this.menage_longue_duree;
+            cleaningPrice = this.menageLongueDuree;
         }
 
         if(numberOfDays >= 7 && numberOfDays < 30){

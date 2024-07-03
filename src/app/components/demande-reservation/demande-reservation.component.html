@@ -99,7 +99,7 @@
 
             <div class="flex-input">
                 <label for="firstname">Prénom :</label>
-                <input type="text" [(ngModel)]="traveller.firstname" #firstname="ngModel" name="firstname" id="firstname" placeholder="Saisissez votre prénom" required>
+                <input type="text" [(ngModel)]="traveller.personalInformations.firstname" #firstname="ngModel" name="firstname" id="firstname" placeholder="Saisissez votre prénom" required>
             </div>
 
             <div *ngIf="firstname.errors && demandeResaForm.submitted">
@@ -108,7 +108,7 @@
 
             <div class="flex-input">
                 <label for="lastname">Nom :</label>
-                <input type="text" [(ngModel)]="traveller.lastname" #lastname="ngModel" name="lastname" id="lastname" placeholder="Saisissez votre nom" required>
+                <input type="text" [(ngModel)]="traveller.personalInformations.lastname" #lastname="ngModel" name="lastname" id="lastname" placeholder="Saisissez votre nom" required>
             </div>
 
             <div *ngIf="lastname.errors && demandeResaForm.submitted">
@@ -117,7 +117,7 @@
 
             <div class="flex-input">
                 <label for="address">Adresse :</label>
-                <input type="text" [(ngModel)]="traveller.address" #address="ngModel" name="address" id="address" placeholder="Numéro et rue" required>
+                <input type="text" [(ngModel)]="traveller.personalInformations.address" #address="ngModel" name="address" id="address" placeholder="Numéro et rue" required>
             </div>
 
             <div *ngIf="address.errors && demandeResaForm.submitted">
@@ -126,7 +126,7 @@
 
             <div class="flex-input">
                 <label for="zipcode">Code postal :</label>
-                <input type="text" [(ngModel)]="traveller.zipcode" #zipcode="ngModel" name="zipcode" id="zipcode" placeholder="Ex : 75010" required>
+                <input type="text" [(ngModel)]="traveller.personalInformations.zipcode" #zipcode="ngModel" name="zipcode" id="zipcode" placeholder="Ex : 75010" required>
             </div>
 
             <div *ngIf="zipcode.errors && demandeResaForm.submitted">
@@ -135,7 +135,7 @@
 
             <div class="flex-input">
                 <label for="city">Ville :</label>
-                <input type="text" [(ngModel)]="traveller.city" #city="ngModel" name="city" id="city" placeholder="Ex : Paris" required>
+                <input type="text" [(ngModel)]="traveller.personalInformations.city" #city="ngModel" name="city" id="city" placeholder="Ex : Paris" required>
             </div>
 
             <div *ngIf="city.errors && demandeResaForm.submitted">
@@ -144,7 +144,7 @@
 
             <div class="flex-input">
                 <label for="country">Pays :</label>
-                <input type="text" [(ngModel)]="traveller.country" #country="ngModel" name="country" id="country" placeholder="Pays de résidence" required>
+                <input type="text" [(ngModel)]="traveller.personalInformations.country" #country="ngModel" name="country" id="country" placeholder="Pays de résidence" required>
             </div>
 
             <div *ngIf="country.errors && demandeResaForm.submitted">
@@ -153,7 +153,7 @@
 
             <div class="flex-input">
                 <label for="email">Email :</label>
-                <input type="email" [(ngModel)]="traveller.email" #email="ngModel" name="email" id="email" placeholder="Ex : james.bond@gmail.com" required email>
+                <input type="email" [(ngModel)]="traveller.personalInformations.email" #email="ngModel" name="email" id="email" placeholder="Ex : james.bond@gmail.com" required email>
             </div>
 
             <div *ngIf="email.errors && demandeResaForm.submitted">
@@ -163,7 +163,7 @@
 
             <div class="flex-input">
                 <label for="phone">Téléphone :</label>
-                <input type="tel" [(ngModel)]="traveller.phone" #phone="ngModel" name="phone" id="phone" placeholder="(+33) 7 85 24 58 75" required>
+                <input type="tel" [(ngModel)]="traveller.personalInformations.phone" #phone="ngModel" name="phone" id="phone" placeholder="(+33) 7 85 24 58 75" required>
             </div>
 
             <div *ngIf="phone.errors && demandeResaForm.submitted">
