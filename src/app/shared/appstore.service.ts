@@ -150,6 +150,23 @@ export class AppstoreService {
       this._traveller.set(traveller)
     }
 
+    resetTraveller(): void {
+      this._traveller.set(
+        {
+          personalInformations: {
+            firstname: '',
+            lastname: '',
+            email: '',
+            phone: '',
+            address: '',
+            zipcode: '',
+            city: '',
+            country: ''
+          }
+        }
+      )
+    }
+
 
     /*******Functions related to reservationRequests */
     getReservationRequests(): WritableSignal<Reservation[]> {

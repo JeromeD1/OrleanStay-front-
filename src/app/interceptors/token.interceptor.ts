@@ -26,8 +26,9 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   if(refreshToken){
     const modifiedReq = req.clone({
       setHeaders: {
-        Authorization: `Bearer ${refreshToken}`
-      }
+        Authorization: `Bearer ${refreshToken}`,
+      },
+      withCredentials: true
     })
     console.log("modifiedReq", modifiedReq);
     

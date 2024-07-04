@@ -47,10 +47,10 @@ export class LoginService {
   }
 
   logout():Observable<any> {
-    return this.http.get(environment.BACKEND_BASE_URL + '/logout', { withCredentials: true }).pipe(
-      tap((data) => {
-        console.log("logged out", "data", data);
-        
+    return this.http.post<void>(environment.BACKEND_BASE_URL + '/logMeOut', null).pipe(
+      tap(() => {
+        this.appstore.setToken("")
+        this.appstore.resetTraveller();
       })
       )
   }
