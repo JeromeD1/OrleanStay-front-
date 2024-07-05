@@ -28,8 +28,14 @@ export class BookingService {
     
   }
 
-  getReservationRequests(): Observable<Reservation[]> {
-    return this.http.get<Reservation[]>(environment.BACKEND_BASE_URL + '/reservation/request').pipe(
+  getAllReservationRequests(): Observable<Reservation[]> {
+    return this.http.get<Reservation[]>(environment.BACKEND_BASE_URL + '/reservation/requests/all').pipe(
+      tap((data) => this.appstore.setReservationRequests(data))
+    )
+  }
+
+  getReservationRequestsByOwnerId(ownerId: number): Observable<Reservation[]> {
+    return this.http.get<Reservation[]>(environment.BACKEND_BASE_URL + `/reservation/requests/owner/${ownerId}`).pipe(
       tap((data) => this.appstore.setReservationRequests(data))
     )
   }

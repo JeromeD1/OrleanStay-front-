@@ -1,0 +1,46 @@
+@import "../../../styles/mixins";
+
+main {
+    @include flex-column-center-start;
+    width: 95vw;
+    max-width: 1700px;
+    margin: auto;
+    margin-top: 48px;
+
+    h1, h2 {
+        margin: 0;
+        white-space: nowrap;
+    }
+
+
+    .request-filter-section {
+        @include flex-row-between-center;
+        width: 100%;
+        margin-top: 48px;
+        gap: 24px;
+
+        .request-filter-buttons {
+            @include flex-row-between-center-wrap;
+            row-gap: 24px;
+            column-gap: 48px;
+            button {
+                @include button-colorBrand;
+                width: 280px;
+            }
+        }
+    }
+
+    .request-choice {
+        width: 90%;
+        max-width: 800px;
+        margin: auto;
+        margin-top: 48px;
+
+        
+    }
+}
+
+::ng-deep .mat-mdc-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-mdc-text-field-wrapper {
+    width: 800px !important;
+    max-width: 90vw !important;
+  }

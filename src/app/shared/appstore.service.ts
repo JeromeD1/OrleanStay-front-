@@ -3,6 +3,7 @@ import { Traveller } from '../models/Traveller.model'
 import { Reservation } from '../models/Reservation.model'
 import { Appartment } from '../models/Appartment.model'
 import { User } from '../models/User.model'
+import { AppartmentNameAndOwner } from '../models/AppartmentNameAndOwner.model'
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +38,7 @@ export class AppstoreService {
 
   private _activeAppartments = signal<Appartment[]>([])
   private _allAppartments = signal<Appartment[]>([])
+  private _appartmentNames = signal<AppartmentNameAndOwner[]>([])
 
   private _currentUser = signal<User | null>(null)
   _reservationRequests = signal<Reservation[]>([])
@@ -89,6 +91,10 @@ export class AppstoreService {
     return this._allAppartments
   }
 
+  getAppartmentNames(): WritableSignal<AppartmentNameAndOwner[]> {
+    return this._appartmentNames
+  }
+
   setActiveAppartments(appartments: Appartment[]): void {
     this._activeAppartments.set(appartments)
   }
@@ -96,7 +102,9 @@ export class AppstoreService {
   setAllAppartments(appartments: Appartment[]): void {
     this._allAppartments.set(appartments)
   }
-
+  setAppartmentNames(appartments: AppartmentNameAndOwner[]): void {
+    this._appartmentNames.set(appartments)
+  }
 
   addReservationIntoAppartment(reservation: any): void {
     const newReservation: Reservation = {...reservation, checkinDate: new Date(reservation.checkinDate), checkoutDate: new Date(reservation.checkoutDate)}

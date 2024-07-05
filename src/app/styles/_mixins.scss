@@ -126,3 +126,57 @@
     align-items: center;
     flex-wrap: wrap;
 }
+
+@mixin button-colorMid {
+    padding: 8px 12px;
+    border: 3px outset var(--colorMid);
+    border-radius: 16px;
+    background-color: var(--colorMid);
+    font-weight: bold;
+
+    &:hover {
+        filter: sepia();
+        cursor: pointer;
+    }
+
+    &:active {
+        border: 3px inset var(--colorMid);
+
+    }
+}
+
+@mixin button-colorLight {
+    padding: 8px 12px;
+    border: 3px outset var(--colorMid);
+    border-radius: 16px;
+    background-color: var(--colorLight);
+    font-weight: bold;
+
+    &:hover {
+        filter: sepia();
+        cursor: pointer;
+    }
+
+    &:active {
+        border: 3px inset var(--colorMid);
+
+    }
+}
+
+@mixin button-colorBrand {
+    padding: 8px 12px;
+    border: 3px outset var(--colorMid);
+    border-radius: 16px;
+    background-color: var(--colorBrand);
+    font-weight: bold;
+
+    &:hover {
+        filter: sepia();
+        cursor: pointer;
+    }
+
+    &:active {
+        border: 3px inset var(--colorMid);
+
+    }
+}
