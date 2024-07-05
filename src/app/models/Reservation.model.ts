@@ -13,6 +13,7 @@ export interface Reservation {
     cancelled?: boolean
     depositAsked?: boolean
     depositReceived?: boolean
+    depositValue?: number
     travellerMessage?: string
     traveller?: Traveller
 }

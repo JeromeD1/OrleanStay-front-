@@ -9,18 +9,21 @@ import { User } from '../../../models/User.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {MatSelectModule} from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { AppartmentNameAndOwner } from '../../../models/AppartmentNameAndOwner.model';
+import { SomeFunctionsService } from '../../../shared/some-functions.service';
 
 @Component({
   selector: 'app-accept-reservation',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatSelectModule],
+  imports: [CommonModule, FormsModule, MatSelectModule, MatFormFieldModule, MatOptionModule],
   templateUrl: './accept-reservation.component.html',
   styleUrl: './accept-reservation.component.scss'
 })
 export class AcceptReservationComponent implements OnInit, OnDestroy {
   
-  constructor(private appartmentService: AppartmentsService, private appStore:AppstoreService, private bookingService: BookingService) {}
+  constructor(private appartmentService: AppartmentsService, private appStore:AppstoreService, private bookingService: BookingService, public someFunctions: SomeFunctionsService) {}
 
   destroy$: Subject<void> = new Subject()
   currentUser: User | null = this.appStore.getCurrentUser()()
@@ -42,7 +45,7 @@ export class AcceptReservationComponent implements OnInit, OnDestroy {
     }
   })
 
-  selectedReservation: Reservation = this.filteredReservationRequests()[0]
+  selectedReservation = signal<Reservation>(this.filteredReservationRequests()[0])
 
 
   ngOnInit(): void {
@@ -54,9 +57,18 @@ export class AcceptReservationComponent implements OnInit, OnDestroy {
   getReservationRequests(): void {
     if(this.reservationRequests().length === 0){
       if(this.userRole === "ADMIN") {
-        this.bookingService.getAllReservationRequests().pipe(takeUntil(this.destroy$)).subscribe()
+        this.bookingService.getAllReservationRequests().pipe(takeUntil(this.destroy$)).subscribe(
+          {
+            next: () => this.selectedReservation.set(this.filteredReservationRequests()[0])
+          }
+        )
+        
       } else if(this.currentUser && this.userRole === "OWNER") {
-        this.bookingService.getReservationRequestsByOwnerId(this.currentUser?.id).pipe(takeUntil(this.destroy$)).subscribe()
+        this.bookingService.getReservationRequestsByOwnerId(this.currentUser?.id).pipe(takeUntil(this.destroy$)).subscribe(
+          {
+            next: () => this.selectedReservation.set(this.filteredReservationRequests()[0])
+          }
+        )
       }
     }
   }
@@ -95,11 +107,24 @@ export class AcceptReservationComponent implements OnInit, OnDestroy {
 
   /*******************Choix de la réservation ************/
   handleChangeReservation(reservation: Reservation) {
-    this.selectedReservation = reservation
+    this.selectedReservation.set(reservation)
+    console.log("reservation", reservation);
+    console.log("selectedReservation", this.selectedReservation());
+    
+    
   }
   /************* Fonction pour trouver un nom d'appartement en fonction de son id ***************/
   findAppartmentNameById(id: number): string | undefined {
     return this.appartmentNames().find(appartment => appartment.id == id)?.name
+  }
+
+  /***********Modif du montant des arrhes ***********/
+  setDepositValue(value: number | undefined) { // TODO: VERIFIER SI FACULTATIF
+    if(value) {
+      this.selectedReservation.update(resa => ({...resa, depositValue: value}))
+    console.log("this.selectedReservation()", this.selectedReservation());
+    }
+  
   }
 
   ngOnDestroy(): void {

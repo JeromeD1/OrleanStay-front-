@@ -4,7 +4,7 @@ import { AppstoreService } from './appstore.service';
 import { Traveller } from '../models/Traveller.model';
 import { Reservation } from '../models/Reservation.model';
 import { environment } from '../../environment/environment';
-import { Observable, tap } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 import { ReservationRequest } from '../models/Request/ReservationRequest.model';
 
 @Injectable({
@@ -30,13 +30,35 @@ export class BookingService {
 
   getAllReservationRequests(): Observable<Reservation[]> {
     return this.http.get<Reservation[]>(environment.BACKEND_BASE_URL + '/reservation/requests/all').pipe(
-      tap((data) => this.appstore.setReservationRequests(data))
+      map((data) => {
+        const newData = data.map((resa) => {
+          const checkinDate = resa.checkinDate ? new Date(resa.checkinDate) : null
+          const checkoutDate = resa.checkoutDate ? new Date(resa.checkoutDate) : null
+          console.log("resa.checkinDate", resa.checkinDate);
+          console.log("checkinDate", checkinDate);
+          return {...resa, checkinDate: checkinDate, checkoutDate: checkoutDate}
+        })
+        return newData
+      }),
+      tap((data) => {this.appstore.setReservationRequests(data)})
     )
   }
 
   getReservationRequestsByOwnerId(ownerId: number): Observable<Reservation[]> {
     return this.http.get<Reservation[]>(environment.BACKEND_BASE_URL + `/reservation/requests/owner/${ownerId}`).pipe(
-      tap((data) => this.appstore.setReservationRequests(data))
+      map((data) => {
+        const newData = data.map((resa) => {
+          const checkinDate = resa.checkinDate ? new Date(resa.checkinDate) : null
+          const checkoutDate = resa.checkoutDate ? new Date(resa.checkoutDate) : null
+          console.log("resa.checkinDate", resa.checkinDate);
+          console.log("checkinDate", checkinDate);
+          
+          
+          return {...resa, checkinDate: checkinDate, checkoutDate: checkoutDate}
+        })
+        return newData
+      }),
+      tap((data) => {this.appstore.setReservationRequests(data)})
     )
   }
 

@@ -15,12 +15,71 @@
     <div class="request-choice">
         <mat-form-field>
             <mat-label>Choisissez une réservation</mat-label>
-            <mat-select (selectionChange)="handleChangeReservation(selectedReservation)">
-              <mat-option #selectedReservation *ngFor="let reservation of filteredReservationRequests()" [value]="reservation.id">
+            <mat-select [value]="filteredReservationRequests()[0]" (selectionChange)="handleChangeReservation($event.value)">
+              <mat-option *ngFor="let reservation of filteredReservationRequests()" [value]="reservation">
                {{findAppartmentNameById(reservation.appartmentId!)}}  -  Du {{reservation.checkinDate | date:'dd/MM/yyyy' }} au {{reservation.checkoutDate | date:'dd/MM/yyyy'}}
               </mat-option>
             </mat-select>
           </mat-form-field>
     </div>
+
+    @if(selectedReservation() && selectedReservation().id) {
+        <section class="resa-information">
+            <div class="info">
+                <p>Nom : </p>
+                <b>{{selectedReservation().traveller?.personalInformations?.lastname}}</b>
+            </div>
+            <div class="info">
+                <p>Prénom : </p>
+                <b>{{selectedReservation().traveller?.personalInformations?.firstname}}</b>
+            </div>
+            <div class="info">
+                <p>Email : </p>
+                <b>{{selectedReservation().traveller?.personalInformations?.email}}</b>
+            </div>
+            <div class="info">
+                <p>Telephone : </p>
+                <b>{{selectedReservation().traveller?.personalInformations?.phone}}</b>
+            </div>
+            <div class="info">
+                <p>Appartement : </p>
+                <b>{{findAppartmentNameById(selectedReservation().appartmentId!)}}</b>
+            </div>
+            <div class="info">
+                <p>Nombre d'adultes : </p>
+                <b>{{selectedReservation().nbAdult}}</b>
+            </div>
+            <div class="info">
+                <p>Nombre d'enfants : </p>
+                <b>{{selectedReservation().nbChild}}</b>
+            </div>
+            <div class="info">
+                <p>Nombre de bébés : </p>
+                <b>{{selectedReservation().nbBaby}}</b>
+            </div>
+            <div class="info">
+                <p>Dates : </p>
+                <b><b>du {{selectedReservation().checkinDate | date:'dd/MM/yyyy'}} au {{selectedReservation().checkoutDate | date:'dd/MM/yyyy'}}</b></b>
+            </div>
+            <div class="info">
+                <p>Nombre de jours : </p>
+                <b>{{someFunctions.getNumberOfDays(selectedReservation())}}</b>
+            </div>
+            <div class="info">
+                <p>Prix du séjour (avec ménage) : </p>
+                <b>{{selectedReservation().reservationPrice}} €</b>
+            </div>
+            <div class="info">
+                <p>Arrhes reçus : </p>
+                <b>{{selectedReservation().depositReceived ? selectedReservation().depositValue : "NON"}}</b>
+            </div>
+
+            <div class="info-input info">
+                <p>Arrhes à demander : </p>
+                <input type="number" [(ngModel)]="selectedReservation().depositValue" name="inputDepositValue" (change)="setDepositValue(selectedReservation().depositValue)">
+            </div>
+   
+        </section>
+    }
 
 </main>
