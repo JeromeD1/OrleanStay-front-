@@ -13,17 +13,19 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AppartmentNameAndOwner } from '../../../models/AppartmentNameAndOwner.model';
 import { SomeFunctionsService } from '../../../shared/some-functions.service';
+import { NotificationService } from '../../../shared/notification.service';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-accept-reservation',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatSelectModule, MatFormFieldModule, MatOptionModule],
+  imports: [CommonModule, FormsModule, MatSelectModule, MatFormFieldModule, MatOptionModule, MatSnackBarModule],
   templateUrl: './accept-reservation.component.html',
   styleUrl: './accept-reservation.component.scss'
 })
 export class AcceptReservationComponent implements OnInit, OnDestroy {
   
-  constructor(private appartmentService: AppartmentsService, private appStore:AppstoreService, private bookingService: BookingService, public someFunctions: SomeFunctionsService) {}
+  constructor(private appartmentService: AppartmentsService, private appStore:AppstoreService, private bookingService: BookingService, public someFunctions: SomeFunctionsService, private notificationService: NotificationService) {}
 
   destroy$: Subject<void> = new Subject()
   currentUser: User | null = this.appStore.getCurrentUser()()
@@ -169,6 +171,14 @@ export class AcceptReservationComponent implements OnInit, OnDestroy {
         }
       }
     )
+  }
+
+  onError() {
+    this.notificationService.error("Ceci est une erreur")
+  }
+
+  onSuccess() {
+    this.notificationService.success("ceci est un success")
   }
 
   ngOnDestroy(): void {
