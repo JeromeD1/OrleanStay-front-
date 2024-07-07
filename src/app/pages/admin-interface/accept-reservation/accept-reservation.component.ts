@@ -127,6 +127,50 @@ export class AcceptReservationComponent implements OnInit, OnDestroy {
   
   }
 
+  /************Fonctions de validation **********/
+  handleAskForDeposit(): void {
+    this.bookingService.askForDeposit(this.selectedReservation()).subscribe(
+      {
+        next: () => {
+          //message acceptation
+        },
+        error: () => {
+          //message error
+        }
+      }
+    )
+  }
+
+  handleRejectReservation(): void {
+    this.selectedReservation.update(value => ({...value, cancelled: true}))
+
+    this.bookingService.rejectReservation(this.selectedReservation()).subscribe(
+      {
+        next: () => {
+          //message acceptation
+        },
+        error: () => {
+          //message error
+        }
+      }
+    )
+  }
+
+  handleAcceptReservation(): void {
+    this.selectedReservation.update(value => ({...value, accepted: true}))
+
+    this.bookingService.rejectReservation(this.selectedReservation()).subscribe(
+      {
+        next: () => {
+          //message acceptation
+        },
+        error: () => {
+          //message error
+        }
+      }
+    )
+  }
+
   ngOnDestroy(): void {
       this.destroy$.next()
       this.destroy$.complete()

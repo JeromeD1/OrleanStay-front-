@@ -62,4 +62,40 @@ export class BookingService {
     )
   }
 
+  askForDeposit(reservationToUpdate: Reservation) {
+    return this.http.put<Reservation>(environment.BACKEND_BASE_URL + `/reservation/${reservationToUpdate.id!}/askForDeposit`, reservationToUpdate).pipe(
+      tap((resa) => {
+        const checkinDate = resa.checkinDate ? new Date(resa.checkinDate) : null
+          const checkoutDate = resa.checkoutDate ? new Date(resa.checkoutDate) : null
+          const updatedReservation: Reservation = {...resa, checkinDate: checkinDate, checkoutDate: checkoutDate}
+          this.appstore.updateReservationRequestsByReservation(updatedReservation) 
+          return updatedReservation
+      })
+    )
+  }
+
+  rejectReservation(reservationToUpdate: Reservation) {
+    return this.http.put<Reservation>(environment.BACKEND_BASE_URL + `/reservation/${reservationToUpdate.id!}/reject`, reservationToUpdate).pipe(
+      tap((resa) => {
+        const checkinDate = resa.checkinDate ? new Date(resa.checkinDate) : null
+          const checkoutDate = resa.checkoutDate ? new Date(resa.checkoutDate) : null
+          const updatedReservation: Reservation = {...resa, checkinDate: checkinDate, checkoutDate: checkoutDate}
+          this.appstore.updateReservationRequestsByReservation(updatedReservation) 
+          return updatedReservation
+      })
+    )
+  }
+
+  acceptReservation(reservationToUpdate: Reservation) {
+    return this.http.put<Reservation>(environment.BACKEND_BASE_URL + `/reservation/${reservationToUpdate.id!}/accept`, reservationToUpdate).pipe(
+      tap((resa) => {
+        const checkinDate = resa.checkinDate ? new Date(resa.checkinDate) : null
+          const checkoutDate = resa.checkoutDate ? new Date(resa.checkoutDate) : null
+          const updatedReservation: Reservation = {...resa, checkinDate: checkinDate, checkoutDate: checkoutDate}
+          this.appstore.updateReservationRequestsByReservation(updatedReservation) 
+          return updatedReservation
+      })
+    )
+  }
+
 }

@@ -14,22 +14,6 @@ main {
     }
 
 
-    .request-filter-section {
-        @include flex-row-between-center;
-        width: 100%;
-        margin-top: 48px;
-        gap: 24px;
-
-        .request-filter-buttons {
-            @include flex-row-around-center-wrap;
-            gap: 24px;
-            button {
-                @include button-colorBrand;
-                width: 280px;
-            }
-        }
-    }
-
     .request-choice {
         width: 90%;
         max-width: 800px;
@@ -67,6 +51,22 @@ main {
             p {
                 margin: 0;
             }
+        }
+    }
+
+    .request-and-validation {
+        @include flex-row-around-center-wrap;
+        margin: auto;
+        margin-top: 48px;
+        gap: 24px;
+        button.button-filter {
+            @include button-colorBrand;
+            width: 280px;
+        }
+
+        button.accept-button {
+            @include button-colorMid;
+            width: 280px;
         }
     }
 }

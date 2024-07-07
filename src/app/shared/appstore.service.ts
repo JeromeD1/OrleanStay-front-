@@ -184,4 +184,10 @@ export class AppstoreService {
     setReservationRequests(reservations:Reservation[]): void {
       this._reservationRequests.set(reservations)
     }
+
+    updateReservationRequestsByReservation(reservationToUpdate: Reservation) {
+      this._reservationRequests.update(value => value.map(resa => (
+        resa.id == reservationToUpdate.id! ? reservationToUpdate : resa
+      )))
+    }
 }

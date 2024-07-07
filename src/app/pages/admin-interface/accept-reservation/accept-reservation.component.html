@@ -1,16 +1,14 @@
 <main>
     <h1>{{reservationRequests().length}} demandes de réservation</h1>
 
-    <section class="request-filter-section">
-        <h2>Filtrer par :</h2>
 
-        <div class="request-filter-buttons">
-            <button type="button" (click)="setFilterToAll()">Toutes</button>
-            <button type="button" (click)="setFilterToNew()">Nouvelles</button>
-            <button type="button" (click)="setFilterToWaitingForDeposit()">En attente d'ahrres</button>
-            <button type="button" (click)="setFilterToWaitingForValidation()">En attente de validation</button>
-        </div>
+    <section class="request-and-validation">
+        <button type="button" class="button-filter" (click)="setFilterToAll()">Toutes</button>
+        <button type="button" class="button-filter" class="button-filter" (click)="setFilterToNew()">Nouvelles</button>
+        <button type="button" class="button-filter" (click)="setFilterToWaitingForDeposit()">En attente d'ahrres</button>
+        <button type="button" class="button-filter" (click)="setFilterToWaitingForValidation()">En attente de validation</button>
     </section>
+
 
     <div class="request-choice">
         <mat-form-field>
@@ -79,6 +77,12 @@
                 <input type="number" [(ngModel)]="selectedReservation().depositValue" name="inputDepositValue" (change)="setDepositValue(selectedReservation().depositValue)">
             </div>
    
+        </section>
+
+        <section class="request-and-validation">
+            <button type="button" class="accept-button" (click)="handleRejectReservation()">Refuser</button>
+            <button type="button" class="accept-button" (click)="handleAskForDeposit()">Demander les ahrres</button>
+            <button type="button" class="accept-button" (click)="handleAcceptReservation()">Valider</button>
         </section>
     }
 
