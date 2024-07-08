@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, WritableSignal, computed, effect, signal } from '@angular/core'
+import { Component, ElementRef, HostListener, OnInit, Renderer2, WritableSignal, computed, effect, signal } from '@angular/core'
 import { LoginComponent } from '../../components/login/login.component'
 import { Traveller } from '../../models/Traveller.model'
 import { AppstoreService } from '../../shared/appstore.service'

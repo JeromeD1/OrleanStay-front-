@@ -12,6 +12,7 @@ import { AppstoreService } from '../../shared/appstore.service';
 import { BookingService } from '../../shared/booking.service';
 import { Subject, takeUntil } from 'rxjs';
 import { ReservationRequest } from '../../models/Request/ReservationRequest.model';
+import { NotificationService } from '../../shared/notification.service';
 // import { TravellerHasReservation } from '../../../../../models/travellerHasReservation.model';
 // import { BookingDataService
 
@@ -27,7 +28,7 @@ export class DemandeReservationComponent implements OnInit, OnDestroy{
   router: Router = inject(Router);
 
   // constructor(private someFunctionService: SomeFunctionsService, private bookingDataService: BookingDataService) {}
-  constructor(private someFunctionService: SomeFunctionsService, private appstore: AppstoreService, private bookingService: BookingService) {}
+  constructor(private someFunctionService: SomeFunctionsService, private appstore: AppstoreService, private bookingService: BookingService, private notificationService: NotificationService) {}
 
   @Input()
   traveller!: Traveller;
@@ -64,9 +65,7 @@ export class DemandeReservationComponent implements OnInit, OnDestroy{
   };
 
 
-ngOnInit(): void {
-  console.log("userReservation in demande reservation onInit",this.userReservation);
-  
+ngOnInit(): void {  
     this.arrivalDate = this.someFunctionService.formatDate(this.userReservation.checkinDate, "arrive");
     this.departureDate = this.someFunctionService.formatDate(this.userReservation.checkoutDate, "depart");
 }
@@ -108,9 +107,7 @@ handleChangeCheckinOrCheckout(event: DateFromPicker): void {
     this.changeShowPickerDeparture();
   }
 
-  if(this.userReservation.checkinDate && this.userReservation.checkoutDate){
-    console.log("nbAdult",this.userReservation.nbAdult);
-    
+  if(this.userReservation.checkinDate && this.userReservation.checkoutDate){    
     this.travelPrice = this.appartment.calculateReservationPrice(this.userReservation.nbAdult, this.userReservation.nbChild, this.userReservation.checkinDate, this.userReservation.checkoutDate)
 
   }
@@ -129,9 +126,7 @@ handleChangeCheckinOrCheckout(event: DateFromPicker): void {
 
       if(clickedButton === 'button-envoiMail'){
         const currentUser = this.appstore.getCurrentUser()()
-        this.traveller.utilisateurId = currentUser?.id
-        console.log("userReservation",this.userReservation);
-        
+        this.traveller.utilisateurId = currentUser?.id        
 
         const reservationRequest: ReservationRequest = {
           appartmentId: this.appartment.id as number,
@@ -147,13 +142,12 @@ handleChangeCheckinOrCheckout(event: DateFromPicker): void {
         this.bookingService.postTravellerReservation(reservationRequest).pipe(takeUntil(this.destroy$)).subscribe(
           {
             next: () => {
-              console.log("Réservation transmise avec succès")
               this.showPopup = true;
               this.appstore.resetUserReservation()
             },
             error: () => {
-              console.log("Il y a eu une erreur lors de la transmission de votre réservation. Réservation non transmise");
-              
+              console.error("Il y a eu une erreur lors de la transmission de votre réservation. Réservation non transmise");
+              this.notificationService.error("Il y a eu une erreur lors de la transmission de votre réservation. Réservation non transmise")
             }
           }
         )

@@ -16,10 +16,8 @@ export class LoginService {
   login(data: any): Observable<{token: string, utilisateur:User}> {
     return this.http.post<{token: string, utilisateur:User}>(environment.BACKEND_BASE_URL + '/login', data).pipe(
       tap(data => {
-        console.log("data : ", data);
         const newUser:User = {...data.utilisateur, creationDate: new Date(data.utilisateur.creationDate)}
         this.appstore.setCurrentUser(newUser)
-        console.log("currentUser login", this.appstore.getCurrentUser()());
         
         this.appstore.setTraveller(
           {
@@ -36,12 +34,8 @@ export class LoginService {
             
           }
         )
-        console.log("traveller login", this.appstore.getTraveller()());
 
         this.appstore.setToken(`${data.token}`)
-        console.log("token :", this.appstore.getToken());
-        
-        
       })
       )
   }

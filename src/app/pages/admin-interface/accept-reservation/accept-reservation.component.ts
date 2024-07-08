@@ -15,11 +15,12 @@ import { AppartmentNameAndOwner } from '../../../models/AppartmentNameAndOwner.m
 import { SomeFunctionsService } from '../../../shared/some-functions.service';
 import { NotificationService } from '../../../shared/notification.service';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { SimpleCalendarComponent } from '../../../components/simple-calendar/simple-calendar.component';
 
 @Component({
   selector: 'app-accept-reservation',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatSelectModule, MatFormFieldModule, MatOptionModule, MatSnackBarModule],
+  imports: [CommonModule, FormsModule, MatSelectModule, MatFormFieldModule, MatOptionModule, MatSnackBarModule, SimpleCalendarComponent],
   templateUrl: './accept-reservation.component.html',
   styleUrl: './accept-reservation.component.scss'
 })
@@ -31,7 +32,7 @@ export class AcceptReservationComponent implements OnInit, OnDestroy {
   currentUser: User | null = this.appStore.getCurrentUser()()
   userRole = this.currentUser?.role
   appartmentNames: WritableSignal<AppartmentNameAndOwner[]> = this.appStore.getAppartmentNames()
-  appartmentOfReservation = signal<Appartment | null>(null)
+  appartmentOfReservation: WritableSignal<Appartment | null> = this.appStore.getCurrentUsedAppartment()
   reservationRequests: WritableSignal<Reservation[]> = this.appStore.getReservationRequests()
   filter = signal<"all" | "new" | "waitingForDeposit" | "waitingForValidation">("all")
   
@@ -57,11 +58,14 @@ export class AcceptReservationComponent implements OnInit, OnDestroy {
 
   /***************Récupération des datas en bdd ****************************/
   getReservationRequests(): void {
-    if(this.reservationRequests().length === 0){
+    // if(this.reservationRequests().length === 0){
       if(this.userRole === "ADMIN") {
         this.bookingService.getAllReservationRequests().pipe(takeUntil(this.destroy$)).subscribe(
           {
-            next: () => this.selectedReservation.set(this.filteredReservationRequests()[0])
+            next: () => {
+              this.selectedReservation.set(this.filteredReservationRequests()[0])
+              this.getAppartmentsById(this.selectedReservation().appartmentId!)
+            }
           }
         )
         
@@ -72,19 +76,21 @@ export class AcceptReservationComponent implements OnInit, OnDestroy {
           }
         )
       }
-    }
+    // }
   }
 
   getAppartmentNames(): void {
-    if(this.appartmentNames().length === 0) {
       this.appartmentService.getAppartmentNamesAndOwners().pipe(takeUntil(this.destroy$)).subscribe()
-    }
   }
 
   getAppartmentsById(id: number): void {
     this.appartmentService.getAppartmentById(id).pipe(takeUntil(this.destroy$)).subscribe(
       {
-        next: (data) => {this.appartmentOfReservation.set(data)}
+        next: (data) => {
+          // this.appartmentOfReservation.set(data)
+        console.log(this.appartmentOfReservation()?.reservations);
+        
+        }
       } 
     )
   }
@@ -92,28 +98,31 @@ export class AcceptReservationComponent implements OnInit, OnDestroy {
   /******Reservation filter functions **************************/
     setFilterToAll(): void {
       this.filter.set("all")
+      this.selectedReservation.set(this.filteredReservationRequests()[0])
     }
 
     setFilterToNew(): void {
       this.filter.set("new")
+      this.selectedReservation.set(this.filteredReservationRequests()[0])
+
     }
 
     setFilterToWaitingForDeposit(): void {
       this.filter.set("waitingForDeposit")
+      this.selectedReservation.set(this.filteredReservationRequests()[0])
+
     }
 
     setFilterToWaitingForValidation(): void {
       this.filter.set("waitingForValidation")
+      this.selectedReservation.set(this.filteredReservationRequests()[0])
     }
 
 
   /*******************Choix de la réservation ************/
   handleChangeReservation(reservation: Reservation) {
-    this.selectedReservation.set(reservation)
-    console.log("reservation", reservation);
-    console.log("selectedReservation", this.selectedReservation());
-    
-    
+    this.selectedReservation.set(reservation) 
+    this.getAppartmentsById(this.selectedReservation().appartmentId!)   
   }
   /************* Fonction pour trouver un nom d'appartement en fonction de son id ***************/
   findAppartmentNameById(id: number): string | undefined {
@@ -124,20 +133,23 @@ export class AcceptReservationComponent implements OnInit, OnDestroy {
   setDepositValue(value: number | undefined) { // TODO: VERIFIER SI FACULTATIF
     if(value) {
       this.selectedReservation.update(resa => ({...resa, depositValue: value}))
-    console.log("this.selectedReservation()", this.selectedReservation());
     }
   
   }
 
   /************Fonctions de validation **********/
   handleAskForDeposit(): void {
+    this.selectedReservation.update((value) => ({...value, depositAsked: true}))
     this.bookingService.askForDeposit(this.selectedReservation()).subscribe(
       {
-        next: () => {
+        next: (data) => {
           //message acceptation
+          this.selectedReservation.set(this.filteredReservationRequests()[0])
+          this.notificationService.success("Votre demande de paiement d'ahrres a bien été envoyé")
         },
-        error: () => {
+        error: (error) => {
           //message error
+          this.notificationService.error(error)
         }
       }
     )
@@ -150,9 +162,12 @@ export class AcceptReservationComponent implements OnInit, OnDestroy {
       {
         next: () => {
           //message acceptation
+          this.selectedReservation.set(this.filteredReservationRequests()[0])
+          this.notificationService.success("La demande de réservation a bien été rejetée (statut annulé)")
         },
-        error: () => {
+        error: (error) => {
           //message error
+          this.notificationService.error(error)
         }
       }
     )
@@ -165,9 +180,12 @@ export class AcceptReservationComponent implements OnInit, OnDestroy {
       {
         next: () => {
           //message acceptation
+          this.selectedReservation.set(this.filteredReservationRequests()[0])
+          this.notificationService.success("La demande de réservation a bien été acceptée.")
         },
-        error: () => {
+        error: (error) => {
           //message error
+          this.notificationService.error(error)
         }
       }
     )

@@ -43,9 +43,7 @@ export class LoginComponent implements OnDestroy {
 
     this.loginService.login(formData).subscribe(
       {
-        next: (data) => {
-          console.log("data in loginComponent after login", data);
-          
+        next: (data) => {          
           if(data?.utilisateur.role === "ADMIN"){
             this.router.navigate(['/admin'])
           } else {

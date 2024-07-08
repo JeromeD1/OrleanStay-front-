@@ -62,8 +62,6 @@ export class AppartmentsService {
   }
 
   getActiveAppartments():Observable<Appartment[]> {    
-    console.log("environment.BACKEND_BASE_URL ", environment.BACKEND_BASE_URL);
-
     return this.http.get<Appartment[]>(environment.BACKEND_BASE_URL + '/appartment/active').pipe(
       map((appartments) => appartments.map(appartment => {
 
@@ -104,7 +102,6 @@ export class AppartmentsService {
       )
     ),
     tap((data: Appartment[]) => {
-      console.log("data appart", data)
       this.appstore.setActiveAppartments(data)
       
     })
@@ -155,7 +152,6 @@ export class AppartmentsService {
       )
     ),
     tap((data: Appartment[]) => {
-      console.log("data appart", data)
       this.appstore.setAllAppartments(data)
       
     })
@@ -170,14 +166,13 @@ export class AppartmentsService {
       tap((appartment) => {
 
         //conversion de checkinDate et checkoutDate de reservations qui arrivent en string en Date
-        const reservations = appartment.reservations.map(resa =>(
-          resa.checkinDate && resa.checkoutDate ? 
-          {...resa, checkinDate: new Date(resa.checkinDate), checkoutDate: new Date(resa.checkoutDate)}
-          : resa
-        ));
+        const reservations: Reservation[] = appartment.reservations.map(resa =>{
+          const checkinDate = resa.checkinDate ? new Date(resa.checkinDate) : null
+          const checkoutDate = resa.checkoutDate ? new Date(resa.checkoutDate) : null
+          return {...resa, checkinDate: checkinDate, checkoutDate: checkoutDate}
+        });
 
-        
-        return new Appartment(
+        const newAppartment: Appartment = new Appartment(
           appartment.id,
           appartment.ownerId,
           appartment.discounts,
@@ -201,8 +196,12 @@ export class AppartmentsService {
           appartment.photos,
           reservations,
           appartment.comments
-      )}
-
+      )
+      
+      this.appstore.setCurrentUsedAppartment(newAppartment)
+        
+        return newAppartment
+      }
       )
     )
 

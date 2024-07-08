@@ -39,6 +39,7 @@ export class AppstoreService {
   private _activeAppartments = signal<Appartment[]>([])
   private _allAppartments = signal<Appartment[]>([])
   private _appartmentNames = signal<AppartmentNameAndOwner[]>([])
+  private _currentUsedAppartment = signal<Appartment | null>(null)
 
   private _currentUser = signal<User | null>(null)
   _reservationRequests = signal<Reservation[]>([])
@@ -95,6 +96,10 @@ export class AppstoreService {
     return this._appartmentNames
   }
 
+  getCurrentUsedAppartment(): WritableSignal<Appartment | null> {
+    return this._currentUsedAppartment
+  }
+
   setActiveAppartments(appartments: Appartment[]): void {
     this._activeAppartments.set(appartments)
   }
@@ -104,6 +109,10 @@ export class AppstoreService {
   }
   setAppartmentNames(appartments: AppartmentNameAndOwner[]): void {
     this._appartmentNames.set(appartments)
+  }
+
+  setCurrentUsedAppartment(appartment: Appartment) {
+    this._currentUsedAppartment.set(appartment)
   }
 
   addReservationIntoAppartment(reservation: any): void {
@@ -186,8 +195,14 @@ export class AppstoreService {
     }
 
     updateReservationRequestsByReservation(reservationToUpdate: Reservation) {
-      this._reservationRequests.update(value => value.map(resa => (
+      this._reservationRequests.update(value => value
+        .map(resa => (
         resa.id == reservationToUpdate.id! ? reservationToUpdate : resa
-      )))
+      )))      
+    }
+
+    removeReservationInReservationRequests(reservation: Reservation) {
+      this._reservationRequests.update(value => value
+        .filter(resa => resa.id != reservation.id))
     }
 }

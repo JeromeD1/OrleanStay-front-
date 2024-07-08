@@ -37,14 +37,7 @@ export class TemplateEmailComponent implements OnInit{
   ngOnInit(): void {
       this.getAppartment();
       this.arrivalDate = this.someFunctionService.formatDate(this.reservation.checkinDate, "arrive");
-      this.departureDate = this.someFunctionService.formatDate(this.reservation.checkoutDate, "depart");
-      console.log("traveller", this.traveller);
-      console.log("reservation", this.reservation);
-      console.log("appartments", this.appartments);
-      console.log("appartment", this.appartment);
-      
-      
-      
+      this.departureDate = this.someFunctionService.formatDate(this.reservation.checkoutDate, "depart");       
   }
 
   get numberNight(): number | null {
@@ -62,18 +55,8 @@ export class TemplateEmailComponent implements OnInit{
 
 
   getAppartment(): void {
-    //   this.route.paramMap.pipe(take(1)).subscribe((params: ParamMap) => {
-    //     const appartmentId: number = parseInt(params.get('appartmentId') as string);
-    //   console.log("appartmentId", appartmentId);
-      
-    //     this.appartment = this.appartments.find(appartment => appartment.id === appartmentId) as Appartment;
-            
-
-    // })
 
     const appartmentId: number = parseInt(this.route.snapshot.paramMap.get('appartmentId') as string);
-          console.log("appartmentId", appartmentId);
-
     this.appartment = this.appartments.find(appartment => appartment.id === appartmentId) as Appartment;
   }
 

@@ -1,7 +1,6 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppstoreService } from './appstore.service';
-import { Traveller } from '../models/Traveller.model';
 import { Reservation } from '../models/Reservation.model';
 import { environment } from '../../environment/environment';
 import { Observable, map, tap } from 'rxjs';
@@ -14,14 +13,9 @@ export class BookingService {
 
   constructor(private http: HttpClient, private appstore: AppstoreService) { }
 
-  postTravellerReservation(reservationRequest: ReservationRequest): Observable<Reservation> {
-    console.log("environment.BACKEND_BASE_URL ", environment.BACKEND_BASE_URL);
-    console.log(reservationRequest);
-    
+  postTravellerReservation(reservationRequest: ReservationRequest): Observable<Reservation> {    
     return this.http.post<any>(environment.BACKEND_BASE_URL + '/reservation',reservationRequest).pipe(
-      tap((response) => {
-        console.log("new reservation", response);
-        
+      tap((response) => {        
         this.appstore.addReservationIntoAppartment(response)
       })
       )
@@ -34,8 +28,6 @@ export class BookingService {
         const newData = data.map((resa) => {
           const checkinDate = resa.checkinDate ? new Date(resa.checkinDate) : null
           const checkoutDate = resa.checkoutDate ? new Date(resa.checkoutDate) : null
-          console.log("resa.checkinDate", resa.checkinDate);
-          console.log("checkinDate", checkinDate);
           return {...resa, checkinDate: checkinDate, checkoutDate: checkoutDate}
         })
         return newData
@@ -50,10 +42,6 @@ export class BookingService {
         const newData = data.map((resa) => {
           const checkinDate = resa.checkinDate ? new Date(resa.checkinDate) : null
           const checkoutDate = resa.checkoutDate ? new Date(resa.checkoutDate) : null
-          console.log("resa.checkinDate", resa.checkinDate);
-          console.log("checkinDate", checkinDate);
-          
-          
           return {...resa, checkinDate: checkinDate, checkoutDate: checkoutDate}
         })
         return newData
@@ -80,8 +68,7 @@ export class BookingService {
         const checkinDate = resa.checkinDate ? new Date(resa.checkinDate) : null
           const checkoutDate = resa.checkoutDate ? new Date(resa.checkoutDate) : null
           const updatedReservation: Reservation = {...resa, checkinDate: checkinDate, checkoutDate: checkoutDate}
-          this.appstore.updateReservationRequestsByReservation(updatedReservation) 
-          return updatedReservation
+          this.appstore.removeReservationInReservationRequests(updatedReservation) 
       })
     )
   }
@@ -92,8 +79,7 @@ export class BookingService {
         const checkinDate = resa.checkinDate ? new Date(resa.checkinDate) : null
           const checkoutDate = resa.checkoutDate ? new Date(resa.checkoutDate) : null
           const updatedReservation: Reservation = {...resa, checkinDate: checkinDate, checkoutDate: checkoutDate}
-          this.appstore.updateReservationRequestsByReservation(updatedReservation) 
-          return updatedReservation
+          this.appstore.removeReservationInReservationRequests(updatedReservation) 
       })
     )
   }

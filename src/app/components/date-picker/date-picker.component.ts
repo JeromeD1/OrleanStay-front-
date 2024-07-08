@@ -142,7 +142,9 @@ setMinCheckoutDate(): void {
 
 filterBookedDates = (date: Date | null): boolean => {
     
-  const time = date?.getTime() || 0;
+  let time = date?.getTime() || 0;
+  if(time !== 0) {time+=  3600 * 24 * 1000} // ajout de 1 jour car les dates étaient décalées dans le calendrier par rapport aux dates reelles (pourquoi ?)
+
 
   //désactiver les dates déjà réservées
     for(let reservation of this.importedReservations) {
@@ -191,7 +193,7 @@ filterBookedDates = (date: Date | null): boolean => {
 
 dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
   if (view === 'month') {
-    const time = cellDate.getTime();
+    const time = cellDate.getTime() + 3600 * 24 * 1000 // ajout de 1 jour car les dates étaient décalées dans le calendrier par rapport aux dates reelles (pourquoi ?)
 
     for(let reservation of this.importedReservations) {
         if(time >= reservation.checkinDate!.getTime() && time < reservation.checkoutDate!.getTime()){
