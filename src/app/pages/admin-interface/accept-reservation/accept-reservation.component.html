@@ -95,7 +95,7 @@
 
         <section class="request-and-validation">
             <button type="button" class="accept-button" (click)="handleRejectReservation()">Refuser</button>
-            <button type="button" class="accept-button" (click)="handleAskForDeposit()">Demander les ahrres</button>
+            <button type="button" class="accept-button" *ngIf="!selectedReservation().depositReceived" (click)="handleAskForDeposit()">Demander les ahrres</button>
             <button type="button" class="accept-button" (click)="handleAcceptReservation()">Valider</button>
         </section>
     }
