@@ -47,6 +47,11 @@ nav {
                 color: var(--colorLight);
             }
         }
+
+        .highlighted {
+            background-color: var(--colorLight);
+            border-radius: 35px;
+        }
     }
 
     img {

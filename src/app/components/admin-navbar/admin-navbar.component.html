@@ -1,8 +1,8 @@
 <nav>
     <div class="navPage">
-        <a [routerLink]="['/admin/acceptReservation']" ><p>Demandes de réservation</p></a>
-        <a [routerLink]="['/admin/addReservation']" ><p>Enregistrement de réservations</p></a>
-        <a [routerLink]="['/admin/appartGestion']" ><p>Gestion globale</p></a>
+        <a [routerLink]="['/admin/acceptReservation']" (click)="setCurrentPageToReservationRequest()" [class.highlighted]="currentPage() === 'reservationRequest'"><p>Demandes de réservation</p></a>
+        <a [routerLink]="['/admin/addReservation']" (click)="setCurrentPageToReservationRegistoring()" [class.highlighted]="currentPage() === 'reservationRegistoring'"><p>Enregistrement de réservations</p></a>
+        <a [routerLink]="['/admin/appartGestion']" (click)="setCurrentPageToGlobalGestion()" [class.highlighted]="currentPage() === 'globalGestion'"><p>Gestion globale</p></a>
         <a class="leaveAdmin" (click)="logout()"><p>Quitter le mode admin</p></a>
     </div>
 
