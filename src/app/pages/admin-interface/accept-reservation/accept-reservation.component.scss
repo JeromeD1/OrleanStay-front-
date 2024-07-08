@@ -69,6 +69,7 @@ main {
         @include flex-row-around-center-wrap;
         margin: auto;
         margin-top: 48px;
+        margin-bottom: 48px;
         gap: 24px;
         button.button-filter {
             @include button-colorBrand;

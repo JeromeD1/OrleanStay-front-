@@ -84,15 +84,7 @@ export class AcceptReservationComponent implements OnInit, OnDestroy {
   }
 
   getAppartmentsById(id: number): void {
-    this.appartmentService.getAppartmentById(id).pipe(takeUntil(this.destroy$)).subscribe(
-      {
-        next: (data) => {
-          // this.appartmentOfReservation.set(data)
-        console.log(this.appartmentOfReservation()?.reservations);
-        
-        }
-      } 
-    )
+    this.appartmentService.getAppartmentById(id).pipe(takeUntil(this.destroy$)).subscribe()
   }
 
   /******Reservation filter functions **************************/
