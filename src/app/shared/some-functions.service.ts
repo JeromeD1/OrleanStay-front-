@@ -50,7 +50,6 @@ export class SomeFunctionsService {
       let day: string = date.getDate().toString();  // Jour du mois
       let month: string = (date.getMonth() + 1).toString();  // Les mois sont indexés à partir de 0 en JavaScript
       let year: string = date.getFullYear().toString();
-      console.log("month",month, "length", month.length);
       
       // Ajoute un zéro devant le jour et le mois si nécessaire
       if(day.length < 1) day = '0' + day;

@@ -3,6 +3,7 @@ import { Traveller } from '../models/Traveller.model'
 import { Reservation } from '../models/Reservation.model'
 import { Appartment } from '../models/Appartment.model'
 import { User } from '../models/User.model'
+import { AppartmentNameAndOwner } from '../models/AppartmentNameAndOwner.model'
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,8 @@ export class AppstoreService {
   constructor() { }
 
   /***************Signal declarations ***************************/
+    private _token = signal<string>("")
+
     private _traveller = signal<Traveller>({
       personalInformations: {
         firstname: '',
@@ -35,9 +38,21 @@ export class AppstoreService {
 
   private _activeAppartments = signal<Appartment[]>([])
   private _allAppartments = signal<Appartment[]>([])
+  private _appartmentNames = signal<AppartmentNameAndOwner[]>([])
+  private _currentUsedAppartment = signal<Appartment | null>(null)
 
   private _currentUser = signal<User | null>(null)
   _reservationRequests = signal<Reservation[]>([])
+
+
+  /*************Functions related to token **********************/
+  getToken():string {
+    return this._token()
+  }
+
+  setToken(token: string): void {
+    this._token.set(token)
+  }
 
 
   /*************Functions related to userReservation *************/
@@ -77,6 +92,14 @@ export class AppstoreService {
     return this._allAppartments
   }
 
+  getAppartmentNames(): WritableSignal<AppartmentNameAndOwner[]> {
+    return this._appartmentNames
+  }
+
+  getCurrentUsedAppartment(): WritableSignal<Appartment | null> {
+    return this._currentUsedAppartment
+  }
+
   setActiveAppartments(appartments: Appartment[]): void {
     this._activeAppartments.set(appartments)
   }
@@ -84,7 +107,13 @@ export class AppstoreService {
   setAllAppartments(appartments: Appartment[]): void {
     this._allAppartments.set(appartments)
   }
+  setAppartmentNames(appartments: AppartmentNameAndOwner[]): void {
+    this._appartmentNames.set(appartments)
+  }
 
+  setCurrentUsedAppartment(appartment: Appartment) {
+    this._currentUsedAppartment.set(appartment)
+  }
 
   addReservationIntoAppartment(reservation: any): void {
     const newReservation: Reservation = {...reservation, checkinDate: new Date(reservation.checkinDate), checkoutDate: new Date(reservation.checkoutDate)}
@@ -138,6 +167,23 @@ export class AppstoreService {
       this._traveller.set(traveller)
     }
 
+    resetTraveller(): void {
+      this._traveller.set(
+        {
+          personalInformations: {
+            firstname: '',
+            lastname: '',
+            email: '',
+            phone: '',
+            address: '',
+            zipcode: '',
+            city: '',
+            country: ''
+          }
+        }
+      )
+    }
+
 
     /*******Functions related to reservationRequests */
     getReservationRequests(): WritableSignal<Reservation[]> {
@@ -146,5 +192,17 @@ export class AppstoreService {
 
     setReservationRequests(reservations:Reservation[]): void {
       this._reservationRequests.set(reservations)
+    }
+
+    updateReservationRequestsByReservation(reservationToUpdate: Reservation) {
+      this._reservationRequests.update(value => value
+        .map(resa => (
+        resa.id == reservationToUpdate.id! ? reservationToUpdate : resa
+      )))      
+    }
+
+    removeReservationInReservationRequests(reservation: Reservation) {
+      this._reservationRequests.update(value => value
+        .filter(resa => resa.id != reservation.id))
     }
 }

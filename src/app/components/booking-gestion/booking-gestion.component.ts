@@ -41,7 +41,6 @@ export class BookingGestionComponent implements OnInit, OnDestroy{
   ngOnInit(): void {
     if(this.appartments().length === 0){
       this.getAppartment()
-      console.log("userReservation",this.userReservation())
     }
      
   }

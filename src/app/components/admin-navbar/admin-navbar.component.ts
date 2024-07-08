@@ -3,6 +3,7 @@ import { LoginService } from '../../shared/login.service';
 import { Subject, takeUntil } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { NotificationService } from '../../shared/notification.service';
 
 @Component({
   selector: 'app-admin-navbar',
@@ -12,7 +13,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './admin-navbar.component.scss'
 })
 export class AdminNavbarComponent implements OnDestroy{
-  constructor(private loginService: LoginService, private router: Router){}
+  constructor(private loginService: LoginService, private router: Router, private notificationService: NotificationService){}
 
   showMenuBurger: boolean = false
 
@@ -22,13 +23,17 @@ export class AdminNavbarComponent implements OnDestroy{
     this.showMenuBurger = !this.showMenuBurger
   }
 
-  logout(): void {
-    console.log("quitter");
-    
+  logout(): void {    
   this.loginService.logout().pipe(takeUntil(this.destroy$)).subscribe(
     {
-      next: () => {this.router.navigate(['/'])},
-      error: (error) => console.error(error)
+      next: () => {        
+        this.router.navigate(['/'])
+        this.notificationService.success("Vous avez bien été déconnecté.")
+      },
+      error: (error) => {
+        console.error(error)
+        this.notificationService.error(error)
+      }
     }
     
     )

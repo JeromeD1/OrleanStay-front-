@@ -76,22 +76,7 @@
             }
 
             button {
-                padding: 12px;
-                border: 3px outset var(--colorMid);
-                border-radius: 16px;
-                background-color: var(--colorMid);
-                font-weight: bold;
-
-                &:hover {
-                    filter: sepia();
-                    cursor: pointer;
-                }
-
-                &:active {
-                    border: 3px inset var(--colorMid);
-
-                }
-
+                @include button-colorMid;
             }
         }
     }
@@ -104,20 +89,7 @@
         button {
             width: 200px;
             max-width: 45%;
-            background-color: var(--colorBrand);
-            border: 3px outset var(--colorMid);
-            font-weight: bold;
-            padding: 8px;
-            border-radius: 16px;
-    
-            &:hover {
-                cursor: pointer;
-                filter: sepia();
-            }
-    
-            &:active {
-                border: 3px inset var(--colorMid);
-            }
+            @include button-colorBrand;
         }
     }
 }
