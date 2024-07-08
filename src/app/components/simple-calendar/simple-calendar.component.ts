@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnChanges, SimpleChanges, ViewChild, input } from '@angular/core';
 import { MatCalendarCellClassFunction, MatDatepickerModule, MatCalendar, MatDatepicker } from '@angular/material/datepicker';
 import { Reservation } from '../../models/Reservation.model';
 import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
@@ -24,16 +24,25 @@ import { MY_DATE_FORMAT } from '../../models/DateFormat.model';
     //-------------------------------------------------
   ]
 })
-export class SimpleCalendarComponent {
+export class SimpleCalendarComponent implements OnChanges{
 
   reservations = input.required<Reservation[]>()
   selectedReservation = input<Reservation>()
   selectedDate: null = null;
 
 
+  /****Mise à jour des dates highlighted lors des changements de valeur des inputs */
+  @ViewChild('calendar')  calendar!: MatCalendar<Date>
 
- 
+  ngOnChanges(changes: SimpleChanges): void {
+    if(this.calendar) {
+      this.calendar.updateTodaysDate()
+    }
+  }
+ /***************************************** */
 
+
+ /*********Surlignage des dates de réservation ***********************/
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
 
     if (view === 'month') {
