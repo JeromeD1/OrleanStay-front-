@@ -15,6 +15,7 @@ import { CommonModule } from '@angular/common';
 import { Owner } from '../../../models/Owner.model';
 import { UtilisateurService } from '../../../shared/utilisateur.service';
 import { UpdateAppartmentComponent } from '../../../components/update-appartment/update-appartment.component';
+import { AppartmentSaveRequest } from '../../../models/Request/AppartmentSaveRequest.model';
 
 @Component({
   selector: 'app-appartment-gestion',
@@ -39,6 +40,8 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
   selectedAppartment = signal<Appartment>(this.allAppartments()[0])
   discounts: WritableSignal<Discount[]> = this.appstore.getDiscounts()
   owners: WritableSignal<Owner[]> = this.appstore.getOwners()
+
+  isAppartmentUpdating: boolean = false
 
   isAllDataCollected = computed(() => {
     console.log(this.allAppartments().length > 0 && this.discounts().length > 0 && this.owners().length > 0 && this.selectedAppartment().id > 0);
@@ -109,7 +112,19 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
 
   handleChangeAppartment(appartment: Appartment) {
     this.selectedAppartment.set(appartment)
-    console.log(this.selectedAppartment());
+    
+    if(this.isAppartmentUpdating) {
+      console.log("Attention - appartement en train d'etre modifié");
+      
+    }
+  }
+
+  handleGetAppartmentUpdatingStatus(event: boolean): void {
+    this.isAppartmentUpdating = event
+  }
+
+  handleUpdateAppartment(appartmentSaveRequest: AppartmentSaveRequest) {
+    console.log(appartmentSaveRequest);
     
   }
 

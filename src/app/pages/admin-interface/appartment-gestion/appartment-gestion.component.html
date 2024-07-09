@@ -16,16 +16,15 @@
         <button type="button">Ajouter</button>
     </section>
 
-    <section>
-        <h1>Informations générales</h1>
-        <p>data collected : {{isAllDataCollected()}} </p>
-        
+    <section>       
         @if(isAllDataCollected() && selectedAppartment().id) {
             
             <app-update-appartment
             [owners]="owners()"
             [appartment]="selectedAppartment()"
             [discounts]="discounts()"
+            (appartEmitter)="handleUpdateAppartment($event)"
+            (modificationEmitter)="handleGetAppartmentUpdatingStatus($event)"
             ></app-update-appartment>
         }
     </section>

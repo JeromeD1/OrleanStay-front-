@@ -1,15 +1,10 @@
 @import "../../styles/mixins";
 
-main {
-    @include flex-column-center-center;
-    margin: auto;
-    background-color: var(--colorLightest);
-    width: 95vw;
-    max-width: 1800px;
-}
+
 form {
-    width: 100%;
-    max-width: 800px;
+    @include flex-column-start-center;
+    width: 900px;
+    max-width: 95vw;
     background-color: var(--colorLight);
     padding: 8px;
     border: 1px solid var(--colorMid);
@@ -17,6 +12,7 @@ form {
 
     .flex-input {
         @include flex-row-between-center;
+        width: 100%;
         gap: 16px;
         margin-bottom: 8px;
         padding: 8px;
@@ -38,5 +34,40 @@ form {
                 outline: none;
             }
         }
+    }
+
+    button {
+        @include button-colorBrand;
+    }
+}
+
+::ng-deep .mat-mdc-checkbox {
+    margin-right: 150px !important;
+}
+
+@media screen and (max-width: 900px) {
+
+    form {
+        .flex-input {
+            @include flex-column-center-start;
+
+            input, select {
+                width: 100%;
+            }
+        }
+
+        .flex-check {
+            @include flex-row-start-start;
+            gap: 24px;
+
+            .check-active {
+                margin-bottom: 8px;
+            }
+        }
+    }
+    
+    ::ng-deep .mat-mdc-checkbox {
+        margin-top: -8px !important;
+        margin-right: 0 !important;
     }
 }

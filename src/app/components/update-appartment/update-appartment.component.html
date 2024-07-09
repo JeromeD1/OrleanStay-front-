@@ -1,9 +1,102 @@
-<form [formGroup]="appartmentForm">
+<form [formGroup]="appartmentForm" (ngSubmit)="onSubmit()">
+    <h2>Informations générales</h2> 
+
+    <div class="flex-input">
+        <label for="appartName">Nom de l'appartement :</label>
+        <input type="text" formControlName="name" name="appartName" id="appartName" [value]="appartment().name" (change)="onModification()">
+    </div>
+
+    <div class="flex-input">
+        <label for="ownerSelect">Propriétaire :</label>
+        <select id="ownerSelect" name="ownerSelect" #selectedOwner formControlName="ownerId" (selectionchange)="onModification()"> <!-- (change)="handleChangeDiscount(selectedDiscount.value)" -->
+            <option *ngFor="let owner of owners()" [selected]="owner.id === appartment().ownerId" [value]="owner.id" >{{getOwnerNameById(owner.id!)}} </option>
+        </select>
+    </div>
+
+    <div class="flex-input">
+        <label for="appartDescription">Description :</label>
+        <input type="text" formControlName="description" name="appartDescription" id="appartDescription" [value]="appartment().description" (change)="onModification()">
+    </div>
+
+    <div class="flex-input">
+        <label for="appartAddress">Adresse :</label>
+        <input type="text" formControlName="address" name="appartAddress" id="appartAddress" [value]="appartment().address" (change)="onModification()">
+    </div>
+
+    <div class="flex-input">
+        <label for="appartZipcode">Code postal :</label>
+        <input type="text" formControlName="zipcode" name="appartZipcode" id="appartZipcode" [value]="appartment().zipcode" (change)="onModification()">
+    </div>
+
+    <div class="flex-input">
+        <label for="appartCity">Ville :</label>
+        <input type="text" formControlName="city" name="appartCity" id="appartCity" [value]="appartment().city" (change)="onModification()">
+    </div>
+
+    <div class="flex-input">
+        <label for="appartMapUrl">Url google map :</label>
+        <input type="text" formControlName="googleMapUrl" name="appartMapUrl" id="appartMapUrl" [value]="appartment().googleMapUrl" (change)="onModification()">
+    </div>
+
+    <div class="flex-input">
+        <label for="appartDistanceCityCenter">Distance du centre ville :</label>
+        <input type="text" formControlName="distanceCityCenter" name="appartDistanceCityCenter" id="appartDistanceCityCenter" [value]="appartment().distanceCityCenter" (change)="onModification()">
+    </div>
+
+    <div class="flex-input">
+        <label for="appartDistanceTrain">Distance de la gare :</label>
+        <input type="text" formControlName="distanceTrain" name="appartDistanceTrain" id="appartDistanceTrain" [value]="appartment().distanceTrain" (change)="onModification()">
+    </div>
+
+    <div class="flex-input">
+        <label for="appartDistanceTram">Distance du tram :</label>
+        <input type="text" formControlName="distanceTram" name="appartDistanceTram" id="appartDistanceTram" [value]="appartment().distanceTram" (change)="onModification()">
+    </div>
+
+    <div class="flex-input">
+        <label for="appartNightPrice">Prix de la nuitée :</label>
+        <input type="number" formControlName="nightPrice" name="appartNightPrice" id="appartNightPrice" [value]="appartment().nightPrice" (change)="onModification()">
+    </div>
+
+    <div class="flex-input">
+        <label for="appartCaution">Prix de la caution :</label>
+        <input type="number" formControlName="caution" name="appartCaution" id="appartCaution" [value]="appartment().caution" (change)="onModification()">
+    </div>
+
+    <div class="flex-input">
+        <label for="appartmenageCourtSejour">Ménage court séjour (&#8249; 3 jours) :</label>
+        <input type="number" formControlName="menageCourtSejour" name="appartmenageCourtSejour" id="appartmenageCourtSejour" [value]="appartment().menageCourtSejour" (change)="onModification()">
+    </div>
+
+    <div class="flex-input">
+        <label for="appartmenageLongSejour">Ménage long séjour (&#8250; 3 jours) :</label>
+        <input type="number" formControlName="menageLongSejour" name="appartmenageLongSejour" id="appartmenageLongSejour" [value]="appartment().menageLongSejour" (change)="onModification()">
+    </div>
+
+    <div class="flex-input">
+        <label for="appartmenageLongueDuree">Ménage longue durée (&#8250; 6 mois) :</label>
+        <input type="number" formControlName="menageLongueDuree" name="appartmenageLongueDuree" id="appartmenageLongueDuree" [value]="appartment().menageLongueDuree" (change)="onModification()">
+    </div>
     
     <div class="flex-input">
-        <label for="discountSelect">Logement :</label>
-        <select id="discountSelect" name="discountSelect" #selectedDiscount formControlName="discountId" > <!-- (change)="handleChangeDiscount(selectedDiscount.value)" -->
+        <label for="discountSelect">Réductions :</label>
+        <select id="discountSelect" name="discountSelect" #selectedDiscount formControlName="discountId" (selectionchange)="onModification()"> <!-- (change)="handleChangeDiscount(selectedDiscount.value)" -->
             <option *ngFor="let discount of discounts()" [selected]="discount.id === appartment().discounts.id" [value]="discount.id" >{{getInfoDiscountById(discount.id!)}} </option>
         </select>
     </div>
+
+    <div class="flex-input">
+        <label for="typeSelect">Type de location :</label>
+        <select id="typeSelect" name="typeSelect" #selectedType formControlName="type" (selectionchange)="onModification()"> <!-- (change)="handleChangeDiscount(selectedDiscount.value)" -->
+            <option *ngFor="let type of appartmentTypes" [selected]="type === appartment().type" [value]="type" >{{type}} </option>
+        </select>
+    </div>
+
+    <div class="flex-input flex-check">
+        <label for="appartActive">Visible par les voyageurs :</label>
+        <mat-checkbox formControlName="active" [checked]="appartment().active" class="check-active" (change)="onModification()"></mat-checkbox>
+    </div>
+
+    <button type="submit">Sauvegarder</button>
+
 </form>

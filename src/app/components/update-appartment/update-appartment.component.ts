@@ -1,16 +1,19 @@
-import { Component, OnInit, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, input, output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 import { Owner } from '../../models/Owner.model';
 import { Discount } from '../../models/Discount.model';
 import { Appartment } from '../../models/Appartment.model';
 import { CommonModule } from '@angular/common';
+import { AppartmentSaveRequest } from '../../models/Request/AppartmentSaveRequest.model';
 
 @Component({
   selector: 'app-update-appartment',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, MatCheckboxModule],
   templateUrl: './update-appartment.component.html',
-  styleUrl: './update-appartment.component.scss'
+  styleUrl: './update-appartment.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UpdateAppartmentComponent implements OnInit {
 
@@ -18,8 +21,13 @@ export class UpdateAppartmentComponent implements OnInit {
   discounts = input.required<Discount[]>()
   appartment = input.required<Appartment>()
 
+  appartEmitter = output<AppartmentSaveRequest>()
+  modificationEmitter = output<boolean>()
+
 
   constructor(private fb: FormBuilder) {}
+
+  appartmentTypes: string[] = ["SAISONNIER", "LONGUE_DUREE"]
 
   appartmentForm = this.fb.group(
     {
@@ -33,7 +41,7 @@ export class UpdateAppartmentComponent implements OnInit {
       distanceTrain: ["", Validators.required],
       distanceTram: ["", Validators.required],
       nightPrice: [0, Validators.required],
-      caution: [0, Validators.required],
+      caution: [300, Validators.required],
       menageCourtSejour: [0, Validators.required],
       menageLongSejour: [0, Validators.required],
       menageLongueDuree: [0, Validators.required],
@@ -94,6 +102,39 @@ export class UpdateAppartmentComponent implements OnInit {
     }
   }
 
+  onModification(): void {
+    this.modificationEmitter.emit(true)
+  }
+
+  onSubmit() {
+    
+    if(this.appartmentForm.valid) {
+      const formData: AppartmentSaveRequest = {
+        id: this.appartment().id,
+        ownerId: this.appartmentForm.value.ownerId!,
+        discountId: this.appartmentForm.value.discountId!,
+        name: this.appartmentForm.value.name!,
+        description: this.appartmentForm.value.description!,
+        address: this.appartmentForm.value.address!,
+        zipcode: this.appartmentForm.value.zipcode!,
+        city: this.appartmentForm.value.city!,
+        distanceCityCenter: this.appartmentForm.value.distanceCityCenter!,
+        distanceTrain: this.appartmentForm.value.distanceTrain!,
+        distanceTram: this.appartmentForm.value.distanceTram!,
+        googleMapUrl: this.appartmentForm.value.googleMapUrl!,
+        nightPrice: this.appartmentForm.value.nightPrice!,
+        caution: this.appartmentForm.value.caution!,
+        menageCourtSejour: this.appartmentForm.value.menageCourtSejour!,
+        menageLongSejour: this.appartmentForm.value.menageLongSejour!,
+        menageLongueDuree: this.appartmentForm.value.menageLongueDuree!,
+        type: this.appartmentForm.value.type!,
+        active: this.appartmentForm.value.active!,
+      }
+
+      this.appartEmitter.emit(formData)      
+    }
+    
+  }
 
   private convertToPercent(value: number): string {
     return value * 100 + "%"
