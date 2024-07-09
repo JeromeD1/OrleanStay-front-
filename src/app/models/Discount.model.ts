@@ -1,5 +1,5 @@
 export interface Discount {
-    id: number;
+    id?: number;
     week: number;
     month: number;
     weekActivated: boolean;

@@ -56,7 +56,11 @@ export class AppartmentsService {
         appartment.comments
       )}
       )
-    )
+    ),
+    tap((data: Appartment[]) => {
+      this.appstore.setAllAppartments(data)
+      
+    })
     )
 
   }

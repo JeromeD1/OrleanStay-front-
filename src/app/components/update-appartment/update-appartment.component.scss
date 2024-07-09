@@ -1,0 +1,42 @@
+@import "../../styles/mixins";
+
+main {
+    @include flex-column-center-center;
+    margin: auto;
+    background-color: var(--colorLightest);
+    width: 95vw;
+    max-width: 1800px;
+}
+form {
+    width: 100%;
+    max-width: 800px;
+    background-color: var(--colorLight);
+    padding: 8px;
+    border: 1px solid var(--colorMid);
+    border-radius: 24px;
+
+    .flex-input {
+        @include flex-row-between-center;
+        gap: 16px;
+        margin-bottom: 8px;
+        padding: 8px;
+        border-radius: 8px;
+
+        &:focus-within {
+            box-shadow: 0px 0px 1px 4px var(--colorBrand);
+            background-color: #e0cdc881;
+        }
+
+        input, select {
+            width: 300px;
+            max-width: 100%;
+            padding: 8px;
+            border-radius: 8px;
+            border: none;
+
+            &:focus {
+                outline: none;
+            }
+        }
+    }
+}

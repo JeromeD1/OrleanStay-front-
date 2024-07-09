@@ -4,6 +4,8 @@ import { Reservation } from '../models/Reservation.model'
 import { Appartment } from '../models/Appartment.model'
 import { User } from '../models/User.model'
 import { AppartmentNameAndOwner } from '../models/AppartmentNameAndOwner.model'
+import { Discount } from '../models/Discount.model'
+import { Owner } from '../models/Owner.model'
 
 @Injectable({
   providedIn: 'root'
@@ -42,7 +44,11 @@ export class AppstoreService {
   private _currentUsedAppartment = signal<Appartment | null>(null)
 
   private _currentUser = signal<User | null>(null)
-  _reservationRequests = signal<Reservation[]>([])
+  private _reservationRequests = signal<Reservation[]>([])
+
+  private _discounts = signal<Discount[]>([])
+  private _owners = signal<Owner[]>([])
+  private _allUsers = signal<User[]>([])
 
 
   /*************Functions related to token **********************/
@@ -205,4 +211,50 @@ export class AppstoreService {
       this._reservationRequests.update(value => value
         .filter(resa => resa.id != reservation.id))
     }
+
+    /******Functions related to discounts **************/
+    getDiscounts(): WritableSignal<Discount[]> {
+      return this._discounts
+    }
+
+    setDiscounts(discounts: Discount[]): void {
+      this._discounts.set(discounts)
+    }
+
+    updateDiscount(discount: Discount): void {
+      this._discounts.update(discounts => discounts.map(item => (
+        item.id === discount.id ? discount : item
+      )))
+    }
+
+    createDiscount(discount: Discount): void {
+      const newDiscounts = this._discounts()
+      newDiscounts.push(discount)
+      this._discounts.set(newDiscounts)
+    }
+
+    /******Functions related to owners **************/
+    getOwners(): WritableSignal<Owner[]> {
+      return this._owners
+    }
+
+    setOwners(owners: Owner[]): void {
+      this._owners.set(owners)
+    }
+
+
+    createOwner(owner: Owner): void {
+      const newOwners = this._owners()
+      newOwners.push(owner)
+      this._owners.set(newOwners)
+    }
+
+        /******Functions related to allUsers **************/
+        getAllUsers(): WritableSignal<User[]> {
+          return this._allUsers
+        }
+    
+        setAllUsers(users: User[]): void {
+          this._allUsers.set(users)
+        }
 }

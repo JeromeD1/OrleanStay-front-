@@ -1,0 +1,9 @@
+<form [formGroup]="appartmentForm">
+    
+    <div class="flex-input">
+        <label for="discountSelect">Logement :</label>
+        <select id="discountSelect" name="discountSelect" #selectedDiscount formControlName="discountId" > <!-- (change)="handleChangeDiscount(selectedDiscount.value)" -->
+            <option *ngFor="let discount of discounts()" [selected]="discount.id === appartment().discounts.id" [value]="discount.id" >{{getInfoDiscountById(discount.id!)}} </option>
+        </select>
+    </div>
+</form>

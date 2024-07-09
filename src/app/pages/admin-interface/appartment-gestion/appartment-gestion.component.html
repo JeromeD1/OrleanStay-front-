@@ -1,1 +1,32 @@
-<p>appartment-gestion works!</p>
+<main>
+    <section class="choix-appart">
+        <div class="appart-select">
+            <h2>Choisissez un appartement :</h2>
+
+            <mat-form-field>
+                <mat-label>Choisissez un appartement</mat-label>
+                    <mat-select [value]="selectedAppartment()" (selectionChange)="handleChangeAppartment($event.value)">
+                    <mat-option *ngFor="let appartment of allAppartments()" [value]="appartment">
+                   {{appartment.name}} 
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+        </div>
+
+        <button type="button">Ajouter</button>
+    </section>
+
+    <section>
+        <h1>Informations générales</h1>
+        <p>data collected : {{isAllDataCollected()}} </p>
+        
+        @if(isAllDataCollected() && selectedAppartment().id) {
+            
+            <app-update-appartment
+            [owners]="owners()"
+            [appartment]="selectedAppartment()"
+            [discounts]="discounts()"
+            ></app-update-appartment>
+        }
+    </section>
+</main>
