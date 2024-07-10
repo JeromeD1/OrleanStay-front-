@@ -1,4 +1,4 @@
-<form [formGroup]="appartmentForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="appartmentForm" (ngSubmit)="updateForm.valid && onSubmit()" #updateForm="ngForm">
     <h2>Informations générales</h2> 
 
     <div class="flex-input">
@@ -24,8 +24,14 @@
     </div>
 
     <div class="flex-input">
-        <label for="appartZipcode">Code postal :</label>
+        <div class="label-span">
+            <label for="appartZipcode">Code postal :</label>
+            @if(updateForm.submitted && appartmentForm.get("zipcode")?.hasError('required')){
+                <span>Le champ ne peut pas être nul.</span>
+            }
+        </div>
         <input type="text" formControlName="zipcode" name="appartZipcode" id="appartZipcode" [value]="appartment().zipcode" (change)="onModification()">
+        
     </div>
 
     <div class="flex-input">

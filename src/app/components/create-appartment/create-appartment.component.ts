@@ -8,48 +8,18 @@ import { CommonModule } from '@angular/common';
 import { AppartmentSaveRequest } from '../../models/Request/AppartmentSaveRequest.model';
 
 @Component({
-  selector: 'app-update-appartment',
+  selector: 'app-create-appartment',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, MatCheckboxModule],
-  templateUrl: './update-appartment.component.html',
-  styleUrl: './update-appartment.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: './create-appartment.component.html',
+  styleUrl: './create-appartment.component.scss'
 })
-export class UpdateAppartmentComponent implements OnInit {
+export class CreateAppartmentComponent {
 
   owners = input.required<Owner[]>()
   discounts = input.required<Discount[]>()
-  appartment = input.required<Appartment>()
 
   appartEmitter = output<AppartmentSaveRequest>()
-  modificationEmitter = output<boolean>()
-  onClickSelectAppartmentEmitter = output<AppartmentSaveRequest>()
-
-  @Input() set detectClickOnSelectAppartment(value: number) {
-    const formData: AppartmentSaveRequest = {
-      id: this.appartment().id,
-      ownerId: this.appartmentForm.value.ownerId!,
-      discountId: this.appartmentForm.value.discountId!,
-      name: this.appartmentForm.value.name!,
-      description: this.appartmentForm.value.description!,
-      address: this.appartmentForm.value.address!,
-      zipcode: this.appartmentForm.value.zipcode!,
-      city: this.appartmentForm.value.city!,
-      distanceCityCenter: this.appartmentForm.value.distanceCityCenter!,
-      distanceTrain: this.appartmentForm.value.distanceTrain!,
-      distanceTram: this.appartmentForm.value.distanceTram!,
-      googleMapUrl: this.appartmentForm.value.googleMapUrl!,
-      nightPrice: this.appartmentForm.value.nightPrice!,
-      caution: this.appartmentForm.value.caution!,
-      menageCourtSejour: this.appartmentForm.value.menageCourtSejour!,
-      menageLongSejour: this.appartmentForm.value.menageLongSejour!,
-      menageLongueDuree: this.appartmentForm.value.menageLongueDuree!,
-      type: this.appartmentForm.value.type!,
-      active: this.appartmentForm.value.active!,
-    }
-    
-      this.onClickSelectAppartmentEmitter.emit(formData)
-  }
 
 
   constructor(private fb: FormBuilder) {}
@@ -79,32 +49,6 @@ export class UpdateAppartmentComponent implements OnInit {
     }
   )
 
-  ngOnInit(): void {
-
-    this.appartmentForm.patchValue({
-      name: this.appartment().name,
-      description: this.appartment().description,
-      address: this.appartment().address,
-      zipcode: this.appartment().zipcode,
-      city: this.appartment().city,
-      googleMapUrl: this.appartment().googleMapUrl,
-      distanceCityCenter: this.appartment().distanceCityCenter,
-      distanceTrain: this.appartment().distanceTrain,
-      distanceTram: this.appartment().distanceTram,
-      nightPrice: this.appartment().nightPrice,
-      caution: this.appartment().caution,
-      menageCourtSejour: this.appartment().menageCourtSejour,
-      menageLongSejour: this.appartment().menageLongSejour,
-      menageLongueDuree: this.appartment().menageLongueDuree,
-      discountId: this.appartment().discounts.id,
-      ownerId: this.appartment().ownerId,
-      type: this.appartment().type,
-      active: this.appartment().active
-
-    })
-    
-  }
-
   
 
   getOwnerNameById(id: number): string {
@@ -129,15 +73,11 @@ export class UpdateAppartmentComponent implements OnInit {
     }
   }
 
-  onModification(): void {
-    this.modificationEmitter.emit(true)
-  }
 
   onSubmit() {
     
     if(this.appartmentForm.valid) {
       const formData: AppartmentSaveRequest = {
-        id: this.appartment().id,
         ownerId: this.appartmentForm.value.ownerId!,
         discountId: this.appartmentForm.value.discountId!,
         name: this.appartmentForm.value.name!,
@@ -159,8 +99,6 @@ export class UpdateAppartmentComponent implements OnInit {
       }
 
       this.appartEmitter.emit(formData)      
-    } else {
-      this.appartmentForm.markAllAsTouched()
     }
     
   }

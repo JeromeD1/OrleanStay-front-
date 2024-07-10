@@ -34,6 +34,10 @@ form {
                 outline: none;
             }
         }
+
+        .label-span {
+            @include flex-column-start-start;
+        }
     }
 
     button {
@@ -71,3 +75,8 @@ form {
         margin-right: 0 !important;
     }
 }
+
+// ::ng-deep .ng-touched {
+//     border: 5px solid var(--colorRedText) !important;
+//     outline-width: 5px;
+// }

@@ -43,12 +43,12 @@ main {
     &.success-snackbar {
       --mdc-snackbar-container-color: rgb(0, 175, 0);
       --mat-mdc-snack-bar-button-color: black;
-      --mdc-snackbar-supporting-text-color: black;
+      --mdc-snackbar-supporting-text-color: white;
     }
     &.error-snackbar {
         --mdc-snackbar-container-color: rgb(220, 0, 0);
         --mat-mdc-snack-bar-button-color: black;
-        --mdc-snackbar-supporting-text-color: black;
+        --mdc-snackbar-supporting-text-color: white;
       }
   }
 
@@ -56,6 +56,8 @@ main {
     font-size: var(--mpFontSize) !important;
     width: 800px !important;
     max-width: 90vw !important;
+    white-space: pre-wrap !important;
+    height: auto !important;
 }
 
 

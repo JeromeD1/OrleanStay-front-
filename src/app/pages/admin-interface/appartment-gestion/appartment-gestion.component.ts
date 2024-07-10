@@ -136,8 +136,10 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
           this.isAppartmentUpdating = false
         },
         error: (error) => {
-          console.log(error);
-          this.notificationService.error(error)
+          this.notificationService.error("Les modifications n'ont pas pu être enregistrées en raison de données invalides.")
+          this.showModalBewareDataNotSave = false
+          this.selectedAppartment.set(this.allAppartments().find(item => item.id === appartmentSaveRequest.id)!)
+          this.matSelectAppartment.writeValue(this.allAppartments().find(item => item.id === appartmentSaveRequest.id))
         }
       }
     )

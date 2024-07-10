@@ -15,7 +15,7 @@ export class NotificationService {
    * this.notificationService.success("confirm oked");
    */
    success(message: string) {
-    this.openSnackBar(message, '', 'success-snackbar');
+    this.openSnackBar(message, 'OK', 'success-snackbar');
   }
 
   /**
@@ -25,7 +25,7 @@ export class NotificationService {
    * this.notificationService.error("confirm canceled");
    */
   error(message: string) {
-    this.openSnackBar(message, '', 'error-snackbar');
+    this.openSnackBar(message, 'ERROR', 'error-snackbar');
   }
 
   
@@ -42,7 +42,7 @@ export class NotificationService {
     message: string,
     action: string,
     className: string,
-    duration = 2000
+    duration = 3500
   ) {
     this.snackBar.open(message, action, {
       duration: duration,

@@ -78,7 +78,10 @@ h1{
     max-width: 90vw !important;
 }
 
-
+::ng-deep .ng-touched {
+    border: 2px solid var(--colorRedText) !important;
+    outline-width: 2px;
+}
 
 @media screen and (max-width:1000px) {
 
