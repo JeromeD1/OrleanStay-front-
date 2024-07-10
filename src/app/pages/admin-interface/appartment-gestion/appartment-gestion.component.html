@@ -3,14 +3,16 @@
         <div class="appart-select">
             <h2>Choisissez un appartement :</h2>
 
-            <mat-form-field>
-                <mat-label>Choisissez un appartement</mat-label>
-                    <mat-select [value]="selectedAppartment()" (selectionChange)="handleChangeAppartment($event.value)">
-                    <mat-option *ngFor="let appartment of allAppartments()" [value]="appartment">
-                   {{appartment.name}} 
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
+            <div (click)="handleClickOnSelectAppartment()">
+                <mat-form-field>
+                    <mat-label>Choisissez un appartement</mat-label>
+                        <mat-select #matSelectAppartment [value]="selectedAppartment()" (selectionChange)="handleChangeAppartment($event.value)" >
+                        <mat-option *ngFor="let appartment of allAppartments()" [value]="appartment">
+                       {{appartment.name}} 
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+            </div>
         </div>
 
         <button type="button">Ajouter</button>
@@ -23,9 +25,19 @@
             [owners]="owners()"
             [appartment]="selectedAppartment()"
             [discounts]="discounts()"
+            [detectClickOnSelectAppartment]="detectClickOnSelectAppartment()"
             (appartEmitter)="handleUpdateAppartment($event)"
             (modificationEmitter)="handleGetAppartmentUpdatingStatus($event)"
+            (onClickSelectAppartmentEmitter)="handleUpdateAppartmentSaveRequest($event)"
             ></app-update-appartment>
         }
     </section>
 </main>
+
+@if(showModalBewareDataNotSave) {
+    <app-modal-change-appartment
+    (cancelEmitter)="onClickDontSave()"
+    (continueEmitter)="onClickContinue()"
+    (saveEmitter)="onClickSave(currentUpdatedAppartmentFormData())"
+    ></app-modal-change-appartment>
+}

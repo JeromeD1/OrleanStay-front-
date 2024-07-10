@@ -1,14 +1,14 @@
-import { Component, OnDestroy, OnInit, WritableSignal, computed, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, WritableSignal, computed, signal } from '@angular/core';
 import { User } from '../../../models/User.model';
 import { AppstoreService } from '../../../shared/appstore.service';
 import { AppartmentsService } from '../../../shared/appartments.service';
 import { NotificationService } from '../../../shared/notification.service';
 import { Appartment } from '../../../models/Appartment.model';
 import { Subject, takeUntil } from 'rxjs';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ReactiveFormsModule, } from '@angular/forms';
 import { Discount } from '../../../models/Discount.model';
 import { DiscountService } from '../../../shared/discount.service';
-import {MatSelectModule} from '@angular/material/select';
+import { MatSelect, MatSelectModule} from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
@@ -16,11 +16,12 @@ import { Owner } from '../../../models/Owner.model';
 import { UtilisateurService } from '../../../shared/utilisateur.service';
 import { UpdateAppartmentComponent } from '../../../components/update-appartment/update-appartment.component';
 import { AppartmentSaveRequest } from '../../../models/Request/AppartmentSaveRequest.model';
+import { ModalChangeAppartmentComponent } from '../../../components/modal-change-appartment/modal-change-appartment.component';
 
 @Component({
   selector: 'app-appartment-gestion',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatSelectModule, MatOptionModule, MatFormFieldModule, UpdateAppartmentComponent],
+  imports: [CommonModule, ReactiveFormsModule, MatSelectModule, MatOptionModule, MatFormFieldModule, UpdateAppartmentComponent, ModalChangeAppartmentComponent],
   templateUrl: './appartment-gestion.component.html',
   styleUrl: './appartment-gestion.component.scss'
 })
@@ -31,8 +32,7 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
     private appartmentService: AppartmentsService, 
     private notificationService: NotificationService, 
     private discountService: DiscountService, 
-    private utilisateurService: UtilisateurService,
-    private fb: FormBuilder){}
+    private utilisateurService: UtilisateurService){}
 
   destroy$: Subject<void> = new Subject()
   currentUser: WritableSignal<User | null> = this.appstore.getCurrentUser()
@@ -42,6 +42,10 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
   owners: WritableSignal<Owner[]> = this.appstore.getOwners()
 
   isAppartmentUpdating: boolean = false
+  detectClickOnSelectAppartment = signal<number>(0)
+  currentUpdatedAppartmentFormData = signal<AppartmentSaveRequest | null>(null)
+  showModalBewareDataNotSave: boolean = false
+  newAppartmentAfterSelectChange!: Appartment
 
   isAllDataCollected = computed(() => {
     console.log(this.allAppartments().length > 0 && this.discounts().length > 0 && this.owners().length > 0 && this.selectedAppartment().id > 0);
@@ -49,7 +53,7 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
     return this.allAppartments().length > 0 && this.discounts().length > 0 && this.owners().length > 0 && this.selectedAppartment().id > 0
   })
 
-  
+  @ViewChild("matSelectAppartment") matSelectAppartment!: MatSelect
 
 
   ngOnInit(): void {
@@ -111,21 +115,69 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
 
 
   handleChangeAppartment(appartment: Appartment) {
-    this.selectedAppartment.set(appartment)
+    console.log("before appartment", this.selectedAppartment());
+    console.log("after appartment", appartment);
+    this.newAppartmentAfterSelectChange = appartment
+    
     
     if(this.isAppartmentUpdating) {
       console.log("Attention - appartement en train d'etre modifié");
-      
+      this.showModalBewareDataNotSave = true
+    } else {
+      this.selectedAppartment.set(appartment)
     }
   }
+
+
 
   handleGetAppartmentUpdatingStatus(event: boolean): void {
     this.isAppartmentUpdating = event
   }
 
+  //sauvegarde de l'appartment updated lors du click sur le bouton submit
   handleUpdateAppartment(appartmentSaveRequest: AppartmentSaveRequest) {
     console.log(appartmentSaveRequest);
     
+
+    this.isAppartmentUpdating = false
+  }
+
+  //repérage du click sur le select appartment pour mettre dans une variable les données possiblement non sauvegardées
+  handleClickOnSelectAppartment() {
+    this.detectClickOnSelectAppartment.update(value => value + 1)
+  }
+
+  // mise dans une variable les données appartment possiblement non sauvegardées lors de l'update
+  handleUpdateAppartmentSaveRequest(formData: AppartmentSaveRequest) {
+    this.currentUpdatedAppartmentFormData.set(formData)
+    console.log("formData", this.currentUpdatedAppartmentFormData());
+    
+  }
+
+  /******Fonctions de validation de changement d'appartement lors du select ********/
+  onClickSave(formData: AppartmentSaveRequest | null): void {
+    console.log("click save");
+    this.showModalBewareDataNotSave = false
+    if(formData) {
+      this.handleUpdateAppartment(formData)
+    }
+    this.selectedAppartment.set(this.newAppartmentAfterSelectChange)
+
+  }
+
+  onClickDontSave(): void {
+    console.log("click dont save");
+    this.showModalBewareDataNotSave = false
+    this.isAppartmentUpdating = false
+    this.selectedAppartment.set(this.newAppartmentAfterSelectChange)
+
+  }
+
+  onClickContinue(): void {
+    console.log("click continue");
+    this.showModalBewareDataNotSave = false
+    //on dit au select #matSelectAppartment de conserver l'ancienne valeur
+    this.matSelectAppartment.writeValue(this.selectedAppartment())
   }
 
   ngOnDestroy(): void {

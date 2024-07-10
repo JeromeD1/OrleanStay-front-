@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, computed, input, output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { Owner } from '../../models/Owner.model';
@@ -23,6 +23,33 @@ export class UpdateAppartmentComponent implements OnInit {
 
   appartEmitter = output<AppartmentSaveRequest>()
   modificationEmitter = output<boolean>()
+  onClickSelectAppartmentEmitter = output<AppartmentSaveRequest>()
+
+  @Input() set detectClickOnSelectAppartment(value: number) {
+    const formData: AppartmentSaveRequest = {
+      id: this.appartment().id,
+      ownerId: this.appartmentForm.value.ownerId!,
+      discountId: this.appartmentForm.value.discountId!,
+      name: this.appartmentForm.value.name!,
+      description: this.appartmentForm.value.description!,
+      address: this.appartmentForm.value.address!,
+      zipcode: this.appartmentForm.value.zipcode!,
+      city: this.appartmentForm.value.city!,
+      distanceCityCenter: this.appartmentForm.value.distanceCityCenter!,
+      distanceTrain: this.appartmentForm.value.distanceTrain!,
+      distanceTram: this.appartmentForm.value.distanceTram!,
+      googleMapUrl: this.appartmentForm.value.googleMapUrl!,
+      nightPrice: this.appartmentForm.value.nightPrice!,
+      caution: this.appartmentForm.value.caution!,
+      menageCourtSejour: this.appartmentForm.value.menageCourtSejour!,
+      menageLongSejour: this.appartmentForm.value.menageLongSejour!,
+      menageLongueDuree: this.appartmentForm.value.menageLongueDuree!,
+      type: this.appartmentForm.value.type!,
+      active: this.appartmentForm.value.active!,
+    }
+    
+      this.onClickSelectAppartmentEmitter.emit(formData)
+  }
 
 
   constructor(private fb: FormBuilder) {}

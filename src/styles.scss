@@ -22,6 +22,7 @@
 --colorMid: #C1D6D6;
 --colorLight:#FAE7E1;
 --colorLightest: #FAFAFA;
+--colorRedText: rgb(150,0,0);
 }
 
 html, body { height: 100%; }
@@ -40,7 +41,7 @@ p, label, input, select, textarea, a, b {
 
 span {
     font-size: var(--tppFontSize) !important;
-    color: rgb(150,0,0);
+    color: var(--colorRedText);
 }
 
 button {
