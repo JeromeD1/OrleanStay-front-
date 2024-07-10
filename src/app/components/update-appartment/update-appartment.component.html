@@ -8,7 +8,7 @@
 
     <div class="flex-input">
         <label for="ownerSelect">Propriétaire :</label>
-        <select id="ownerSelect" name="ownerSelect" #selectedOwner formControlName="ownerId" (selectionchange)="onModification()"> <!-- (change)="handleChangeDiscount(selectedDiscount.value)" -->
+        <select id="ownerSelect" name="ownerSelect" #selectedOwner formControlName="ownerId" (change)="onModification()"> <!-- (change)="handleChangeDiscount(selectedDiscount.value)" -->
             <option *ngFor="let owner of owners()" [selected]="owner.id === appartment().ownerId" [value]="owner.id" >{{getOwnerNameById(owner.id!)}} </option>
         </select>
     </div>
@@ -80,14 +80,14 @@
     
     <div class="flex-input">
         <label for="discountSelect">Réductions :</label>
-        <select id="discountSelect" name="discountSelect" #selectedDiscount formControlName="discountId" (selectionchange)="onModification()"> <!-- (change)="handleChangeDiscount(selectedDiscount.value)" -->
+        <select id="discountSelect" name="discountSelect" #selectedDiscount formControlName="discountId" (change)="onModification()"> <!-- (change)="handleChangeDiscount(selectedDiscount.value)" -->
             <option *ngFor="let discount of discounts()" [selected]="discount.id === appartment().discounts.id" [value]="discount.id" >{{getInfoDiscountById(discount.id!)}} </option>
         </select>
     </div>
 
     <div class="flex-input">
         <label for="typeSelect">Type de location :</label>
-        <select id="typeSelect" name="typeSelect" #selectedType formControlName="type" (selectionchange)="onModification()"> <!-- (change)="handleChangeDiscount(selectedDiscount.value)" -->
+        <select id="typeSelect" name="typeSelect" #selectedType formControlName="type" (change)="onModification()"> <!-- (change)="handleChangeDiscount(selectedDiscount.value)" -->
             <option *ngFor="let type of appartmentTypes" [selected]="type === appartment().type" [value]="type" >{{type}} </option>
         </select>
     </div>

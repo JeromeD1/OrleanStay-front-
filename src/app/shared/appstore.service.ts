@@ -146,6 +146,26 @@ export class AppstoreService {
     )
   }
 
+  updateAppartment(appartment: Appartment): void {
+    this._activeAppartments.update(appartments => 
+      appartments.map(item => (
+        item.id === appartment.id ? appartment : item
+      ))
+    )
+
+    this._allAppartments.update(appartments => 
+      appartments.map(item => (
+        item.id === appartment.id ? appartment : item
+      ))
+    )
+
+    this._appartmentNames.update(appartments =>
+      appartments.map(item => (
+        item.id === appartment.id ? {...item, name: appartment.name, ownerId: appartment.ownerId} : item
+      ))
+    )
+  }
+
   /********Functions related to currentUser *************/
   getCurrentUser(): WritableSignal<User | null> {
     return this._currentUser

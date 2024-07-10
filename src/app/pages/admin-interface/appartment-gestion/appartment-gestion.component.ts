@@ -47,9 +47,8 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
   showModalBewareDataNotSave: boolean = false
   newAppartmentAfterSelectChange!: Appartment
 
-  isAllDataCollected = computed(() => {
-    console.log(this.allAppartments().length > 0 && this.discounts().length > 0 && this.owners().length > 0 && this.selectedAppartment().id > 0);
-    
+  //signal permettant de vérifier que toutes les données sont collectées avant d'afficher des elements necessitant ces données
+  isAllDataCollected = computed(() => {    
     return this.allAppartments().length > 0 && this.discounts().length > 0 && this.owners().length > 0 && this.selectedAppartment().id > 0
   })
 
@@ -66,38 +65,28 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
     if(this.discounts().length === 0) {
       this.discountService.getDiscounts().pipe(takeUntil(this.destroy$)).subscribe(
         {
-          next:(data) => {console.log("discounts", this.discounts())},
           error: (error) => this.notificationService.error(error)
         })
     }
   }
 
   getOwners(): void {
-    console.log("je suis dans getOwners");
-    console.log("voici owners :", this.owners());
-    
     if(this.owners().length === 0){
-      console.log("je suis dans condition getOwners");
       this.utilisateurService.getAllOwners().pipe(takeUntil(this.destroy$)).subscribe(
         {
-          next:(data) => {console.log("owners", this.owners())},
           error: (error) => this.notificationService.error(error)
         }
       )
     }
   }
 
-  getAppartments(): void {
-    console.log("je suis dans getappartment");
-    
+  getAppartments(): void {    
     if(this.allAppartments().length === 0) {
-      console.log("je suis dans condition getappartment");
       if(this.currentUser()?.role === "ADMIN") {
         this.appartmentService.getAllAppartments().pipe(takeUntil(this.destroy$)).subscribe(
           {
-            next: () => {this.selectedAppartment.set(this.allAppartments()[0])
-              console.log("selected appartment", this.selectedAppartment());
-              
+            next: () => {
+              this.selectedAppartment.set(this.allAppartments()[0])
             },
             error: (error) => this.notificationService.error(error)
           }
@@ -115,13 +104,9 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
 
 
   handleChangeAppartment(appartment: Appartment) {
-    console.log("before appartment", this.selectedAppartment());
-    console.log("after appartment", appartment);
     this.newAppartmentAfterSelectChange = appartment
-    
-    
+        
     if(this.isAppartmentUpdating) {
-      console.log("Attention - appartement en train d'etre modifié");
       this.showModalBewareDataNotSave = true
     } else {
       this.selectedAppartment.set(appartment)
@@ -135,11 +120,28 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
   }
 
   //sauvegarde de l'appartment updated lors du click sur le bouton submit
-  handleUpdateAppartment(appartmentSaveRequest: AppartmentSaveRequest) {
-    console.log(appartmentSaveRequest);
+  handleUpdateAppartment(appartmentSaveRequest: AppartmentSaveRequest) {    
+    this.appartmentService.update(appartmentSaveRequest).subscribe(
+      {
+        next: (data) => {
+          this.notificationService.success(`L'appartement ${appartmentSaveRequest.name} a bien été modifié`)
+          //si on a sauvegardé via le bouton de sauvegarde normal, les valeurs de selectedAppartment ont changé, il faut donc 
+          //lui réatribuer les bonnes valeurs afin que l'appartement apparaisse toujours dans le select          
+          if(this.isAppartmentUpdating === true) {
+            this.matSelectAppartment.writeValue(this.allAppartments().find(item => item.id === data.id))
+          }
+          //on ferme la modal d'avertissement au cas ou elle était ouverte
+          this.showModalBewareDataNotSave = false
+          //on déclare le formulaire comme n'étant plus en trai d'être updating
+          this.isAppartmentUpdating = false
+        },
+        error: (error) => {
+          console.log(error);
+          this.notificationService.error(error)
+        }
+      }
+    )
     
-
-    this.isAppartmentUpdating = false
   }
 
   //repérage du click sur le select appartment pour mettre dans une variable les données possiblement non sauvegardées
@@ -149,16 +151,13 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
 
   // mise dans une variable les données appartment possiblement non sauvegardées lors de l'update
   handleUpdateAppartmentSaveRequest(formData: AppartmentSaveRequest) {
-    this.currentUpdatedAppartmentFormData.set(formData)
-    console.log("formData", this.currentUpdatedAppartmentFormData());
-    
+    this.currentUpdatedAppartmentFormData.set(formData)    
   }
 
   /******Fonctions de validation de changement d'appartement lors du select ********/
-  onClickSave(formData: AppartmentSaveRequest | null): void {
-    console.log("click save");
-    this.showModalBewareDataNotSave = false
+  onClickSave(formData: AppartmentSaveRequest | null): void {    
     if(formData) {
+      this.isAppartmentUpdating = false
       this.handleUpdateAppartment(formData)
     }
     this.selectedAppartment.set(this.newAppartmentAfterSelectChange)
@@ -166,15 +165,12 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
   }
 
   onClickDontSave(): void {
-    console.log("click dont save");
     this.showModalBewareDataNotSave = false
     this.isAppartmentUpdating = false
     this.selectedAppartment.set(this.newAppartmentAfterSelectChange)
-
   }
 
   onClickContinue(): void {
-    console.log("click continue");
     this.showModalBewareDataNotSave = false
     //on dit au select #matSelectAppartment de conserver l'ancienne valeur
     this.matSelectAppartment.writeValue(this.selectedAppartment())
