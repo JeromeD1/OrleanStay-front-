@@ -37,6 +37,27 @@ form {
 
         .label-span {
             @include flex-column-start-start;
+
+            label {
+                @include flex-row-center-center;
+                gap: 48px;
+
+                p {
+                    margin: 0;
+                }
+
+                .icon-plus {
+                    color: blue;
+                    transform: scale(1.5);
+                    transition: 0.5s;
+
+                    &:hover {
+                        transform: scale(1.8);
+                        color: var(--colorRedText);
+                        cursor: pointer;  
+                    }
+                }
+            }
         }
     }
 

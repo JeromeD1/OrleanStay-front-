@@ -1,16 +1,18 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, computed, input, output } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import { Owner } from '../../models/Owner.model';
-import { Discount } from '../../models/Discount.model';
-import { Appartment } from '../../models/Appartment.model';
-import { CommonModule } from '@angular/common';
-import { AppartmentSaveRequest } from '../../models/Request/AppartmentSaveRequest.model';
+import { ChangeDetectionStrategy, Component, Input, OnInit, input, output } from '@angular/core'
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms'
+import {MatCheckboxModule} from '@angular/material/checkbox'
+import { Owner } from '../../models/Owner.model'
+import { Discount } from '../../models/Discount.model'
+import { Appartment } from '../../models/Appartment.model'
+import { CommonModule } from '@angular/common'
+import { AppartmentSaveRequest } from '../../models/Request/AppartmentSaveRequest.model'
+import { CreateDiscountComponent } from '../create-discount/create-discount.component'
+import {MatIconModule} from '@angular/material/icon'
 
 @Component({
   selector: 'app-update-appartment',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, MatCheckboxModule],
+  imports: [ReactiveFormsModule, CommonModule, MatCheckboxModule, CreateDiscountComponent, MatIconModule],
   templateUrl: './update-appartment.component.html',
   styleUrl: './update-appartment.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -78,6 +80,8 @@ export class UpdateAppartmentComponent implements OnInit {
       active: [false, Validators.required],
     }
   )
+
+  showCreateDiscount: boolean = false
 
   ngOnInit(): void {
 
@@ -167,5 +171,19 @@ export class UpdateAppartmentComponent implements OnInit {
 
   private convertToPercent(value: number): string {
     return Math.round((1 - value) * 100) + "%"
+  }
+
+  /****Fonctions relatives à la création des discounts *******/
+  setShowDiscountComponent(): void {
+    this.showCreateDiscount = true
+  }
+
+  setHideDiscountComponent(): void {
+    this.showCreateDiscount = false
+  }
+
+  createNewDiscount(discount: Discount): void {
+    console.log("new discount", discount);
+    
   }
 }

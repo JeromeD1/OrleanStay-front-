@@ -156,7 +156,7 @@
     
     <div class="flex-input">
         <div class="label-span">
-            <label for="discountSelect">Réductions :</label>
+            <label for="discountSelect"> <p>Réductions : </p> <mat-icon class="icon-plus" (click)="setShowDiscountComponent()">add_circle_outline</mat-icon></label>
             @if(updateForm.submitted && appartmentForm.get("discountId")?.hasError('required')){
                 <span>Le champ ne peut pas être nul.</span>
             }
@@ -186,3 +186,11 @@
     <button type="submit">Sauvegarder</button>
 
 </form>
+
+@if(showCreateDiscount) {
+    <app-create-discount
+    [discounts]="discounts()"
+    (closeEmitter)="setHideDiscountComponent()"
+    (discountEmitter)="createNewDiscount($event)"
+    ></app-create-discount>
+}

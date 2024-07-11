@@ -60,4 +60,27 @@ export class SomeFunctionsService {
   
     return arriveOuDepart === "arrive" ? "Choisissez une date d'arrivée" : "Choisissez une date de départ";
   }
+
+
+  getInfoDiscountById(id: number, discounts: Discount[]): string | null {
+    const discount: Discount | undefined = discounts.find(discount => discount.id === id)
+    if(discount) {
+      if(discount.weekActivated && discount.monthActivated) {
+        return `${this.convertToPercent(discount?.week)} à la semaine - ${this.convertToPercent(discount?.month)} au mois`
+      } else if(discount.weekActivated && !discount.monthActivated) {
+        return `${this.convertToPercent(discount?.week)} à la semaine`
+      } else if(!discount.weekActivated && discount.monthActivated) {
+        return `${this.convertToPercent(discount?.month)} au mois`
+      } else {
+        return "Aucune réduction"
+      }
+    } else {
+      return null
+    }
+  }
+
+
+  private convertToPercent(value: number): string {
+    return Math.round((1 - value) * 100) + "%"
+  }
 }

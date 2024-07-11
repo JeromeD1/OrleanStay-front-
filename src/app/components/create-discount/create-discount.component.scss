@@ -1,0 +1,54 @@
+@import "../../styles/mixins";
+
+main {
+    @include flex-row-center-center;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    background-color: #fae7e181;
+    backdrop-filter: blur(10px);
+
+    section {
+        @include flex-column-center-center;
+        position: relative;
+        width: 1000px;
+        max-width: 95vw;
+        box-shadow: 0 1px 0 2px var(--colorMid);
+        min-height: 50vh;
+        background-color: #fafafa9e;
+        backdrop-filter: blur(40px);
+        gap: 64px;
+        padding: 16px 64px;
+        border-radius: 24px;
+        
+        .img-close {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 40px;
+            height: auto;
+
+            &:hover {
+                cursor: pointer;
+                filter: hue-rotate(110deg);
+            }
+        }
+
+        .form-list-container {
+            @include flex-row-between-start;
+            gap: 24px;
+
+            .discount-list {
+
+                .sameDiscount{
+                    color: var(--colorRedText);
+                    font-weight: 500;
+                }
+            }
+        }
+
+    }
+}
