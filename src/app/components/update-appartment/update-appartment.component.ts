@@ -166,6 +166,6 @@ export class UpdateAppartmentComponent implements OnInit {
   }
 
   private convertToPercent(value: number): string {
-    return value * 100 + "%"
+    return Math.round((1 - value) * 100) + "%"
   }
 }

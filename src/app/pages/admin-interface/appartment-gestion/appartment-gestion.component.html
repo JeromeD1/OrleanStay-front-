@@ -1,11 +1,11 @@
 <main>
     <section class="choix-appart">
-        @if(!isInCreationAppartmentMode) {
-            <div class="appart-select">
+
+            <div class="appart-select" [class.hidden-element]="isInCreationAppartmentMode">
                 <h2>Choisissez un appartement :</h2>
     
                 <div (click)="handleClickOnSelectAppartment()">
-                    <mat-form-field>
+                    <mat-form-field [class.hidden-element]="isInCreationAppartmentMode">
                         <mat-label>Choisissez un appartement</mat-label>
                             <mat-select #matSelectAppartment [value]="selectedAppartment()" (selectionChange)="handleChangeAppartment($event.value)" >
                             <mat-option *ngFor="let appartment of allAppartments()" [value]="appartment">
@@ -16,11 +16,11 @@
                 </div>
             </div>
             
-            <div class="add-delete-appart">
+            <div class="add-delete-appart" [class.hidden-element]="isInCreationAppartmentMode">
                 <button type="button" class="button-ajouter" (click)="passInCreationAppartmentMode()">Ajouter</button>
                 <button type="button" class="button-delete" (click)="deleteAppartment()">Supprimer</button>
             </div>
-        } @else {
+        @if(isInCreationAppartmentMode) {
             <div class="div-cancel-appart-creation">
                 <button type="button"  class="button-cancel" (click)="quitCreationAppartmentMode()">Annuler la création</button>
             </div>

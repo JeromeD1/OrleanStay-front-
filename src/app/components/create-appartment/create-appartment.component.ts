@@ -14,7 +14,7 @@ import { AppartmentSaveRequest } from '../../models/Request/AppartmentSaveReques
   templateUrl: './create-appartment.component.html',
   styleUrl: '../update-appartment/update-appartment.component.scss'
 })
-export class CreateAppartmentComponent {
+export class CreateAppartmentComponent implements OnInit{
 
   owners = input.required<Owner[]>()
   discounts = input.required<Discount[]>()
@@ -44,12 +44,19 @@ export class CreateAppartmentComponent {
       menageLongueDuree: [90, Validators.required],
       discountId: [0, Validators.required],
       ownerId: [0, Validators.required],
-      type: ["", Validators.required],
-      active: [false, Validators.required],
+      type: ["LONGUE_DUREE", Validators.required],
+      active: [true, Validators.required],
     }
   )
 
-  
+  ngOnInit(): void {
+      this.appartmentForm.patchValue(
+        {
+          ownerId: this.owners()[0].id,
+          discountId: this.discounts()[0].id
+        }
+      )
+  }
 
   getOwnerNameById(id: number): string {
     const owner: Owner | undefined = this.owners().find(owner => owner.id === id)

@@ -4,7 +4,7 @@ import { AppstoreService } from '../../../shared/appstore.service';
 import { AppartmentsService } from '../../../shared/appartments.service';
 import { NotificationService } from '../../../shared/notification.service';
 import { Appartment } from '../../../models/Appartment.model';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, tap } from 'rxjs';
 import { ReactiveFormsModule, } from '@angular/forms';
 import { Discount } from '../../../models/Discount.model';
 import { DiscountService } from '../../../shared/discount.service';
@@ -56,7 +56,6 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
   })
 
   @ViewChild("matSelectAppartment") matSelectAppartment!: MatSelect
-
 
   ngOnInit(): void {
       this.getDiscounts()
@@ -195,8 +194,8 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
     this.appartmentService.create(formData).pipe(takeUntil(this.destroy$)).subscribe(
       {
         next: (data) => {
-          this.notificationService.success(`L'appartement ${formData.name} a bien été créé.`)
           this.quitCreationAppartmentMode()
+          this.notificationService.success(`L'appartement ${formData.name} a bien été créé.`)
           this.selectedAppartment.set(this.allAppartments().find(appartment => appartment.id === data.id)!)
           this.matSelectAppartment.writeValue(this.allAppartments().find(appartment => appartment.id === data.id)!)
         },
@@ -208,6 +207,33 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
       }
     )
   }
+
+  // createAppartment(formData : AppartmentSaveRequest): void {
+  //   console.log("formData", formData);
+  //   this.appartmentService.create(formData).pipe(
+  //     takeUntil(this.destroy$),
+  //     tap((data) => {
+  //       this.quitCreationAppartmentMode()
+  //         this.notificationService.success(`L'appartement ${formData.name} a bien été créé.`)
+  //         this.selectedAppartment.set(this.allAppartments().find(appartment => appartment.id === data.id)!)
+  //     })
+  //   ).subscribe(
+  //     {
+  //       next: (data) => {
+          
+  //         this.matSelectAppartment.writeValue(this.allAppartments().find(appartment => appartment.id === data.id)!)
+  //       },
+  //       error: (error) => {
+  //         console.log("erreur de creation :", error);
+          
+  //         this.notificationService.error(`Suite à un problème, l'appartement ${formData.name} n'a pas pu être créé.`)
+  //       }
+  //     }
+  //   )
+  // }
+
+
+  
 
   deleteAppartment(): void {
     this.appartmentService.delete(this.selectedAppartment().id).pipe(takeUntil(this.destroy$)).subscribe(

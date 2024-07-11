@@ -18,6 +18,8 @@ main {
         gap: 48px;
         width: 900px;
         max-width: 100%;
+        margin-bottom: 24px;
+
 
         .appart-select {
             @include flex-row-start-center-wrap;
@@ -48,6 +50,14 @@ main {
             width: 100%;
             margin-top: 24px;
             margin-bottom: 24px;
+        }
+
+        .hidden-element {
+            // visibility: hidden;
+            display: none !important;
+            margin: 0;
+            gap: 0;
+            padding: 0;
         }
     }
 }
