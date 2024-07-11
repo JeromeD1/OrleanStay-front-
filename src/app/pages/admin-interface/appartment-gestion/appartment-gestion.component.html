@@ -1,25 +1,41 @@
 <main>
     <section class="choix-appart">
-        <div class="appart-select">
-            <h2>Choisissez un appartement :</h2>
-
-            <div (click)="handleClickOnSelectAppartment()">
-                <mat-form-field>
-                    <mat-label>Choisissez un appartement</mat-label>
-                        <mat-select #matSelectAppartment [value]="selectedAppartment()" (selectionChange)="handleChangeAppartment($event.value)" >
-                        <mat-option *ngFor="let appartment of allAppartments()" [value]="appartment">
-                       {{appartment.name}} 
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
+        @if(!isInCreationAppartmentMode) {
+            <div class="appart-select">
+                <h2>Choisissez un appartement :</h2>
+    
+                <div (click)="handleClickOnSelectAppartment()">
+                    <mat-form-field>
+                        <mat-label>Choisissez un appartement</mat-label>
+                            <mat-select #matSelectAppartment [value]="selectedAppartment()" (selectionChange)="handleChangeAppartment($event.value)" >
+                            <mat-option *ngFor="let appartment of allAppartments()" [value]="appartment">
+                           {{appartment.name}} 
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                </div>
             </div>
-        </div>
-
-        <button type="button">Ajouter</button>
+            
+            <div class="add-delete-appart">
+                <button type="button" class="button-ajouter" (click)="passInCreationAppartmentMode()">Ajouter</button>
+                <button type="button" class="button-delete" (click)="deleteAppartment()">Supprimer</button>
+            </div>
+        } @else {
+            <div class="div-cancel-appart-creation">
+                <button type="button"  class="button-cancel" (click)="quitCreationAppartmentMode()">Annuler la création</button>
+            </div>
+        }
     </section>
 
-    <section>       
-        @if(isAllDataCollected() && selectedAppartment().id) {
+    <section> 
+        @if(isAllDataCollected() && isInCreationAppartmentMode) {
+            <app-create-appartment
+            [owners]="owners()"
+            [discounts]="discounts()"
+            (appartEmitter)="createAppartment($event)"
+            ></app-create-appartment>
+        }      
+        @else if(isAllDataCollected() && selectedAppartment().id) {
             
             <app-update-appartment
             [owners]="owners()"

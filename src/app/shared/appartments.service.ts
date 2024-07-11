@@ -9,6 +9,8 @@ import { Reservation } from '../models/Reservation.model';
 import { AppstoreService } from './appstore.service';
 import { AppartmentNameAndOwner } from '../models/AppartmentNameAndOwner.model';
 import { AppartmentSaveRequest } from '../models/Request/AppartmentSaveRequest.model';
+import { Info } from '../models/Info.model';
+import { Photo } from '../models/Photo.model';
 
 
 @Injectable({
@@ -262,5 +264,57 @@ export class AppartmentsService {
   })
 )
   }
+
+
+
+  create(appartmentToCreate: AppartmentSaveRequest): Observable<Appartment> {
+    return this.http.post<Appartment>(environment.BACKEND_BASE_URL + `/appartment`, appartmentToCreate).pipe(
+    tap((appartment) => {
+      console.log("appartment créé", appartment);
+      
+      //creation des tableaux vides
+      const reservations: Reservation[] = []
+      const infos: Info[] = []
+      const photos: Photo[] = []
+
+      const newAppartment: Appartment = new Appartment(
+        appartment.id,
+        appartment.ownerId,
+        appartment.discounts,
+        appartment.name,
+        appartment.description,
+        appartment.address,
+        appartment.zipcode,
+        appartment.city,
+        appartment.distanceCityCenter,
+        appartment.distanceTrain,
+        appartment.distanceTram,
+        appartment.googleMapUrl,
+        appartment.nightPrice,
+        appartment.caution,
+        appartment.menageCourtSejour,
+        appartment.menageLongSejour,
+        appartment.menageLongueDuree,
+        appartment.type,
+        appartment.active,
+        infos,
+        photos,
+        reservations,
+        appartment.comments
+    )
+    
+    this.appstore.createAppartment(newAppartment)
+    
+    return newAppartment
+  })
+)
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${environment.BACKEND_BASE_URL}/appartment/${id}`).pipe(
+      tap(() => this.appstore.deleteAppartment(id))
+    )
+  }
+
 
 }

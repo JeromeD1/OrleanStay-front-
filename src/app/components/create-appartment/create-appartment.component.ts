@@ -12,7 +12,7 @@ import { AppartmentSaveRequest } from '../../models/Request/AppartmentSaveReques
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, MatCheckboxModule],
   templateUrl: './create-appartment.component.html',
-  styleUrl: './create-appartment.component.scss'
+  styleUrl: '../update-appartment/update-appartment.component.scss'
 })
 export class CreateAppartmentComponent {
 
@@ -37,11 +37,11 @@ export class CreateAppartmentComponent {
       distanceCityCenter: ["", Validators.required],
       distanceTrain: ["", Validators.required],
       distanceTram: ["", Validators.required],
-      nightPrice: [0, Validators.required],
+      nightPrice: [50, Validators.required],
       caution: [300, Validators.required],
-      menageCourtSejour: [0, Validators.required],
-      menageLongSejour: [0, Validators.required],
-      menageLongueDuree: [0, Validators.required],
+      menageCourtSejour: [30, Validators.required],
+      menageLongSejour: [50, Validators.required],
+      menageLongueDuree: [90, Validators.required],
       discountId: [0, Validators.required],
       ownerId: [0, Validators.required],
       type: ["", Validators.required],

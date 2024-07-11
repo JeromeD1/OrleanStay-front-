@@ -166,6 +166,35 @@ export class AppstoreService {
     )
   }
 
+  createAppartment(appartment: Appartment): void {
+    if(appartment.active) {
+      const newAppartments: Appartment[] = this._activeAppartments()
+      newAppartments.push(appartment)
+      this._activeAppartments.set(newAppartments)
+    }
+
+    const newAllAppartments: Appartment[] = this._allAppartments()
+    newAllAppartments.push(appartment)
+    this._allAppartments.set(newAllAppartments)
+
+    const newAppartmentNames: AppartmentNameAndOwner[] = newAllAppartments.map(item => (
+      {id: item.id, name: item.name, ownerId: item.ownerId}
+    ))
+
+    this._appartmentNames.set(newAppartmentNames)
+  }
+
+  deleteAppartment(id: number): void {
+    const newActiveAppartment: Appartment[] = this._activeAppartments().filter(item => item.id != id)
+    this._activeAppartments.set(newActiveAppartment)
+
+    const newAllAppartments: Appartment[] = this._allAppartments().filter(item => item.id != id)
+    this._allAppartments.set(newAllAppartments)
+
+    const newAppartmentNames: AppartmentNameAndOwner[] = this._appartmentNames().filter(item => item.id != id)
+    this._appartmentNames.set(newAppartmentNames)
+  }
+
   /********Functions related to currentUser *************/
   getCurrentUser(): WritableSignal<User | null> {
     return this._currentUser

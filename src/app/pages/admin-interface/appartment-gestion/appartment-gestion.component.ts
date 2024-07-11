@@ -17,11 +17,12 @@ import { UtilisateurService } from '../../../shared/utilisateur.service';
 import { UpdateAppartmentComponent } from '../../../components/update-appartment/update-appartment.component';
 import { AppartmentSaveRequest } from '../../../models/Request/AppartmentSaveRequest.model';
 import { ModalChangeAppartmentComponent } from '../../../components/modal-change-appartment/modal-change-appartment.component';
+import { CreateAppartmentComponent } from '../../../components/create-appartment/create-appartment.component';
 
 @Component({
   selector: 'app-appartment-gestion',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatSelectModule, MatOptionModule, MatFormFieldModule, UpdateAppartmentComponent, ModalChangeAppartmentComponent],
+  imports: [CommonModule, ReactiveFormsModule, MatSelectModule, MatOptionModule, MatFormFieldModule, UpdateAppartmentComponent, ModalChangeAppartmentComponent, CreateAppartmentComponent],
   templateUrl: './appartment-gestion.component.html',
   styleUrl: './appartment-gestion.component.scss'
 })
@@ -46,6 +47,8 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
   currentUpdatedAppartmentFormData = signal<AppartmentSaveRequest | null>(null)
   showModalBewareDataNotSave: boolean = false
   newAppartmentAfterSelectChange!: Appartment
+
+  isInCreationAppartmentMode: boolean = false
 
   //signal permettant de vérifier que toutes les données sont collectées avant d'afficher des elements necessitant ces données
   isAllDataCollected = computed(() => {    
@@ -176,6 +179,47 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
     this.showModalBewareDataNotSave = false
     //on dit au select #matSelectAppartment de conserver l'ancienne valeur
     this.matSelectAppartment.writeValue(this.selectedAppartment())
+  }
+
+  /*********Fonctions liées à l'ajout d'appartement ************/
+  passInCreationAppartmentMode(): void {
+    this.isInCreationAppartmentMode = true
+  }
+
+  quitCreationAppartmentMode(): void {
+    this.isInCreationAppartmentMode = false
+  }
+
+  createAppartment(formData : AppartmentSaveRequest): void {
+    console.log("formData", formData);
+    this.appartmentService.create(formData).pipe(takeUntil(this.destroy$)).subscribe(
+      {
+        next: (data) => {
+          this.notificationService.success(`L'appartement ${formData.name} a bien été créé.`)
+          this.quitCreationAppartmentMode()
+          this.selectedAppartment.set(this.allAppartments().find(appartment => appartment.id === data.id)!)
+          this.matSelectAppartment.writeValue(this.allAppartments().find(appartment => appartment.id === data.id)!)
+        },
+        error: (error) => {
+          console.log("erreur de creation :", error);
+          
+          this.notificationService.error(`Suite à un problème, l'appartement ${formData.name} n'a pas pu être créé.`)
+        }
+      }
+    )
+  }
+
+  deleteAppartment(): void {
+    this.appartmentService.delete(this.selectedAppartment().id).pipe(takeUntil(this.destroy$)).subscribe(
+      {
+        next: () => {
+          this.notificationService.success(`L'appartement ${this.selectedAppartment().name} a bien été supprimé.`)
+          this.selectedAppartment.set(this.allAppartments()[0])
+          this.matSelectAppartment.writeValue(this.allAppartments()[0])
+        }, 
+        error: () => this.notificationService.error(`L'appartement ${this.selectedAppartment().name} n'a pas pu être supprimé.`)
+      }
+    )
   }
 
   ngOnDestroy(): void {
