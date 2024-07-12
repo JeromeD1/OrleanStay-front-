@@ -298,12 +298,27 @@ export class AppstoreService {
       this._owners.set(newOwners)
     }
 
-        /******Functions related to allUsers **************/
-        getAllUsers(): WritableSignal<User[]> {
-          return this._allUsers
-        }
-    
-        setAllUsers(users: User[]): void {
-          this._allUsers.set(users)
-        }
+    /******Functions related to allUsers **************/
+    getAllUsers(): WritableSignal<User[]> {
+      return this._allUsers
+    }
+
+    setAllUsers(users: User[]): void {
+      this._allUsers.set(users)
+    }
+
+
+    /****Reset des signaux réservés à la session lors du logout ******/
+    resetAutenticatedSignals(): void {
+      this._allAppartments.set([])
+      this._appartmentNames.set([])
+      this._currentUser.set(null)
+      this._owners.set([])
+      this._allUsers.set([])
+      this._token.set("")
+      this._reservationRequests.set([])
+      this._currentUsedAppartment.set(null)
+
+      localStorage.setItem("refreshToken", "")
+    }
 }

@@ -76,7 +76,16 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
     if(this.owners().length === 0){
       this.utilisateurService.getAllOwners().pipe(takeUntil(this.destroy$)).subscribe(
         {
-          error: (error) => this.notificationService.error(error)
+          error: () => {
+            const meAsOwner: Owner = {
+              id: this.appstore.getCurrentUser()()!.id,
+              firstname: this.appstore.getCurrentUser()()!.personalInformations.firstname,
+              lastname: this.appstore.getCurrentUser()()!.personalInformations.lastname
+            }
+            const newOwners: Owner[] = []
+            newOwners.push(meAsOwner)
+            this.appstore.setOwners(newOwners)
+          }
         }
       )
     }

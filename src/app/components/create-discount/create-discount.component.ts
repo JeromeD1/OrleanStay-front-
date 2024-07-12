@@ -41,7 +41,16 @@ export class CreateDiscountComponent {
     const weekActivatedEquals: boolean = discount.weekActivated == this.discountForm.value.weekActivated
     const monthEquals: boolean = Math.round((1 - discount.month) * 100) == this.discountForm.value.month
     const monthActivatedEquals: boolean = discount.monthActivated == this.discountForm.value.monthActivated
-    return weekEquals && weekActivatedEquals && monthEquals && monthActivatedEquals
+
+    if(this.discountForm.value.weekActivated && this.discountForm.value.monthActivated) {
+      return weekEquals && weekActivatedEquals && monthEquals && monthActivatedEquals
+    } else if(!this.discountForm.value.weekActivated && this.discountForm.value.monthActivated) {
+      return monthEquals && monthActivatedEquals
+    } else if(!this.discountForm.value.monthActivated && this.discountForm.value.weekActivated) {
+      return weekEquals && weekActivatedEquals
+    } else {
+      return monthActivatedEquals && weekActivatedEquals
+    }
   }
   
   getDiscountInfos(id: number): string | null {
