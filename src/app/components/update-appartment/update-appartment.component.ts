@@ -8,6 +8,8 @@ import { CommonModule } from '@angular/common'
 import { AppartmentSaveRequest } from '../../models/Request/AppartmentSaveRequest.model'
 import { CreateDiscountComponent } from '../create-discount/create-discount.component'
 import {MatIconModule} from '@angular/material/icon'
+import { DiscountService } from '../../shared/discount.service'
+import { NotificationService } from '../../shared/notification.service'
 
 @Component({
   selector: 'app-update-appartment',
@@ -54,7 +56,7 @@ export class UpdateAppartmentComponent implements OnInit {
   }
 
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private discountService: DiscountService, private notificationService: NotificationService) {}
 
   appartmentTypes: string[] = ["SAISONNIER", "LONGUE_DUREE"]
 
@@ -184,6 +186,10 @@ export class UpdateAppartmentComponent implements OnInit {
 
   createNewDiscount(discount: Discount): void {
     console.log("new discount", discount);
+    this.discountService.create(discount).subscribe({
+      next: () => this.notificationService.success("Le jeu de réduction a bien été ajouté"),
+      error: () => this.notificationService.error("Une erreur s'est produite lors de l'enregistrement du jeu de réduction")
+    })
     
   }
 }

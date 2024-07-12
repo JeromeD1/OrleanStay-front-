@@ -217,31 +217,6 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
     )
   }
 
-  // createAppartment(formData : AppartmentSaveRequest): void {
-  //   console.log("formData", formData);
-  //   this.appartmentService.create(formData).pipe(
-  //     takeUntil(this.destroy$),
-  //     tap((data) => {
-  //       this.quitCreationAppartmentMode()
-  //         this.notificationService.success(`L'appartement ${formData.name} a bien été créé.`)
-  //         this.selectedAppartment.set(this.allAppartments().find(appartment => appartment.id === data.id)!)
-  //     })
-  //   ).subscribe(
-  //     {
-  //       next: (data) => {
-          
-  //         this.matSelectAppartment.writeValue(this.allAppartments().find(appartment => appartment.id === data.id)!)
-  //       },
-  //       error: (error) => {
-  //         console.log("erreur de creation :", error);
-          
-  //         this.notificationService.error(`Suite à un problème, l'appartement ${formData.name} n'a pas pu être créé.`)
-  //       }
-  //     }
-  //   )
-  // }
-
-
   
 
   deleteAppartment(): void {

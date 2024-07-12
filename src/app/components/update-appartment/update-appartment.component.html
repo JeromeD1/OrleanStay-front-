@@ -189,7 +189,6 @@
 
 @if(showCreateDiscount) {
     <app-create-discount
-    [discounts]="discounts()"
     (closeEmitter)="setHideDiscountComponent()"
     (discountEmitter)="createNewDiscount($event)"
     ></app-create-discount>

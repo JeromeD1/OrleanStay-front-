@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges, WritableSignal, input, output } from '@angular/core';
 import { Discount } from '../../models/Discount.model';
 import { SomeFunctionsService } from '../../shared/some-functions.service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import {MatCheckboxModule} from '@angular/material/checkbox'
 import { NotificationService } from '../../shared/notification.service';
+import { AppstoreService } from '../../shared/appstore.service';
 
 @Component({
   selector: 'app-create-discount',
@@ -14,9 +15,9 @@ import { NotificationService } from '../../shared/notification.service';
   styleUrl: './create-discount.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateDiscountComponent {
+export class CreateDiscountComponent{
 
-  constructor(private someFunctions: SomeFunctionsService, private fb: FormBuilder, private notificationService: NotificationService) {
+  constructor(private someFunctions: SomeFunctionsService, private fb: FormBuilder, private notificationService: NotificationService, private appstore: AppstoreService) {
     this.discountForm.get('week')?.valueChanges.subscribe()
     this.discountForm.get('weekActivated')?.valueChanges.subscribe()
     this.discountForm.get('month')?.valueChanges.subscribe()
@@ -26,7 +27,13 @@ export class CreateDiscountComponent {
   
   closeEmitter = output<void>()
   discountEmitter = output<Discount>()
-  discounts = input.required<Discount[]>()
+  // discounts = input.required<Discount[]>()
+  discounts: WritableSignal<Discount[]> = this.appstore.getDiscounts()
+  // @Input() set discounts(data :Discount[]) {
+  //   this.allDiscounts = data
+  // }
+  
+  // allDiscounts!: Discount[]
 
   discountForm = this.fb.group({
     week: [0, Validators.required],
@@ -35,6 +42,9 @@ export class CreateDiscountComponent {
     monthActivated: [false, Validators.required]
   })
 
+  // ngOnChanges(changes: SimpleChanges): void {
+  //     this.allDiscounts = changes['discounts'].currentValue;
+  // }
 
   compareDiscountWithFormValues(discount: Discount): boolean {
     const weekEquals: boolean = Math.round((1 - discount.week) * 100) == this.discountForm.value.week
@@ -45,9 +55,9 @@ export class CreateDiscountComponent {
     if(this.discountForm.value.weekActivated && this.discountForm.value.monthActivated) {
       return weekEquals && weekActivatedEquals && monthEquals && monthActivatedEquals
     } else if(!this.discountForm.value.weekActivated && this.discountForm.value.monthActivated) {
-      return monthEquals && monthActivatedEquals
+      return monthEquals && monthActivatedEquals && !discount.weekActivated
     } else if(!this.discountForm.value.monthActivated && this.discountForm.value.weekActivated) {
-      return weekEquals && weekActivatedEquals
+      return weekEquals && weekActivatedEquals && !discount.monthActivated
     } else {
       return monthActivatedEquals && weekActivatedEquals
     }
@@ -57,12 +67,17 @@ export class CreateDiscountComponent {
     return this.someFunctions.getInfoDiscountById(id, this.discounts())
   }
 
+  // getDiscountInfos(id: number): string | null {
+  //   return this.someFunctions.getInfoDiscountById(id, this.allDiscounts)
+  // }
+
   onSubmit(): void {
     if(!this.discountForm.valid) {
       this.notificationService.error("Veillez à remplir tous les champs avant de soumettre le formulaire.")
     } else {
       let isAlreadyPresent: boolean = false
       for(const discount of this.discounts()){
+        // for(const discount of this.allDiscounts){
         if(this.compareDiscountWithFormValues(discount)){
           isAlreadyPresent = true
         }
@@ -71,13 +86,14 @@ export class CreateDiscountComponent {
         this.notificationService.error("Impossible d'ajouter un type de réduction déjà existant.")
       } else {
         const formData: Discount = {
-          week: this.discountForm.value.week!,
+          week: 1 - (this.discountForm.value.week! / 100),
           weekActivated: this.discountForm.value.weekActivated!,
-          month: this.discountForm.value.month!,
+          month: 1 - (this.discountForm.value.month! / 100),
           monthActivated: this.discountForm.value.monthActivated!
         }
 
         this.discountEmitter.emit(formData)
+        // this.closeCreateDiscount()
       }
     }
   }
