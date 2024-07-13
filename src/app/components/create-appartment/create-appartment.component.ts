@@ -1,16 +1,19 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, computed, input, output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { Owner } from '../../models/Owner.model';
 import { Discount } from '../../models/Discount.model';
-import { Appartment } from '../../models/Appartment.model';
+import {MatIconModule} from '@angular/material/icon'
 import { CommonModule } from '@angular/common';
 import { AppartmentSaveRequest } from '../../models/Request/AppartmentSaveRequest.model';
+import { NotificationService } from '../../shared/notification.service';
+import { DiscountService } from '../../shared/discount.service';
+import { CreateDiscountComponent } from '../create-discount/create-discount.component';
 
 @Component({
   selector: 'app-create-appartment',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, MatCheckboxModule],
+  imports: [ReactiveFormsModule, CommonModule, MatCheckboxModule, MatIconModule, CreateDiscountComponent],
   templateUrl: './create-appartment.component.html',
   styleUrl: '../update-appartment/update-appartment.component.scss'
 })
@@ -21,8 +24,9 @@ export class CreateAppartmentComponent implements OnInit{
 
   appartEmitter = output<AppartmentSaveRequest>()
 
+  showCreateDiscount: boolean = false
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private notificationService: NotificationService, private discountService: DiscountService, private cdr: ChangeDetectorRef) {}
 
   appartmentTypes: string[] = ["SAISONNIER", "LONGUE_DUREE"]
 
@@ -112,5 +116,26 @@ export class CreateAppartmentComponent implements OnInit{
 
   private convertToPercent(value: number): string {
     return Math.round((1 - value) * 100) + "%"
+  }
+
+
+   /****Fonctions relatives à la création des discounts *******/
+   setShowDiscountComponent(): void {
+    this.showCreateDiscount = true
+  }
+
+  setHideDiscountComponent(): void {
+    this.showCreateDiscount = false
+  }
+
+  createNewDiscount(discount: Discount): void {
+    this.discountService.create(discount).subscribe({
+      next: () => {
+        this.notificationService.success("Le jeu de réduction a bien été ajouté")        
+        this.cdr.detectChanges() //pour que dans l'enfant createDiscount la modif de discounts soit détectée
+      },
+      error: () => this.notificationService.error("Une erreur s'est produite lors de l'enregistrement du jeu de réduction")
+    })
+    
   }
 }

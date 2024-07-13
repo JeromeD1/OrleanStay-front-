@@ -1,11 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges, WritableSignal, effect, input, output } from '@angular/core';
+import { ChangeDetectorRef, Component, input, output } from '@angular/core';
 import { Discount } from '../../models/Discount.model';
 import { SomeFunctionsService } from '../../shared/some-functions.service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import {MatCheckboxModule} from '@angular/material/checkbox'
 import { NotificationService } from '../../shared/notification.service';
-import { AppstoreService } from '../../shared/appstore.service';
 
 @Component({
   selector: 'app-create-discount',
@@ -22,12 +21,6 @@ export class CreateDiscountComponent{
     this.discountForm.get('weekActivated')?.valueChanges.subscribe()
     this.discountForm.get('month')?.valueChanges.subscribe()
     this.discountForm.get('monthActivated')?.valueChanges.subscribe()
-
-    // setTimeout(() => {
-    //   cdr.markForCheck()
-    //   console.log("test");
-      
-    // }, 3000)
   }
 
   

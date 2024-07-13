@@ -199,7 +199,6 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
   }
 
   createAppartment(formData : AppartmentSaveRequest): void {
-    console.log("formData", formData);
     this.appartmentService.create(formData).pipe(takeUntil(this.destroy$)).subscribe(
       {
         next: (data) => {
@@ -208,9 +207,7 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
           this.selectedAppartment.set(this.allAppartments().find(appartment => appartment.id === data.id)!)
           this.matSelectAppartment.writeValue(this.allAppartments().find(appartment => appartment.id === data.id)!)
         },
-        error: (error) => {
-          console.log("erreur de creation :", error);
-          
+        error: () => {
           this.notificationService.error(`Suite à un problème, l'appartement ${formData.name} n'a pas pu être créé.`)
         }
       }

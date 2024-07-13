@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, tap } from 'rxjs';
-
 import { environment } from '../../environment/environment';
-
 import { Appartment } from '../models/Appartment.model';
 import { Reservation } from '../models/Reservation.model';
 import { AppstoreService } from './appstore.service';
@@ -269,9 +267,7 @@ export class AppartmentsService {
 
   create(appartmentToCreate: AppartmentSaveRequest): Observable<Appartment> {
     return this.http.post<Appartment>(environment.BACKEND_BASE_URL + `/appartment`, appartmentToCreate).pipe(
-    tap((appartment) => {
-      console.log("appartment créé", appartment);
-      
+    tap((appartment) => {      
       //creation des tableaux vides
       const reservations: Reservation[] = []
       const infos: Info[] = []

@@ -185,13 +185,10 @@ export class UpdateAppartmentComponent implements OnInit {
   }
 
   createNewDiscount(discount: Discount): void {
-    console.log("new discount", discount);
     this.discountService.create(discount).subscribe({
       next: () => {
-        this.notificationService.success("Le jeu de réduction a bien été ajouté")
-        console.log("changement ?", this.discounts());
-        
-        this.cdr.detectChanges()
+        this.notificationService.success("Le jeu de réduction a bien été ajouté")        
+        this.cdr.detectChanges() //pour que le dom se mette a jour dans createDiscount quand disconts change
       },
       error: () => this.notificationService.error("Une erreur s'est produite lors de l'enregistrement du jeu de réduction")
     })

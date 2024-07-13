@@ -46,7 +46,7 @@ export class AppstoreService {
   private _currentUser = signal<User | null>(null)
   private _reservationRequests = signal<Reservation[]>([])
 
-  _discounts = signal<Discount[]>([])
+  private _discounts = signal<Discount[]>([])
   private _owners = signal<Owner[]>([])
   private _allUsers = signal<User[]>([])
 
@@ -280,8 +280,6 @@ export class AppstoreService {
       const newDiscounts = this._discounts()
       newDiscounts.push(discount)
       this._discounts.set(newDiscounts)
-      console.log("this._discounts", this._discounts());
-      
     }
 
     /******Functions related to owners **************/
