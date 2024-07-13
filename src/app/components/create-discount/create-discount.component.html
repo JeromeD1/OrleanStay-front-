@@ -45,9 +45,6 @@
                     @for(discount of discounts(); track discount.id){
                         <p [class.sameDiscount]="compareDiscountWithFormValues(discount)">{{getDiscountInfos(discount.id!)}} </p>
                     }
-                    <!-- @for(discount of allDiscounts; track discount.id){
-                        <p [class.sameDiscount]="compareDiscountWithFormValues(discount)">{{getDiscountInfos(discount.id!)}} </p>
-                    } -->
                 </div>
 
             </div>

@@ -16,6 +16,7 @@ main {
         position: relative;
         width: 1000px;
         max-width: 95vw;
+        max-height: 95vh;
         box-shadow: 0 1px 0 2px var(--colorMid);
         min-height: 500px;
         background-color: #fafafa9e;
@@ -93,6 +94,8 @@ main {
                 padding: 16px;
                 width: 35%;
                 min-height: 100%;
+                max-height: 70vh;
+                overflow-y: auto;
 
                 .sameDiscount{
                     color: var(--colorRedText);

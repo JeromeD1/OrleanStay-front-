@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges, WritableSignal, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges, WritableSignal, effect, input, output } from '@angular/core';
 import { Discount } from '../../models/Discount.model';
 import { SomeFunctionsService } from '../../shared/some-functions.service';
 import { CommonModule } from '@angular/common';
@@ -13,27 +13,29 @@ import { AppstoreService } from '../../shared/appstore.service';
   imports: [CommonModule, ReactiveFormsModule, MatCheckboxModule],
   templateUrl: './create-discount.component.html',
   styleUrl: './create-discount.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  // changeDetection: ChangeDetectionStrategy.OnPush //maj de discounts non detecté si présent
 })
 export class CreateDiscountComponent{
 
-  constructor(private someFunctions: SomeFunctionsService, private fb: FormBuilder, private notificationService: NotificationService, private appstore: AppstoreService) {
+  constructor(private someFunctions: SomeFunctionsService, private fb: FormBuilder, private notificationService: NotificationService, private cdr: ChangeDetectorRef) {
     this.discountForm.get('week')?.valueChanges.subscribe()
     this.discountForm.get('weekActivated')?.valueChanges.subscribe()
     this.discountForm.get('month')?.valueChanges.subscribe()
     this.discountForm.get('monthActivated')?.valueChanges.subscribe()
+
+    // setTimeout(() => {
+    //   cdr.markForCheck()
+    //   console.log("test");
+      
+    // }, 3000)
   }
 
   
   closeEmitter = output<void>()
   discountEmitter = output<Discount>()
-  // discounts = input.required<Discount[]>()
-  discounts: WritableSignal<Discount[]> = this.appstore.getDiscounts()
-  // @Input() set discounts(data :Discount[]) {
-  //   this.allDiscounts = data
-  // }
-  
-  // allDiscounts!: Discount[]
+
+
+  discounts = input.required<Discount[]>()
 
   discountForm = this.fb.group({
     week: [0, Validators.required],
@@ -42,9 +44,6 @@ export class CreateDiscountComponent{
     monthActivated: [false, Validators.required]
   })
 
-  // ngOnChanges(changes: SimpleChanges): void {
-  //     this.allDiscounts = changes['discounts'].currentValue;
-  // }
 
   compareDiscountWithFormValues(discount: Discount): boolean {
     const weekEquals: boolean = Math.round((1 - discount.week) * 100) == this.discountForm.value.week
@@ -62,14 +61,12 @@ export class CreateDiscountComponent{
       return monthActivatedEquals && weekActivatedEquals
     }
   }
+
   
   getDiscountInfos(id: number): string | null {
     return this.someFunctions.getInfoDiscountById(id, this.discounts())
   }
 
-  // getDiscountInfos(id: number): string | null {
-  //   return this.someFunctions.getInfoDiscountById(id, this.allDiscounts)
-  // }
 
   onSubmit(): void {
     if(!this.discountForm.valid) {
@@ -77,7 +74,6 @@ export class CreateDiscountComponent{
     } else {
       let isAlreadyPresent: boolean = false
       for(const discount of this.discounts()){
-        // for(const discount of this.allDiscounts){
         if(this.compareDiscountWithFormValues(discount)){
           isAlreadyPresent = true
         }
@@ -86,14 +82,14 @@ export class CreateDiscountComponent{
         this.notificationService.error("Impossible d'ajouter un type de réduction déjà existant.")
       } else {
         const formData: Discount = {
-          week: 1 - (this.discountForm.value.week! / 100),
+          week: Math.round((1 - (this.discountForm.value.week! / 100)) * 100) / 100, //round pour forcer le 2 chiffres après la virgule
           weekActivated: this.discountForm.value.weekActivated!,
-          month: 1 - (this.discountForm.value.month! / 100),
+          month: Math.round((1 - (this.discountForm.value.month! / 100)) * 100) / 100,
           monthActivated: this.discountForm.value.monthActivated!
         }
 
         this.discountEmitter.emit(formData)
-        // this.closeCreateDiscount()
+        
       }
     }
   }

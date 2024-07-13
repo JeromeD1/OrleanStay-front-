@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, input, output } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, input, output } from '@angular/core'
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms'
 import {MatCheckboxModule} from '@angular/material/checkbox'
 import { Owner } from '../../models/Owner.model'
@@ -56,7 +56,7 @@ export class UpdateAppartmentComponent implements OnInit {
   }
 
 
-  constructor(private fb: FormBuilder, private discountService: DiscountService, private notificationService: NotificationService) {}
+  constructor(private fb: FormBuilder, private discountService: DiscountService, private notificationService: NotificationService, private cdr: ChangeDetectorRef) {}
 
   appartmentTypes: string[] = ["SAISONNIER", "LONGUE_DUREE"]
 
@@ -187,7 +187,12 @@ export class UpdateAppartmentComponent implements OnInit {
   createNewDiscount(discount: Discount): void {
     console.log("new discount", discount);
     this.discountService.create(discount).subscribe({
-      next: () => this.notificationService.success("Le jeu de réduction a bien été ajouté"),
+      next: () => {
+        this.notificationService.success("Le jeu de réduction a bien été ajouté")
+        console.log("changement ?", this.discounts());
+        
+        this.cdr.detectChanges()
+      },
       error: () => this.notificationService.error("Une erreur s'est produite lors de l'enregistrement du jeu de réduction")
     })
     
