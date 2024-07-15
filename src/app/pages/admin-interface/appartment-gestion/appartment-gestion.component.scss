@@ -70,28 +70,6 @@ main {
   }
 
 
-  ::ng-deep .mat-mdc-snack-bar-container {
-    
-    &.success-snackbar {
-      --mdc-snackbar-container-color: rgb(0, 175, 0);
-      --mat-mdc-snack-bar-button-color: black;
-      --mdc-snackbar-supporting-text-color: white;
-    }
-    &.error-snackbar {
-        --mdc-snackbar-container-color: rgb(220, 0, 0);
-        --mat-mdc-snack-bar-button-color: black;
-        --mdc-snackbar-supporting-text-color: white;
-      }
-  }
-
-::ng-deep .mat-mdc-snack-bar-container .mdc-snackbar__label {
-    font-size: var(--mpFontSize) !important;
-    width: 800px !important;
-    max-width: 90vw !important;
-    white-space: pre-wrap !important;
-    height: auto !important;
-}
-
 
 @media screen and (max-width: 950px) {
     main {
