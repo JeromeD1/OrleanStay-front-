@@ -1,21 +1,23 @@
 <main class="main-appartment-card">
     <h1>{{appartment.description}} </h1>
 
-    <section class="caroussel" #caroussel>
-        <img [src]="appartment.photos[index].imgUrl" alt="photo" class="img-caroussel" #imgCaroussel (load)="setWithAndHeight()">
-        <img src="../../../../../../assets/icons/icons8-flèche-gauche-rose.png" 
-        alt="précédant" 
-        class="fleche-caroussel fleche-gauche"
-        (click)="previousPhoto()"
-        *ngIf="index > 0">
-
-        <img src="../../../../../../assets/icons/icons8-flèche-droite-rose.png" 
-        alt="suivant" 
-        class="fleche-caroussel fleche-droite"
-        (click)="nextPhoto()"
-        *ngIf="index < appartment.photos.length -1">
-
-    </section>
+    @if(appartment.photos.length > 0) {
+        <section class="caroussel" #caroussel>
+            <img [src]="appartment.photos[index].imgUrl" alt="photo" class="img-caroussel" #imgCaroussel (load)="setWithAndHeight()">
+            <img src="../../../../../../assets/icons/icons8-flèche-gauche-rose.png" 
+            alt="précédant" 
+            class="fleche-caroussel fleche-gauche"
+            (click)="previousPhoto()"
+            *ngIf="index > 0">
+    
+            <img src="../../../../../../assets/icons/icons8-flèche-droite-rose.png" 
+            alt="suivant" 
+            class="fleche-caroussel fleche-droite"
+            (click)="nextPhoto()"
+            *ngIf="index < appartment.photos.length -1">
+    
+        </section>
+    }
 
     <section class="infoResa-container">
         <div class="div-info">
