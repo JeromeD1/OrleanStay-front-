@@ -1,6 +1,9 @@
 <section>
     <h2>Ajouter des photos</h2>
     <button type="button">Ajouter</button>
+    @if (isOrderModified()) {
+        <button type="button">Sauvegarder l'ordre des photos</button>
+    }
 </section>
 
 <form [formGroup]="formPhoto">
@@ -9,7 +12,10 @@
             <div [formGroupName]="i" class="container">
                 <img [src]="photoGroup.get('imgUrl')?.value"> 
                 <div class="actions">
-                    <input formControlName="positionOrder" placeholder="Position Order">
+                    <!-- <input type="number" formControlName="positionOrder" placeholder="Position Order"> -->
+                    <select name="position" #position formControlName="positionOrder">
+                        <option *ngFor="let position of positionOrderOptions" [ngValue]="position" >{{position}} </option>
+                    </select>
                     
                     <div class="button-container">
                         <button type="button"><img src="../../../../../../assets/icons/icons-edit.png" alt="Modifier"></button>
