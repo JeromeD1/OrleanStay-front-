@@ -6,6 +6,7 @@ import { User } from '../models/User.model'
 import { AppartmentNameAndOwner } from '../models/AppartmentNameAndOwner.model'
 import { Discount } from '../models/Discount.model'
 import { Owner } from '../models/Owner.model'
+import { Photo } from '../models/Photo.model'
 
 @Injectable({
   providedIn: 'root'
@@ -193,6 +194,134 @@ export class AppstoreService {
 
     const newAppartmentNames: AppartmentNameAndOwner[] = this._appartmentNames().filter(item => item.id != id)
     this._appartmentNames.set(newAppartmentNames)
+  }
+
+  addPhotoInAppartment(photos: Photo[]) {
+    //Mise à jour de currentUsedAppartment
+    const updatedAppartment: Appartment = new Appartment(
+      this._currentUsedAppartment()!.id,
+      this._currentUsedAppartment()!.ownerId,
+        this._currentUsedAppartment()!.discounts,
+        this._currentUsedAppartment()!.name,
+        this._currentUsedAppartment()!.description,
+        this._currentUsedAppartment()!.address,
+        this._currentUsedAppartment()!.zipcode,
+        this._currentUsedAppartment()!.city,
+        this._currentUsedAppartment()!.distanceCityCenter,
+        this._currentUsedAppartment()!.distanceTrain,
+        this._currentUsedAppartment()!.distanceTram,
+        this._currentUsedAppartment()!.googleMapUrl,
+        this._currentUsedAppartment()!.nightPrice,
+        this._currentUsedAppartment()!.caution,
+        this._currentUsedAppartment()!.menageCourtSejour,
+        this._currentUsedAppartment()!.menageLongSejour,
+        this._currentUsedAppartment()!.menageLongueDuree,
+        this._currentUsedAppartment()!.type,
+        this._currentUsedAppartment()!.active,
+        this._currentUsedAppartment()!.infos,
+        photos,
+        this._currentUsedAppartment()!.reservations,
+        this._currentUsedAppartment()!.comments
+    )
+    this._currentUsedAppartment.set(updatedAppartment)
+
+    //Mise à jour de allAppartments
+    this._allAppartments.update(value => value.map(item => (
+      item.id === this._currentUsedAppartment()!.id ? this._currentUsedAppartment()! : item 
+    )))
+
+    //Mise à jour de activeAppartments
+    this._activeAppartments.update(value => value.map(item => (
+      item.id === this._currentUsedAppartment()!.id ? this._currentUsedAppartment()! : item 
+    )))
+  }
+
+  updatePhotoInAppartment(photo: Photo) {
+    //Mise à jour de currentUsedAppartment
+    const currentAppartmentPhotos = this._currentUsedAppartment()?.photos
+    const newAppartmentPhotos = currentAppartmentPhotos?.map(item => (
+      item.id === photo.id ? photo : item
+    ))
+
+    const updatedAppartment: Appartment = new Appartment(
+      this._currentUsedAppartment()!.id,
+      this._currentUsedAppartment()!.ownerId,
+        this._currentUsedAppartment()!.discounts,
+        this._currentUsedAppartment()!.name,
+        this._currentUsedAppartment()!.description,
+        this._currentUsedAppartment()!.address,
+        this._currentUsedAppartment()!.zipcode,
+        this._currentUsedAppartment()!.city,
+        this._currentUsedAppartment()!.distanceCityCenter,
+        this._currentUsedAppartment()!.distanceTrain,
+        this._currentUsedAppartment()!.distanceTram,
+        this._currentUsedAppartment()!.googleMapUrl,
+        this._currentUsedAppartment()!.nightPrice,
+        this._currentUsedAppartment()!.caution,
+        this._currentUsedAppartment()!.menageCourtSejour,
+        this._currentUsedAppartment()!.menageLongSejour,
+        this._currentUsedAppartment()!.menageLongueDuree,
+        this._currentUsedAppartment()!.type,
+        this._currentUsedAppartment()!.active,
+        this._currentUsedAppartment()!.infos,
+        newAppartmentPhotos!,
+        this._currentUsedAppartment()!.reservations,
+        this._currentUsedAppartment()!.comments
+    )
+    this._currentUsedAppartment.set(updatedAppartment)
+
+    //Mise à jour de allAppartments
+    this._allAppartments.update(value => value.map(item => (
+      item.id === this._currentUsedAppartment()!.id ? this._currentUsedAppartment()! : item 
+    )))
+
+    //Mise à jour de activeAppartments
+    this._activeAppartments.update(value => value.map(item => (
+      item.id === this._currentUsedAppartment()!.id ? this._currentUsedAppartment()! : item 
+    )))
+  }
+
+  deletePhotoInAppartment(photo: Photo) {
+    //Mise à jour de currentUsedAppartment
+    const currentAppartmentPhotos = this._currentUsedAppartment()?.photos
+    const newAppartmentPhotos = currentAppartmentPhotos?.filter(item => item.id !== photo.id)
+
+    const updatedAppartment: Appartment = new Appartment(
+      this._currentUsedAppartment()!.id,
+      this._currentUsedAppartment()!.ownerId,
+        this._currentUsedAppartment()!.discounts,
+        this._currentUsedAppartment()!.name,
+        this._currentUsedAppartment()!.description,
+        this._currentUsedAppartment()!.address,
+        this._currentUsedAppartment()!.zipcode,
+        this._currentUsedAppartment()!.city,
+        this._currentUsedAppartment()!.distanceCityCenter,
+        this._currentUsedAppartment()!.distanceTrain,
+        this._currentUsedAppartment()!.distanceTram,
+        this._currentUsedAppartment()!.googleMapUrl,
+        this._currentUsedAppartment()!.nightPrice,
+        this._currentUsedAppartment()!.caution,
+        this._currentUsedAppartment()!.menageCourtSejour,
+        this._currentUsedAppartment()!.menageLongSejour,
+        this._currentUsedAppartment()!.menageLongueDuree,
+        this._currentUsedAppartment()!.type,
+        this._currentUsedAppartment()!.active,
+        this._currentUsedAppartment()!.infos,
+        newAppartmentPhotos!,
+        this._currentUsedAppartment()!.reservations,
+        this._currentUsedAppartment()!.comments
+    )
+    this._currentUsedAppartment.set(updatedAppartment)
+
+    //Mise à jour de allAppartments
+    this._allAppartments.update(value => value.map(item => (
+      item.id === this._currentUsedAppartment()!.id ? this._currentUsedAppartment()! : item 
+    )))
+
+    //Mise à jour de activeAppartments
+    this._activeAppartments.update(value => value.map(item => (
+      item.id === this._currentUsedAppartment()!.id ? this._currentUsedAppartment()! : item 
+    )))
   }
 
   /********Functions related to currentUser *************/

@@ -18,11 +18,12 @@ import { UpdateAppartmentComponent } from '../../../components/update-appartment
 import { AppartmentSaveRequest } from '../../../models/Request/AppartmentSaveRequest.model';
 import { ModalChangeAppartmentComponent } from '../../../components/modal-change-appartment/modal-change-appartment.component';
 import { CreateAppartmentComponent } from '../../../components/create-appartment/create-appartment.component';
+import { UpdateAppartmentPhotosComponent } from '../../../components/update-appartment-photos/update-appartment-photos.component';
 
 @Component({
   selector: 'app-appartment-gestion',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatSelectModule, MatOptionModule, MatFormFieldModule, UpdateAppartmentComponent, ModalChangeAppartmentComponent, CreateAppartmentComponent],
+  imports: [CommonModule, ReactiveFormsModule, MatSelectModule, MatOptionModule, MatFormFieldModule, UpdateAppartmentComponent, ModalChangeAppartmentComponent, CreateAppartmentComponent, UpdateAppartmentPhotosComponent],
   templateUrl: './appartment-gestion.component.html',
   styleUrl: './appartment-gestion.component.scss'
 })

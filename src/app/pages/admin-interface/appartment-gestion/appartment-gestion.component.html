@@ -48,6 +48,12 @@
             ></app-update-appartment>
         }
     </section>
+
+    <section>
+        <app-update-appartment-photos
+        [photos]="selectedAppartment().photos"
+        ></app-update-appartment-photos>
+    </section>
 </main>
 
 @if(showModalBewareDataNotSave) {
