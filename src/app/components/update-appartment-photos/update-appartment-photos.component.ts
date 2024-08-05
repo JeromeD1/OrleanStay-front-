@@ -3,6 +3,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, input, OnChanges
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AppartmentPhotosService } from '../../shared/appartment-photos.service';
 import { Photo } from '../../models/Photo.model';
+import { take } from 'rxjs';
+import { NotificationService } from '../../shared/notification.service';
 
 @Component({
   selector: 'app-update-appartment-photos',
@@ -27,7 +29,7 @@ export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges{
   initialPhotos: Photo[] = []
   positionOrderOptions: number[] = []
 
-  constructor(private readonly appartmentPhotosService: AppartmentPhotosService, private readonly fb: FormBuilder, private cdr: ChangeDetectorRef) {}
+  constructor(private readonly appartmentPhotosService: AppartmentPhotosService, private readonly fb: FormBuilder, private readonly notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.initialPhotos = this.photos()
@@ -118,6 +120,21 @@ export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges{
     // Remplacez les contrôles dans le FormArray par les contrôles triés
     this.photoArray.clear();
     sortedControls.forEach(control => this.photoArray.push(control));
+  }
+
+  saveUpdatedOrder(): void {
+    const formData: Photo[] = this.formPhoto.getRawValue().photos as Photo[]
+    this.appartmentPhotosService.updateOrder(formData).pipe(take(1)).subscribe(
+      {
+        next: () => {
+          this.notificationService.success("L'ordre des photos a bien été sauvegardé.")
+          this.isOrderModified.set(false)
+        },
+        error: () => {
+          this.notificationService.error("Une erreur s'est produite lors de l'enregistrement de l'ordre des photos.")
+        }
+      }
+    )
   }
 
 

@@ -197,43 +197,49 @@ export class AppstoreService {
   }
 
   addPhotoInAppartment(photos: Photo[]) {
-    //Mise à jour de currentUsedAppartment
-    const updatedAppartment: Appartment = new Appartment(
-      this._currentUsedAppartment()!.id,
-      this._currentUsedAppartment()!.ownerId,
-        this._currentUsedAppartment()!.discounts,
-        this._currentUsedAppartment()!.name,
-        this._currentUsedAppartment()!.description,
-        this._currentUsedAppartment()!.address,
-        this._currentUsedAppartment()!.zipcode,
-        this._currentUsedAppartment()!.city,
-        this._currentUsedAppartment()!.distanceCityCenter,
-        this._currentUsedAppartment()!.distanceTrain,
-        this._currentUsedAppartment()!.distanceTram,
-        this._currentUsedAppartment()!.googleMapUrl,
-        this._currentUsedAppartment()!.nightPrice,
-        this._currentUsedAppartment()!.caution,
-        this._currentUsedAppartment()!.menageCourtSejour,
-        this._currentUsedAppartment()!.menageLongSejour,
-        this._currentUsedAppartment()!.menageLongueDuree,
-        this._currentUsedAppartment()!.type,
-        this._currentUsedAppartment()!.active,
-        this._currentUsedAppartment()!.infos,
-        photos,
-        this._currentUsedAppartment()!.reservations,
-        this._currentUsedAppartment()!.comments
-    )
-    this._currentUsedAppartment.set(updatedAppartment)
+    const appartmentWithUpdatedPhotos = this._allAppartments().find(item => item.id === photos[0].id)
+    if(appartmentWithUpdatedPhotos){
 
-    //Mise à jour de allAppartments
-    this._allAppartments.update(value => value.map(item => (
-      item.id === this._currentUsedAppartment()!.id ? this._currentUsedAppartment()! : item 
-    )))
-
-    //Mise à jour de activeAppartments
-    this._activeAppartments.update(value => value.map(item => (
-      item.id === this._currentUsedAppartment()!.id ? this._currentUsedAppartment()! : item 
-    )))
+      //Mise à jour de currentUsedAppartment
+      const updatedAppartment: Appartment = new Appartment(
+        appartmentWithUpdatedPhotos.id,
+        appartmentWithUpdatedPhotos.ownerId,
+          appartmentWithUpdatedPhotos.discounts,
+          appartmentWithUpdatedPhotos.name,
+          appartmentWithUpdatedPhotos.description,
+          appartmentWithUpdatedPhotos.address,
+          appartmentWithUpdatedPhotos.zipcode,
+          appartmentWithUpdatedPhotos.city,
+          appartmentWithUpdatedPhotos.distanceCityCenter,
+          appartmentWithUpdatedPhotos.distanceTrain,
+          appartmentWithUpdatedPhotos.distanceTram,
+          appartmentWithUpdatedPhotos.googleMapUrl,
+          appartmentWithUpdatedPhotos.nightPrice,
+          appartmentWithUpdatedPhotos.caution,
+          appartmentWithUpdatedPhotos.menageCourtSejour,
+          appartmentWithUpdatedPhotos.menageLongSejour,
+          appartmentWithUpdatedPhotos.menageLongueDuree,
+          appartmentWithUpdatedPhotos.type,
+          appartmentWithUpdatedPhotos.active,
+          appartmentWithUpdatedPhotos.infos,
+          photos,
+          appartmentWithUpdatedPhotos.reservations,
+          appartmentWithUpdatedPhotos.comments
+      )
+      this._currentUsedAppartment.set(updatedAppartment)
+  
+      //Mise à jour de allAppartments
+      this._allAppartments.update(value => value.map(item => (
+        item.id === appartmentWithUpdatedPhotos.id ? appartmentWithUpdatedPhotos : item 
+      )))
+  
+      //Mise à jour de activeAppartments
+      this._activeAppartments.update(value => value.map(item => (
+        item.id === appartmentWithUpdatedPhotos.id ? appartmentWithUpdatedPhotos : item 
+      )))
+      console.log("_allAppartments", this._allAppartments());
+    }
+    
   }
 
   updatePhotoInAppartment(photo: Photo) {

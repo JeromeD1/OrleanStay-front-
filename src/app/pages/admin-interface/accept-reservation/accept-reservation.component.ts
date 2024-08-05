@@ -72,7 +72,10 @@ export class AcceptReservationComponent implements OnInit, OnDestroy {
       } else if(this.currentUser && this.userRole === "OWNER") {
         this.bookingService.getReservationRequestsByOwnerId(this.currentUser?.id).pipe(takeUntil(this.destroy$)).subscribe(
           {
-            next: () => this.selectedReservation.set(this.filteredReservationRequests()[0])
+            next: () => {
+              this.selectedReservation.set(this.filteredReservationRequests()[0])
+              //TODO: vérifier s'il faut appeler getAppartmentsById comme ci dessus
+            }
           }
         )
       }

@@ -2,7 +2,7 @@
     <h2>Ajouter des photos</h2>
     <button type="button">Ajouter</button>
     @if (isOrderModified()) {
-        <button type="button">Sauvegarder l'ordre des photos</button>
+        <button type="button" (click)="saveUpdatedOrder()">Sauvegarder l'ordre des photos</button>
     }
 </section>
 
