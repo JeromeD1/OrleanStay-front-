@@ -1,6 +1,6 @@
 <section>
     <h2>Ajouter des photos</h2>
-    <button type="button">Ajouter</button>
+    <button type="button" (click)="uploadWidget()">Ajouter</button>
     @if (isOrderModified()) {
         <button type="button" (click)="saveUpdatedOrder()">Sauvegarder l'ordre des photos</button>
     }

@@ -5,6 +5,8 @@ import { AppartmentPhotosService } from '../../shared/appartment-photos.service'
 import { Photo } from '../../models/Photo.model';
 import { take } from 'rxjs';
 import { NotificationService } from '../../shared/notification.service';
+import { environment } from '../../../environment/environment';
+import { ScriptService } from '../../shared/script.service';
 
 @Component({
   selector: 'app-update-appartment-photos',
@@ -33,7 +35,13 @@ export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges{
   initialPhotos: Photo[] = []
   positionOrderOptions: number[] = []
 
-  constructor(private readonly appartmentPhotosService: AppartmentPhotosService, private readonly fb: FormBuilder, private readonly notificationService: NotificationService) {}
+  constructor(
+    private readonly appartmentPhotosService: AppartmentPhotosService, 
+    private readonly fb: FormBuilder, 
+    private readonly notificationService: NotificationService,
+    private scriptService: ScriptService) {
+      this.scriptService.load('uw');
+    }
 
   ngOnInit(): void {
     this.initialPhotos = this.photos()
@@ -54,15 +62,27 @@ export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges{
     this.photoArray.clear() // on vide le formArray pour le cas ou l'utilisateur change d'appartement
 
     this.photos().forEach((photo) => {
-      const photoGroup = this.fb.group({
-        id: [photo.id],
-        appartmentId: [photo.appartmentId, Validators.required],
-        positionOrder: [photo.positionOrder, Validators.required],
-        imgUrl: [photo.imgUrl, Validators.required]
-      });
+      this.addNewPhotoInForm(photo)
+      // const photoGroup = this.fb.group({
+      //   id: [photo.id],
+      //   appartmentId: [photo.appartmentId, Validators.required],
+      //   positionOrder: [photo.positionOrder, Validators.required],
+      //   imgUrl: [photo.imgUrl, Validators.required]
+      // });
   
-      this.photoArray.push(photoGroup);
+      // this.photoArray.push(photoGroup);
     });
+  }
+
+  addNewPhotoInForm(photo: Photo): void {
+    const photoGroup = this.fb.group({
+      id: [photo.id],
+      appartmentId: [photo.appartmentId, Validators.required],
+      positionOrder: [photo.positionOrder, Validators.required],
+      imgUrl: [photo.imgUrl, Validators.required]
+    });
+
+    this.photoArray.push(photoGroup);
   }
 
   /************************************ */
@@ -143,6 +163,72 @@ export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges{
       }
     )
   }
+
+
+  /************Cloudinary *******************/
+  uploadedImage = '';
+  isDisabled = false;
+  uploadedImages: string[] = [];
+
+
+
+  processResults = (error: any, result: any): void => {
+    if (result.event === 'close') {
+      this.isDisabled = false;
+    }
+    if (result && result.event === 'success') {
+      const secureUrl = result.info.secure_url;
+      const previewUrl = secureUrl.replace('/upload/', '/upload/w_400/');
+      this.uploadedImages.push(previewUrl);
+      console.log("previewUrl", previewUrl);
+      //ajout d'une position dans positionOrderOptions
+      this.positionOrderOptions.push(this.photos().length + 1)
+      //création d'une nouvelle photo
+      const newPhoto: Photo = {
+        appartmentId: this.photos()[0].appartmentId,
+        positionOrder: this.photos().length + 1,
+        imgUrl: previewUrl
+      }
+      this.appartmentPhotosService.create(newPhoto).pipe(take(1)).subscribe(
+        {
+          next: (data) => {
+            this.updateOrderEmitter.emit(this.photos()[0].appartmentId) //pour la mise à jour de l'appartement dans le parent
+            console.log("updated photos",this.photos());
+            //TODO : ajouter un nouveau formGroup
+            const photoToAdd: Photo = data.find(item => item.imgUrl === newPhoto.imgUrl && item.positionOrder === newPhoto.positionOrder)!
+            this.addNewPhotoInForm(photoToAdd)
+            
+          },
+          error: () => {
+            this.notificationService.error("Une erreur s'est produite lors de l'enregistrement de la photo.")
+            //TODO : Effacer la photo dans cloudinary
+          }
+        }
+      )
+      
+    }
+    if (error) {
+      this.notificationService.error("Il y a eu une erreur lors du téléchargement de l'image.")
+    }
+  };
+
+  cloudName = environment.CLOUD_NAME;
+  uploadPreset = environment.UPLOAD_PRESET;
+
+  uploadWidget = (): void => {
+    this.isDisabled = true;
+    (window as any).cloudinary.openUploadWidget(
+      {
+        cloudName: this.cloudName,
+        uploadPreset: this.uploadPreset,
+        sources: ['local', 'url'],
+        tags: ['myphotoalbum-angular'],
+        clientAllowedFormats: ['image'],
+        resourceType: 'image',
+      },
+      this.processResults
+    );
+  };
 
 
 }
