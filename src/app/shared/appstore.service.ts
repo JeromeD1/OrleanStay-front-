@@ -197,48 +197,77 @@ export class AppstoreService {
   }
 
   addPhotoInAppartment(photos: Photo[]) {
-    const appartmentWithUpdatedPhotos = this._allAppartments().find(item => item.id === photos[0].id)
-    if(appartmentWithUpdatedPhotos){
+  this._activeAppartments.update(allAppartments => {
+    return allAppartments.map(appartment => {
+      if (appartment.id === photos[0].appartmentId) {
+        // Création d'un nouvel objet Appartment avec les photos mises à jour
+        const updatedAppartment = new Appartment(
+          appartment.id,
+          appartment.ownerId,
+          appartment.discounts,
+          appartment.name,
+          appartment.description,
+          appartment.address,
+          appartment.zipcode,
+          appartment.city,
+          appartment.distanceCityCenter,
+          appartment.distanceTrain,
+          appartment.distanceTram,
+          appartment.googleMapUrl,
+          appartment.nightPrice,
+          appartment.caution,
+          appartment.menageCourtSejour,
+          appartment.menageLongSejour,
+          appartment.menageLongueDuree,
+          appartment.type,
+          appartment.active,
+          appartment.infos,
+          photos,  
+          appartment.reservations,
+          appartment.comments
+        );
 
-      //Mise à jour de currentUsedAppartment
-      const updatedAppartment: Appartment = new Appartment(
-        appartmentWithUpdatedPhotos.id,
-        appartmentWithUpdatedPhotos.ownerId,
-          appartmentWithUpdatedPhotos.discounts,
-          appartmentWithUpdatedPhotos.name,
-          appartmentWithUpdatedPhotos.description,
-          appartmentWithUpdatedPhotos.address,
-          appartmentWithUpdatedPhotos.zipcode,
-          appartmentWithUpdatedPhotos.city,
-          appartmentWithUpdatedPhotos.distanceCityCenter,
-          appartmentWithUpdatedPhotos.distanceTrain,
-          appartmentWithUpdatedPhotos.distanceTram,
-          appartmentWithUpdatedPhotos.googleMapUrl,
-          appartmentWithUpdatedPhotos.nightPrice,
-          appartmentWithUpdatedPhotos.caution,
-          appartmentWithUpdatedPhotos.menageCourtSejour,
-          appartmentWithUpdatedPhotos.menageLongSejour,
-          appartmentWithUpdatedPhotos.menageLongueDuree,
-          appartmentWithUpdatedPhotos.type,
-          appartmentWithUpdatedPhotos.active,
-          appartmentWithUpdatedPhotos.infos,
-          photos,
-          appartmentWithUpdatedPhotos.reservations,
-          appartmentWithUpdatedPhotos.comments
-      )
-      this._currentUsedAppartment.set(updatedAppartment)
-  
-      //Mise à jour de allAppartments
-      this._allAppartments.update(value => value.map(item => (
-        item.id === appartmentWithUpdatedPhotos.id ? appartmentWithUpdatedPhotos : item 
-      )))
-  
-      //Mise à jour de activeAppartments
-      this._activeAppartments.update(value => value.map(item => (
-        item.id === appartmentWithUpdatedPhotos.id ? appartmentWithUpdatedPhotos : item 
-      )))
-      console.log("_allAppartments", this._allAppartments());
-    }
+        return updatedAppartment;
+      }
+      return appartment;
+    });
+  });
+
+  this._allAppartments.update(allAppartments => {
+    return allAppartments.map(appartment => {
+      if (appartment.id === photos[0].appartmentId) {
+       // Création d'un nouvel objet Appartment avec les photos mises à jour
+        const updatedAppartment = new Appartment(
+          appartment.id,
+          appartment.ownerId,
+          appartment.discounts,
+          appartment.name,
+          appartment.description,
+          appartment.address,
+          appartment.zipcode,
+          appartment.city,
+          appartment.distanceCityCenter,
+          appartment.distanceTrain,
+          appartment.distanceTram,
+          appartment.googleMapUrl,
+          appartment.nightPrice,
+          appartment.caution,
+          appartment.menageCourtSejour,
+          appartment.menageLongSejour,
+          appartment.menageLongueDuree,
+          appartment.type,
+          appartment.active,
+          appartment.infos,
+          photos,  
+          appartment.reservations,
+          appartment.comments
+        );
+
+        return updatedAppartment;
+      }
+      return appartment;
+    });
+  });
     
   }
 

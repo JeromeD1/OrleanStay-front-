@@ -4,10 +4,10 @@
             <div class="appart-select" [class.hidden-element]="isInCreationAppartmentMode">
                 <h2>Choisissez un appartement :</h2>
     
-                <div (click)="handleClickOnSelectAppartment()">
+                <div (click)="isPhotoOrderUptateToSave ? showWarningNotificationForSavingPhotoOrder() : handleClickOnSelectAppartment()">
                     <mat-form-field [class.hidden-element]="isInCreationAppartmentMode">
                         <mat-label>Choisissez un appartement</mat-label>
-                            <mat-select #matSelectAppartment [value]="selectedAppartment()" (selectionChange)="handleChangeAppartment($event.value)" >
+                            <mat-select #matSelectAppartment [disabled]="isPhotoOrderUptateToSave" [value]="selectedAppartment()" (selectionChange)="handleChangeAppartment($event.value)" >
                             <mat-option *ngFor="let appartment of allAppartments()" [value]="appartment">
                            {{appartment.name}} 
                           </mat-option>
@@ -52,6 +52,8 @@
     <section>
         <app-update-appartment-photos
         [photos]="selectedAppartment().photos"
+        (updateOrderEmitter)="updateSelectedAppartmentWhileChangingPhotoOrder($event)"
+        (warningChangeOrderEmitter)="setWarningOnPhotoOrderToSave($event)"
         ></app-update-appartment-photos>
     </section>
 </main>

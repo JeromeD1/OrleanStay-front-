@@ -50,6 +50,7 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
   newAppartmentAfterSelectChange!: Appartment
 
   isInCreationAppartmentMode: boolean = false
+  isPhotoOrderUptateToSave: boolean = false
 
   //signal permettant de vérifier que toutes les données sont collectées avant d'afficher des elements necessitant ces données
   isAllDataCollected = computed(() => {    
@@ -228,6 +229,19 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
         error: () => this.notificationService.error(`L'appartement ${this.selectedAppartment().name} n'a pas pu être supprimé.`)
       }
     )
+  }
+
+
+  updateSelectedAppartmentWhileChangingPhotoOrder(id: number): void {
+    this.selectedAppartment.set(this.allAppartments().find(item => item.id === id)!)
+  }
+
+  setWarningOnPhotoOrderToSave(value: boolean): void {
+    this.isPhotoOrderUptateToSave = value
+  }
+
+  showWarningNotificationForSavingPhotoOrder(): void {
+    this.notificationService.error("Veuillez sauvegarder l'ordre des photos avant de changer d'appartement.")
   }
 
   ngOnDestroy(): void {

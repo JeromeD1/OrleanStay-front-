@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, input, OnChanges, OnInit, signal, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, input, OnChanges, OnInit, output, signal, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AppartmentPhotosService } from '../../shared/appartment-photos.service';
 import { Photo } from '../../models/Photo.model';
@@ -17,6 +17,10 @@ import { NotificationService } from '../../shared/notification.service';
 export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges{
 
   photos = input.required<Photo[]>()
+
+  updateOrderEmitter = output<number>() //sert à envoyer l'id de l'appartement mis à jour pour mettre à jour selectedAppartment dans le parent
+  warningChangeOrderEmitter = output<boolean>()
+
   formPhoto = this.fb.group({
     photos: this.fb.array([])
   })
@@ -70,7 +74,8 @@ export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges{
           positionOrderControl.valueChanges.subscribe((value) => {
             this.isOrderModified.set(true)
             this.updateAllPositionOrder(control, value)
-            console.log(this.formPhoto.getRawValue());
+            
+            this.warningChangeOrderEmitter.emit(true)
             
           });
         }
@@ -129,6 +134,8 @@ export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges{
         next: () => {
           this.notificationService.success("L'ordre des photos a bien été sauvegardé.")
           this.isOrderModified.set(false)
+          this.updateOrderEmitter.emit(this.photos()[0].appartmentId)
+          this.warningChangeOrderEmitter.emit(false)
         },
         error: () => {
           this.notificationService.error("Une erreur s'est produite lors de l'enregistrement de l'ordre des photos.")
