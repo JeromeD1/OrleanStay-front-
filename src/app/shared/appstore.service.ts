@@ -198,7 +198,11 @@ export class AppstoreService {
 
   addPhotoInAppartment(photos: Photo[]) {
   this._activeAppartments.update(allAppartments => {
+    console.log("photos", photos);
+    
     return allAppartments.map(appartment => {
+      console.log(" : ", appartment.id , " : ", photos[0].appartmentId);
+      
       if (appartment.id === photos[0].appartmentId) {
         // Création d'un nouvel objet Appartment avec les photos mises à jour
         const updatedAppartment = new Appartment(

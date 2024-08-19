@@ -42,10 +42,12 @@ export class AppartmentPhotosService {
     )
   }
 
-  delete(photo: Photo): Observable<void> {
-    return this.http.delete<void>(environment.BACKEND_BASE_URL + '/photo/' + photo.id).pipe(
-      tap(() => {
-        this.appstore.deletePhotoInAppartment(photo)
+  delete(photo: Photo, imgId: string): Observable<Photo[]> {
+    return this.http.delete<Photo[]>(environment.BACKEND_BASE_URL + '/photo/' + photo.id + "/imgId/" + imgId).pipe(
+      tap((data) => {
+        console.log("data after delete photo :", data);
+        
+        this.appstore.addPhotoInAppartment(data)
       })
     )
   }

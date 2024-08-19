@@ -79,8 +79,26 @@ export class SomeFunctionsService {
     }
   }
 
+   extractIdFromUrl(url: string): string {
+    const urlParts = url.split('/');
+    const preLastPart = urlParts[urlParts.length - 2]
+    const lastPart = urlParts[urlParts.length - 1];
+    let id = lastPart.split('.')[0]; // Supprime l'extension (par exemple, ".png")
+
+    if(preLastPart == "OrleanStay") {
+      id = preLastPart + "/" + id
+    }
+  
+    return id;
+  }
+
+  convertImgId(url: string): string {
+    return url.replaceAll('/', '-')
+  }
+
 
   private convertToPercent(value: number): string {
     return Math.round((1 - value) * 100) + "%"
   }
+
 }

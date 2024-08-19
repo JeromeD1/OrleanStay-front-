@@ -10,7 +10,7 @@
     <ng-container formArrayName="photos">
         <ng-container *ngFor="let photoGroup of photoArray.controls; let i = index">
             <div [formGroupName]="i" class="container">
-                <img [src]="photoGroup.get('imgUrl')?.value"> 
+                <img [src]="photoGroup.get('imgUrl')?.value | cacheBuster"> 
                 <div class="actions">
                     <!-- <input type="number" formControlName="positionOrder" placeholder="Position Order"> -->
                     <select name="position" #position formControlName="positionOrder">
@@ -18,8 +18,8 @@
                     </select>
                     
                     <div class="button-container">
-                        <button type="button"><img src="../../../../../../assets/icons/icons-edit.png" alt="Modifier"></button>
-                        <button type="button"><img src="../../../../../../assets/icons/icons-supprimer.png" alt="Supprimer"></button>
+                        <button type="button" (click)="uploadOverwriteWidget(photoGroup.get('imgUrl')?.value)"><img src="../../../../../../assets/icons/icons-edit.png" alt="Modifier"></button>
+                        <button type="button" (click)="deleteImage(photoGroup.get('imgUrl')?.value)"><img src="../../../../../../assets/icons/icons-supprimer.png" alt="Supprimer"></button>
                     </div>
                 </div>
                 
