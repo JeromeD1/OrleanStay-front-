@@ -15,6 +15,27 @@ main {
             }
         }
 
+        .menu {
+            @include flex-column-center-end;
+            gap: 8px;
+            position: absolute;
+            top: 48px;
+            right: 48px;
+            z-index: 2;
+
+            .img-menu {
+                border-radius: 50%;
+                padding: 5px;
+                width: 60px;
+                height: 60px;
+                &:hover {
+                    cursor: pointer;
+                    filter: invert(48%) sepia(13%) saturate(3207%) hue-rotate(310deg) brightness(95%) contrast(80%);
+                    box-shadow: 0 0 10px 10px var(--colorMid);
+                }
+            }
+        }
+
         #landingPage {
             position: fixed;
             width: 100vw;
@@ -23,6 +44,7 @@ main {
             width: 100%;
             z-index: 0;
             overflow: hidden;
+
         }
 
         #nuage {
@@ -77,4 +99,40 @@ main {
 
 .test {
     height: 100vh;
+}
+
+@media screen and (max-width:1200px) {
+    main {
+        .openImage {
+            .menu {
+                position: absolute;
+                top: 24px;
+                right: 24px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width:800px) {
+    main {
+        .openImage {
+            .menu {
+                position: absolute;
+                top: 16px;
+                right: 16px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width:500px) {
+    main {
+        .openImage {
+            .menu {
+                position: absolute;
+                top: 4px;
+                right: 4px;
+            }
+        }
+    }
 }

@@ -49,6 +49,13 @@
     align-items: flex-start;
 }
 
+@mixin flex-column-center-end {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+}
+
 //----------flex row-------------------
 
 

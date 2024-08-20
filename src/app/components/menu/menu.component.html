@@ -1,0 +1,13 @@
+<ul>
+    @if (currentUser()?.role === "ADMIN" || currentUser()?.role === "OWNER") {
+        <li>
+            <a [routerLink]="['/admin']" ><p>Administration</p></a>
+        </li>
+    }
+    <li>
+        <a [routerLink]="['/']" ><p>Mon profil</p></a>
+    </li>
+    <li>
+        <a [routerLink]="['/']" ><p>Mes réservations</p></a>
+    </li>
+</ul>
