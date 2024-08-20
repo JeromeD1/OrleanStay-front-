@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, output, Output } from '@angular/core';
 import { LoginService } from '../../shared/login.service';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
@@ -24,8 +24,8 @@ export class LoginComponent implements OnDestroy {
 
   destroy$: Subject<void> = new Subject()
 
-  @Output()
-  closeEmitter: EventEmitter<void> = new EventEmitter()
+  closeEmitter = output<void>()
+  createAccountEmitter = output<void>()
 
   login: string = ""
   password: string = ""
@@ -89,6 +89,10 @@ export class LoginComponent implements OnDestroy {
       
       )
 
+  }
+
+  openSignup(): void {
+    this.createAccountEmitter.emit()
   }
 
   ngOnDestroy(): void {

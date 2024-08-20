@@ -4,6 +4,7 @@ import { Traveller } from '../../models/Traveller.model'
 import { AppstoreService } from '../../shared/appstore.service'
 import { CommonModule } from '@angular/common'
 import { BookingGestionComponent } from '../../components/booking-gestion/booking-gestion.component'
+import { SignupComponent } from '../../components/signup/signup.component'
 
 @Component({
   selector: 'app-home',
@@ -12,6 +13,7 @@ import { BookingGestionComponent } from '../../components/booking-gestion/bookin
     CommonModule,
     LoginComponent,
     BookingGestionComponent,
+    SignupComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -21,6 +23,7 @@ export class HomeComponent implements OnInit{
 
   traveller: WritableSignal<Traveller> = this.appstore.getTraveller()
   showLogin: boolean = false
+  showSignup: boolean = false
   clickCount: number = 0
   timerId: any = null
   
@@ -89,6 +92,15 @@ export class HomeComponent implements OnInit{
   
   closeLogin(): void {
     this.showLogin = false
+  }
+
+  openSignup(): void {
+    this.closeLogin()
+    this.showSignup = true
+  }
+
+  closeSignup(): void {
+    this.showSignup = false
   }
   
   onClickSeveralTimes() {

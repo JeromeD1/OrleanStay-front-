@@ -254,3 +254,12 @@
         }
     }
 }
+
+@mixin linked {
+    color: rgb(20, 20, 190);
+
+    &:hover {
+        cursor: pointer;
+        filter: sepia();
+    }
+}

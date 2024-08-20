@@ -23,6 +23,12 @@
     <app-login
     *ngIf="showLogin"
     (closeEmitter)="closeLogin()"
+    (createAccountEmitter)="openSignup()"
     ></app-login>
+
+    <app-signup
+    *ngIf="showSignup"
+    (closeEmitter)="closeSignup()"
+    ></app-signup>
     
 </main>
