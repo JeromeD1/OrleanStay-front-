@@ -5,11 +5,15 @@ import { AppstoreService } from '../shared/appstore.service';
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   
   const refreshToken = inject(AppstoreService).getToken()  
+  const storageToken = localStorage.getItem("refreshToken")
 
-  if(refreshToken){
+  const token = refreshToken ? refreshToken : storageToken
+  
+
+  if(token){
     const modifiedReq = req.clone({
       setHeaders: {
-        Authorization: `Bearer ${refreshToken}`,
+        Authorization: `Bearer ${token}`,
       },
       withCredentials: true
     })

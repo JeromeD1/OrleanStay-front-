@@ -42,7 +42,7 @@ export class AcceptReservationComponent implements OnInit, OnDestroy {
     } else if(this.filter() === "new"){
       return this.reservationRequests().filter(request => request.depositAsked === false && request.depositReceived === false)
     } else if (this.filter() === "waitingForDeposit") {
-      return this.reservationRequests().filter(request => request.depositAsked === true)
+      return this.reservationRequests().filter(request => request.depositAsked === true && request.depositReceived === false)
     } else {
       return this.reservationRequests().filter(request => request.depositReceived === true)
     }
@@ -72,7 +72,10 @@ export class AcceptReservationComponent implements OnInit, OnDestroy {
       } else if(this.currentUser && this.userRole === "OWNER") {
         this.bookingService.getReservationRequestsByOwnerId(this.currentUser?.id).pipe(takeUntil(this.destroy$)).subscribe(
           {
-            next: () => this.selectedReservation.set(this.filteredReservationRequests()[0])
+            next: () => {
+              this.selectedReservation.set(this.filteredReservationRequests()[0])
+              //TODO: vérifier s'il faut appeler getAppartmentsById comme ci dessus
+            }
           }
         )
       }

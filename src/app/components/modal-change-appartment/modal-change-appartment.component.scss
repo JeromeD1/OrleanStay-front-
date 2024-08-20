@@ -1,0 +1,39 @@
+@import '../../styles/mixins';
+
+main {
+    @include flex-row-center-center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    width: 100vw;
+    height: 100vh;
+    background-color: #fae7e181;
+    backdrop-filter: blur(10px);
+
+    section {
+        @include flex-column-center-start;
+        width: 800px;
+        max-width: 95vw;
+        box-shadow: 0 1px 0 2px var(--colorMid);
+        background-color: #fafafa9e;
+        backdrop-filter: blur(40px);
+        gap: 48px;
+        padding: 24px;
+        border-radius: 24px;
+
+        h1 {
+            color: var(--colorRedText);
+        }
+        
+        .div-button{
+            @include flex-row-around-center-wrap;
+            gap: 48px;
+            width: 100%;
+            button {
+                @include button-colorBrand;
+                max-width: 200px;
+            }
+        }
+    }
+}

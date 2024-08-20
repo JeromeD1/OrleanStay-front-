@@ -1,0 +1,34 @@
+@import "../../styles/mixins";
+
+main {
+    @include flex-row-between-center;
+    gap: 16px;
+    width: 800px;
+    max-width: 95vw;
+    padding: 16px;
+    border-radius: 16px;
+
+    &.notif-success {
+        background-color: var(--colorSuccess);
+    }
+
+    &.notif-error {
+        background-color: var(--colorRedText);
+    }
+
+    p {
+        display: inline-block;
+        color: white;
+    }
+
+    h2 {
+        display: inline-block;
+        width: 100px;
+        color: black;
+    }
+}
+
+::ng-deep .mat-mdc-snack-bar-container .mdc-snackbar__label {
+    margin-left: -8px !important;
+    padding: 0 !important;
+}

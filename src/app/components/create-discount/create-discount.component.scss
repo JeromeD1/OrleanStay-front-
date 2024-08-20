@@ -1,0 +1,146 @@
+@import "../../styles/mixins";
+
+main {
+    @include flex-row-center-center;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    background-color: #fae7e181;
+    backdrop-filter: blur(10px);
+
+    section {
+        @include flex-column-center-center;
+        position: relative;
+        width: 1000px;
+        max-width: 95vw;
+        max-height: 95vh;
+        box-shadow: 0 1px 0 2px var(--colorMid);
+        min-height: 500px;
+        background-color: #fafafa9e;
+        backdrop-filter: blur(40px);
+        gap: 24px;
+        padding: 24px;
+        border-radius: 24px;
+        
+        .img-close {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 40px;
+            height: auto;
+
+            &:hover {
+                cursor: pointer;
+                filter: hue-rotate(110deg);
+            }
+        }
+
+        .form-list-container {
+            @include flex-row-between-start;
+            gap: 24px;
+            min-height: 330px;
+            width: 100%;
+
+            form {
+                @include flex-column-around-center;
+                border: 1px solid var(--colorMid);
+                border-radius: 24px;
+                padding: 16px;
+                width: 65%;
+                height: 100%;
+
+                .flex-input {
+                    @include flex-row-between-center;
+                    width: 100%;
+                    gap: 16px;
+                    margin-bottom: 8px;
+                    padding: 8px;
+                    border-radius: 8px;
+                
+                    &:focus-within {
+                        box-shadow: 0px 0px 1px 4px var(--colorBrand);
+                        background-color: #e0cdc881;
+                    }
+                
+                    input, select {
+                        width: 300px;
+                        max-width: 100%;
+                        padding: 8px;
+                        border-radius: 8px;
+                        border: none;
+                
+                        &:focus {
+                            outline: none;
+                        }
+                    }
+                
+                    .label-span {
+                        @include flex-column-start-start;
+                    }
+                
+                    ::ng-deep .mat-mdc-checkbox {
+                        margin-top: -16px !important;
+                    }
+                }
+            }
+
+            .discount-list {
+                @include flex-column-start-start;
+                border: 1px solid var(--colorMid);
+                border-radius: 24px;
+                padding: 16px;
+                width: 35%;
+                min-height: 100%;
+                max-height: 70vh;
+                overflow-y: auto;
+
+                .sameDiscount{
+                    color: var(--colorRedText);
+                    font-weight: 500;
+                }
+            }
+        }
+
+        .button-container {
+            @include flex-row-center-center;
+            gap: 48px;
+            width: 100%;
+
+            button {
+                @include button-colorBrand;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 850px) {
+    main {
+        section {
+            .form-list-container {
+                @include flex-column-center-center;
+                gap: 24px;
+                height: auto;
+
+                form {
+                    width: 100%;
+                    height: auto;
+                    gap: 8px;
+                }
+
+                .discount-list {
+                    width: 100%;
+                    .all-discount {
+                        width: 100%;
+                        @include flex-row-between-start-wrap;
+                        column-gap: 48px;
+                        row-gap: 8px;
+                        }
+                }
+
+            }
+        }
+    }
+}

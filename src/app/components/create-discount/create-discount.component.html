@@ -1,0 +1,60 @@
+<main>
+
+    <section>
+        <img src="../../../../../../assets/icons/icon-close-window.png" (click)="closeCreateDiscount()" alt="close" class="img-close">
+    
+        <h1>Création d'un jeu de réductions</h1>
+        <div class="form-list-container">
+            <form [formGroup]="discountForm" #formDiscount="ngForm">
+                <h2>Entrez vos options</h2>
+                <div class="flex-input">
+                    <div class="label-span">
+                        <label for="weekDiscount">Réduction à la semaine (%) :</label>
+                        @if(formDiscount.submitted && discountForm.get("week")?.hasError('required')){
+                            <span>Le champ ne peut pas être nul.</span>
+                        }
+                    </div>
+                    <input type="text" placeholder="ex : 5%" formControlName="week" name="weekDiscount" id="weekDiscount" >
+                </div>
+
+                <div class="flex-input flex-check">
+                    <label for="discountWeekActivated">Réduction à la semaine active</label>
+                    <mat-checkbox formControlName="weekActivated" id="discountWeekActivated" class="check-active"></mat-checkbox>
+                </div>
+
+                <div class="flex-input">
+                    <div class="label-span">
+                        <label for="monthDiscount">Réduction au mois (%) :</label>
+                        @if(formDiscount.submitted && discountForm.get("month")?.hasError('required')){
+                            <span>Le champ ne peut pas être nul.</span>
+                        }
+                    </div>
+                    <input type="text" placeholder="ex : 5%" formControlName="month" name="monthDiscount" id="monthDiscount" >
+                </div>
+
+                <div class="flex-input flex-check">
+                    <label for="discountMonthActivated">Réduction à la semaine active</label>
+                    <mat-checkbox formControlName="monthActivated" id="discountMonthActivated" class="check-active"></mat-checkbox>
+                </div>
+
+            </form>
+        
+            <div class="discount-list">
+                <h2>Réductions existantes</h2>
+                <div class="all-discount">
+                    @for(discount of discounts(); track discount.id){
+                        <p [class.sameDiscount]="compareDiscountWithFormValues(discount)">{{getDiscountInfos(discount.id!)}} </p>
+                    }
+                </div>
+
+            </div>
+        </div>
+
+        <div class="button-container">
+            <button type="button" (click)="closeCreateDiscount()">Retour</button>
+            <button type="button" (click)="onSubmit()">Ajouter</button>
+        </div>
+    
+    </section>
+
+</main>

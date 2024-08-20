@@ -4,6 +4,9 @@ import { Reservation } from '../models/Reservation.model'
 import { Appartment } from '../models/Appartment.model'
 import { User } from '../models/User.model'
 import { AppartmentNameAndOwner } from '../models/AppartmentNameAndOwner.model'
+import { Discount } from '../models/Discount.model'
+import { Owner } from '../models/Owner.model'
+import { Photo } from '../models/Photo.model'
 
 @Injectable({
   providedIn: 'root'
@@ -42,7 +45,11 @@ export class AppstoreService {
   private _currentUsedAppartment = signal<Appartment | null>(null)
 
   private _currentUser = signal<User | null>(null)
-  _reservationRequests = signal<Reservation[]>([])
+  private _reservationRequests = signal<Reservation[]>([])
+
+  private _discounts = signal<Discount[]>([])
+  private _owners = signal<Owner[]>([])
+  private _allUsers = signal<User[]>([])
 
 
   /*************Functions related to token **********************/
@@ -140,6 +147,255 @@ export class AppstoreService {
     )
   }
 
+  updateAppartment(appartment: Appartment): void {
+    this._activeAppartments.update(appartments => 
+      appartments.map(item => (
+        item.id === appartment.id ? appartment : item
+      ))
+    )
+
+    this._allAppartments.update(appartments => 
+      appartments.map(item => (
+        item.id === appartment.id ? appartment : item
+      ))
+    )
+
+    this._appartmentNames.update(appartments =>
+      appartments.map(item => (
+        item.id === appartment.id ? {...item, name: appartment.name, ownerId: appartment.ownerId} : item
+      ))
+    )
+  }
+
+  createAppartment(appartment: Appartment): void {
+    if(appartment.active) {
+      const newAppartments: Appartment[] = this._activeAppartments()
+      newAppartments.push(appartment)
+      this._activeAppartments.set(newAppartments)
+    }
+
+    const newAllAppartments: Appartment[] = this._allAppartments()
+    newAllAppartments.push(appartment)
+    this._allAppartments.set(newAllAppartments)
+
+    const newAppartmentNames: AppartmentNameAndOwner[] = newAllAppartments.map(item => (
+      {id: item.id, name: item.name, ownerId: item.ownerId}
+    ))
+
+    this._appartmentNames.set(newAppartmentNames)
+  }
+
+  deleteAppartment(id: number): void {
+    const newActiveAppartment: Appartment[] = this._activeAppartments().filter(item => item.id != id)
+    this._activeAppartments.set(newActiveAppartment)
+
+    const newAllAppartments: Appartment[] = this._allAppartments().filter(item => item.id != id)
+    this._allAppartments.set(newAllAppartments)
+
+    const newAppartmentNames: AppartmentNameAndOwner[] = this._appartmentNames().filter(item => item.id != id)
+    this._appartmentNames.set(newAppartmentNames)
+  }
+
+  addPhotoInAppartment(photos: Photo[]) {
+  this._activeAppartments.update(allAppartments => {
+    return allAppartments.map(appartment => {
+      if (appartment.id === photos[0].appartmentId) {
+        // Création d'un nouvel objet Appartment avec les photos mises à jour
+        const updatedAppartment = new Appartment(
+          appartment.id,
+          appartment.ownerId,
+          appartment.discounts,
+          appartment.name,
+          appartment.description,
+          appartment.address,
+          appartment.zipcode,
+          appartment.city,
+          appartment.distanceCityCenter,
+          appartment.distanceTrain,
+          appartment.distanceTram,
+          appartment.googleMapUrl,
+          appartment.nightPrice,
+          appartment.caution,
+          appartment.menageCourtSejour,
+          appartment.menageLongSejour,
+          appartment.menageLongueDuree,
+          appartment.type,
+          appartment.active,
+          appartment.infos,
+          photos,  
+          appartment.reservations,
+          appartment.comments
+        );
+
+        return updatedAppartment;
+      }
+      return appartment;
+    });
+  });
+
+  this._allAppartments.update(allAppartments => {
+    return allAppartments.map(appartment => {
+      if (appartment.id === photos[0].appartmentId) {
+       // Création d'un nouvel objet Appartment avec les photos mises à jour
+        const updatedAppartment = new Appartment(
+          appartment.id,
+          appartment.ownerId,
+          appartment.discounts,
+          appartment.name,
+          appartment.description,
+          appartment.address,
+          appartment.zipcode,
+          appartment.city,
+          appartment.distanceCityCenter,
+          appartment.distanceTrain,
+          appartment.distanceTram,
+          appartment.googleMapUrl,
+          appartment.nightPrice,
+          appartment.caution,
+          appartment.menageCourtSejour,
+          appartment.menageLongSejour,
+          appartment.menageLongueDuree,
+          appartment.type,
+          appartment.active,
+          appartment.infos,
+          photos,  
+          appartment.reservations,
+          appartment.comments
+        );
+
+        return updatedAppartment;
+      }
+      return appartment;
+    });
+  });
+    
+  }
+
+  updatePhotoInAppartment(photo: Photo) {
+    //update des active appartment
+    this._activeAppartments.update(allAppartments => {
+      return allAppartments.map(appartment => {
+        if (appartment.id === photo.appartmentId) {
+          const newPhotos = appartment.photos.map(item => (
+            item.id === photo.id ? photo : item
+          ))
+          // Création d'un nouvel objet Appartment avec les photos mises à jour
+          const updatedAppartment = new Appartment(
+            appartment.id,
+            appartment.ownerId,
+            appartment.discounts,
+            appartment.name,
+            appartment.description,
+            appartment.address,
+            appartment.zipcode,
+            appartment.city,
+            appartment.distanceCityCenter,
+            appartment.distanceTrain,
+            appartment.distanceTram,
+            appartment.googleMapUrl,
+            appartment.nightPrice,
+            appartment.caution,
+            appartment.menageCourtSejour,
+            appartment.menageLongSejour,
+            appartment.menageLongueDuree,
+            appartment.type,
+            appartment.active,
+            appartment.infos,
+            newPhotos,  
+            appartment.reservations,
+            appartment.comments
+          );
+  
+          return updatedAppartment
+        }
+        return appartment
+      })
+    })
+
+    // update de allAppartments
+    this._allAppartments.update(allAppartments => {
+      return allAppartments.map(appartment => {
+        if (appartment.id === photo.appartmentId) {
+          const newPhotos = appartment.photos.map(item => (
+            item.id === photo.id ? photo : item
+          ))
+          // Création d'un nouvel objet Appartment avec les photos mises à jour
+          const updatedAppartment = new Appartment(
+            appartment.id,
+            appartment.ownerId,
+            appartment.discounts,
+            appartment.name,
+            appartment.description,
+            appartment.address,
+            appartment.zipcode,
+            appartment.city,
+            appartment.distanceCityCenter,
+            appartment.distanceTrain,
+            appartment.distanceTram,
+            appartment.googleMapUrl,
+            appartment.nightPrice,
+            appartment.caution,
+            appartment.menageCourtSejour,
+            appartment.menageLongSejour,
+            appartment.menageLongueDuree,
+            appartment.type,
+            appartment.active,
+            appartment.infos,
+            newPhotos,  
+            appartment.reservations,
+            appartment.comments
+          );
+  
+          return updatedAppartment
+        }
+        return appartment
+      })
+    })
+  }
+
+  deletePhotoInAppartment(photo: Photo) {
+    //Mise à jour de currentUsedAppartment
+    const currentAppartmentPhotos = this._currentUsedAppartment()?.photos
+    const newAppartmentPhotos = currentAppartmentPhotos?.filter(item => item.id !== photo.id)
+
+    const updatedAppartment: Appartment = new Appartment(
+      this._currentUsedAppartment()!.id,
+      this._currentUsedAppartment()!.ownerId,
+        this._currentUsedAppartment()!.discounts,
+        this._currentUsedAppartment()!.name,
+        this._currentUsedAppartment()!.description,
+        this._currentUsedAppartment()!.address,
+        this._currentUsedAppartment()!.zipcode,
+        this._currentUsedAppartment()!.city,
+        this._currentUsedAppartment()!.distanceCityCenter,
+        this._currentUsedAppartment()!.distanceTrain,
+        this._currentUsedAppartment()!.distanceTram,
+        this._currentUsedAppartment()!.googleMapUrl,
+        this._currentUsedAppartment()!.nightPrice,
+        this._currentUsedAppartment()!.caution,
+        this._currentUsedAppartment()!.menageCourtSejour,
+        this._currentUsedAppartment()!.menageLongSejour,
+        this._currentUsedAppartment()!.menageLongueDuree,
+        this._currentUsedAppartment()!.type,
+        this._currentUsedAppartment()!.active,
+        this._currentUsedAppartment()!.infos,
+        newAppartmentPhotos!,
+        this._currentUsedAppartment()!.reservations,
+        this._currentUsedAppartment()!.comments
+    )
+    this._currentUsedAppartment.set(updatedAppartment)
+
+    //Mise à jour de allAppartments
+    this._allAppartments.update(value => value.map(item => (
+      item.id === this._currentUsedAppartment()!.id ? this._currentUsedAppartment()! : item 
+    )))
+
+    //Mise à jour de activeAppartments
+    this._activeAppartments.update(value => value.map(item => (
+      item.id === this._currentUsedAppartment()!.id ? this._currentUsedAppartment()! : item 
+    )))
+  }
+
   /********Functions related to currentUser *************/
   getCurrentUser(): WritableSignal<User | null> {
     return this._currentUser
@@ -204,5 +460,66 @@ export class AppstoreService {
     removeReservationInReservationRequests(reservation: Reservation) {
       this._reservationRequests.update(value => value
         .filter(resa => resa.id != reservation.id))
+    }
+
+    /******Functions related to discounts **************/
+    getDiscounts(): WritableSignal<Discount[]> {
+      return this._discounts
+    }
+
+    setDiscounts(discounts: Discount[]): void {
+      this._discounts.set(discounts)
+    }
+
+    updateDiscount(discount: Discount): void {
+      this._discounts.update(discounts => discounts.map(item => (
+        item.id === discount.id ? discount : item
+      )))
+    }
+
+    createDiscount(discount: Discount): void {
+      const newDiscounts = this._discounts()
+      newDiscounts.push(discount)
+      this._discounts.set(newDiscounts)
+    }
+
+    /******Functions related to owners **************/
+    getOwners(): WritableSignal<Owner[]> {
+      return this._owners
+    }
+
+    setOwners(owners: Owner[]): void {
+      this._owners.set(owners)
+    }
+
+
+    createOwner(owner: Owner): void {
+      const newOwners = this._owners()
+      newOwners.push(owner)
+      this._owners.set(newOwners)
+    }
+
+    /******Functions related to allUsers **************/
+    getAllUsers(): WritableSignal<User[]> {
+      return this._allUsers
+    }
+
+    setAllUsers(users: User[]): void {
+      this._allUsers.set(users)
+    }
+
+
+    /****Reset des signaux réservés à la session lors du logout ******/
+    resetAutenticatedSignals(): void {
+      this._allAppartments.set([])
+      this._appartmentNames.set([])
+      this._currentUser.set(null)
+      this._owners.set([])
+      this._allUsers.set([])
+      this._token.set("")
+      this._reservationRequests.set([])
+      this._currentUsedAppartment.set(null)
+
+      localStorage.setItem("refreshToken", "")
     }
 }

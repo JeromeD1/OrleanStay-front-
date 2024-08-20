@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificationComponent } from '../components/notification/notification.component';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,8 @@ export class NotificationService {
 
   constructor(private readonly snackBar: MatSnackBar) { }
 
+
+
    /**
    * Presents a toast displaying the message with a green background
    * @param message Message to display
@@ -15,7 +18,9 @@ export class NotificationService {
    * this.notificationService.success("confirm oked");
    */
    success(message: string) {
-    this.openSnackBar(message, '', 'success-snackbar');
+    // this.openSnackBar(message, 'OK', 'success-snackbar');
+    this.openSnackbarFromComponent(message, "success")
+
   }
 
   /**
@@ -25,7 +30,8 @@ export class NotificationService {
    * this.notificationService.error("confirm canceled");
    */
   error(message: string) {
-    this.openSnackBar(message, '', 'error-snackbar');
+    // this.openSnackBar(message, 'ERROR', 'error-snackbar');
+    this.openSnackbarFromComponent(message, "error")
   }
 
   
@@ -42,12 +48,19 @@ export class NotificationService {
     message: string,
     action: string,
     className: string,
-    duration = 2000
+    duration = 3500
   ) {
     this.snackBar.open(message, action, {
       duration: duration,
       panelClass: [className]
     });
+  }
+
+  openSnackbarFromComponent(message: string, notificationType: "success" | "error") {
+    this.snackBar.openFromComponent(NotificationComponent, {
+      duration: 3500,
+      data: {message: message, notificationType: notificationType}
+    })
   }
 }
 

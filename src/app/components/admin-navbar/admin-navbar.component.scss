@@ -35,6 +35,7 @@ nav {
             p{
                 margin: 0 !important;
                 padding: 0;
+                text-align: center;
             }
         }
 
@@ -46,6 +47,11 @@ nav {
                 font-weight: bold;
                 color: var(--colorLight);
             }
+        }
+
+        .highlighted {
+            background-color: var(--colorLight);
+            border-radius: 35px;
         }
     }
 
@@ -82,6 +88,7 @@ nav {
         div.navBurger {
             @include flex-column-center-center;
             position: absolute;
+            z-index: 1000;
             top: 0;
             left: 0;
             width: 70vw;

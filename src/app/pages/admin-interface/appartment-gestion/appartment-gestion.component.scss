@@ -1,0 +1,147 @@
+@import "../../../styles/mixins";
+
+main {
+    @include flex-column-start-center;
+    width: 1700px;
+    max-width: 95vw;
+    margin: auto;
+    // gap: 48px;
+
+    p, h1, h2 {
+        margin: 0;
+        padding: 0;
+        white-space: nowrap;
+    }
+
+
+    .choix-appart {
+        @include flex-row-between-center;
+        gap: 48px;
+        width: 900px;
+        max-width: 100%;
+        margin-bottom: 24px;
+
+
+        .appart-select {
+            @include flex-row-start-center-wrap;
+            gap: 24px;
+        }
+
+        .add-delete-appart{
+            @include flex-column-center-center;
+            gap: 16px;
+        }
+
+        .button-ajouter {
+            @include button-colorMid;
+            width: 130px;
+        }
+
+        .button-cancel {
+            @include button-colorMid;
+        }
+
+        .button-delete {
+            @include button-colorRed;
+            width: 130px;
+        }
+
+        .div-cancel-appart-creation {
+            @include flex-column-center-center;
+            width: 100%;
+            margin-top: 24px;
+            margin-bottom: 24px;
+        }
+
+        .hidden-element {
+            // visibility: hidden;
+            display: none !important;
+            margin: 0;
+            gap: 0;
+            padding: 0;
+        }
+    }
+}
+
+
+::ng-deep .mat-mdc-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-mdc-text-field-wrapper {
+    width: 400px !important;
+    max-width: 90vw !important;
+    margin-top: 16px;
+  }
+
+
+
+@media screen and (max-width: 950px) {
+    main {
+        .choix-appart {
+            @include flex-column-center-start;
+            gap: 0px;
+
+            .appart-select {
+                width: 100%;
+            }
+
+            .add-delete-appart {
+                @include flex-row-around-center;
+                gap: 24px;
+                width: 100%;
+            }
+        }
+    }
+
+    ::ng-deep .mat-mdc-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-mdc-text-field-wrapper {
+        width: calc(90vw - 265px) !important;
+      }
+}
+
+@media screen and (max-width: 600px) {
+    main {
+        .choix-appart {
+            @include flex-row-between-start;
+            gap: 16px;
+
+            .appart-select {
+                @include flex-column-start-start;
+                width: 100%;
+            }
+
+            .add-delete-appart {
+                width: auto;
+                margin-left: -300px;
+                button {
+                    width: auto;
+                    gap: 8px;
+                }
+            }
+        }
+    }
+
+    ::ng-deep .mat-mdc-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-mdc-text-field-wrapper {
+        width: 95vw !important;
+      }
+}
+
+@media screen and (max-width: 530px) {
+    main {
+        .choix-appart {
+            @include flex-column-center-start;
+            gap: 0px;
+
+            h2 {
+                margin-bottom: -24px;
+            }
+
+            .appart-select {
+                width: 100%;
+            }
+
+            .add-delete-appart {
+                @include flex-row-around-center;
+                gap: 24px;
+                width: 100%;
+                margin-left: 0;
+            }
+        }
+    }
+}

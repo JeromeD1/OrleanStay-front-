@@ -1,12 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import "../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
+// @import "../src/app/styles/mixins";
 
-@mixin flex-column-start-center {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-}
 
 
 :root {
@@ -22,6 +17,8 @@
 --colorMid: #C1D6D6;
 --colorLight:#FAE7E1;
 --colorLightest: #FAFAFA;
+--colorRedText: rgb(150,0,0);
+--colorSuccess: rgb(0,175,0);
 }
 
 html, body { height: 100%; }
@@ -30,52 +27,52 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    box-sizing: border-box !important;
 }
 
 p, label, input, select, textarea, a, b {
-    font-size: var(--ppFontSize);
+    font-size: var(--ppFontSize) !important;
     text-decoration: none;
 }
 
 span {
-    font-size: var(--tppFontSize);
-    color: rgb(150,0,0);
+    font-size: var(--tppFontSize) !important;
+    color: var(--colorRedText);
 }
 
 button {
-    font-size: var(--mpFontSize);
+    font-size: var(--mpFontSize) !important;
 }
 
 h1{
-    font-size: var(--h2FontSize);
+    font-size: var(--h2FontSize) !important;
 }
 
-::ng-deep .mat-mdc-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-mdc-text-field-wrapper {
-    width: 800px !important;
-    max-width: 90vw !important;
-  }
+// ::ng-deep .mat-mdc-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-mdc-text-field-wrapper {
+//     width: 800px !important;
+//     max-width: 90vw !important;
+//   }
 
 
-  ::ng-deep .mat-mdc-snack-bar-container {
+//   ::ng-deep .mat-mdc-snack-bar-container {
     
-    &.success-snackbar {
-      --mdc-snackbar-container-color: rgb(0, 175, 0);
-      --mat-mdc-snack-bar-button-color: black;
-      --mdc-snackbar-supporting-text-color: black;
-    }
-    &.error-snackbar {
-        --mdc-snackbar-container-color: rgb(220, 0, 0);
-        --mat-mdc-snack-bar-button-color: black;
-        --mdc-snackbar-supporting-text-color: black;
-      }
-  }
+//     &.success-snackbar {
+//       --mdc-snackbar-container-color: rgb(0, 175, 0);
+//       --mat-mdc-snack-bar-button-color: black;
+//       --mdc-snackbar-supporting-text-color: black;
+//     }
+//     &.error-snackbar {
+//         --mdc-snackbar-container-color: rgb(220, 0, 0);
+//         --mat-mdc-snack-bar-button-color: black;
+//         --mdc-snackbar-supporting-text-color: black;
+//       }
+//   }
 
-::ng-deep .mat-mdc-snack-bar-container .mdc-snackbar__label {
-    font-size: var(--mpFontSize) !important;
-    width: 800px !important;
-    max-width: 90vw !important;
-}
+// ::ng-deep .mat-mdc-snack-bar-container .mdc-snackbar__label {
+//     // font-size: var(--mpFontSize) !important;
+//     // width: 800px !important;
+//     // max-width: 90vw !important;
+// }
 
 
 

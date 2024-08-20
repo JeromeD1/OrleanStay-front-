@@ -32,7 +32,8 @@ main {
         gap: 48px;
 
         .resa {
-            max-width: 800px;
+            width: 800px;
+            max-width: 95vw;
             padding: 24px;
             border: 1px solid var(--colorMid);
             border-radius: 24px;
@@ -69,7 +70,7 @@ main {
         @include flex-row-around-center-wrap;
         margin: auto;
         margin-top: 48px;
-        margin-bottom: 48px;
+        margin-bottom: 0;
         gap: 24px;
         button.button-filter {
             @include button-colorBrand;
@@ -91,22 +92,23 @@ main {
   }
 
 
-  ::ng-deep .mat-mdc-snack-bar-container {
-    
-    &.success-snackbar {
-      --mdc-snackbar-container-color: rgb(0, 175, 0);
-      --mat-mdc-snack-bar-button-color: black;
-      --mdc-snackbar-supporting-text-color: black;
-    }
-    &.error-snackbar {
-        --mdc-snackbar-container-color: rgb(220, 0, 0);
-        --mat-mdc-snack-bar-button-color: black;
-        --mdc-snackbar-supporting-text-color: black;
-      }
-  }
 
-::ng-deep .mat-mdc-snack-bar-container .mdc-snackbar__label {
-    font-size: var(--mpFontSize) !important;
-    width: 800px !important;
-    max-width: 90vw !important;
+@media screen and (max-width:600px) {
+    main {
+        .resa-information {
+            .resa {
+                padding: 16px;
+                
+                .info {
+                    @include flex-row-between-center;
+                    gap: 24px;
+
+                    p{
+                        width: auto;
+                        margin: 0;
+                    }
+                }
+            }
+        }
+    }
 }

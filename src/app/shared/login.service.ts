@@ -36,6 +36,8 @@ export class LoginService {
         )
 
         this.appstore.setToken(`${data.token}`)
+
+        localStorage.setItem("refreshToken", data.token)
       })
       )
   }
