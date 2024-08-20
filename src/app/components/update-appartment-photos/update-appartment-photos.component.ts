@@ -59,6 +59,7 @@ export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges{
   //détecttion du changement de sélection d'appartement et réinitialisation du formulaire
   ngOnChanges(changes: SimpleChanges): void {
       if(changes['photos']) {
+        this.initialPhotos = this.photos()
         this.initForm()
         this.initEvents()
       }
@@ -171,60 +172,15 @@ export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges{
 
 
   /************Cloudinary *******************/
-  uploadedImage = '';
-  // isDisabled = false;
-  // uploadedImages: string[] = [];
-
-
-
-  processResultsAfterAddingPhoto = (error: any, result: any): void => {
-    if (result && result.event === 'success') {
-      const secureUrl = result.info.secure_url;
-      const previewUrl = secureUrl.replace('/upload/', '/upload/w_400/');
-      // this.uploadedImages.push(previewUrl);
-      console.log("previewUrl", previewUrl);
-      //ajout d'une position dans positionOrderOptions
-      this.positionOrderOptions.push(this.photos().length + 1)
-      //création d'une nouvelle photo
-      const newPhoto: Photo = {
-        appartmentId: this.photos()[0].appartmentId,
-        positionOrder: this.photos().length + 1,
-        imgUrl: previewUrl
-      }
-      this.appartmentPhotosService.create(newPhoto).pipe(take(1)).subscribe(
-        {
-          next: (data) => {
-            this.updateOrderEmitter.emit(this.photos()[0].appartmentId) //pour la mise à jour de l'appartement dans le parent
-            console.log("updated photos",this.photos());
-            //TODO : ajouter un nouveau formGroup
-            const photoToAdd: Photo = data.find(item => item.imgUrl === newPhoto.imgUrl && item.positionOrder === newPhoto.positionOrder)!
-            this.addNewPhotoInForm(photoToAdd)
-            
-          },
-          error: () => {
-            this.notificationService.error("Une erreur s'est produite lors de l'enregistrement de la photo.")
-            //TODO : Effacer la photo dans cloudinary
-          }
-        }
-      )
-      
-    }
-    if (error) {
-      this.notificationService.error("Il y a eu une erreur lors du téléchargement de l'image.")
-    }
-  };
-
   cloudName = environment.CLOUD_NAME;
   uploadPreset = environment.UPLOAD_PRESET;
   apiKey = environment.api_key
   cloudinaryFolder = environment.cloudinaryFolder
 
-  uploadWidget(): void {
+  uploadWidget(url?: string): void {
     this.cloudinaryService.getCloudinarySignature(false).pipe(take(1)).subscribe(
       {
         next: (signatureData) => {
-          console.log("signatureData", signatureData);
-          
           (window as any).cloudinary.openUploadWidget(
             {
               cloudName: this.cloudName,
@@ -236,7 +192,13 @@ export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges{
               source: "uw",
               folder: this.cloudinaryFolder
             },
-            this.processResultsAfterAddingPhoto
+            (error: any, result: any) => {
+              if(url) {
+                this.processResultsAfterUpdatingPhoto(error, result, url)
+              } else {
+                this.processResultsAfterAddingPhoto(error, result)
+              }
+            }
           );
         },
         error: () => {
@@ -246,68 +208,75 @@ export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges{
     
   };
 
-  uploadOverwriteWidget = (url: string): void => {
-    console.log("url", url);
-    console.log("img id : ", this.someFunctions.extractIdFromUrl(url));
-    
-    
-    this.cloudinaryService.getCloudinarySignature(true, this.someFunctions.extractIdFromUrl(url)).pipe(take(1)).subscribe(
-      {
-        next: (signatureData) => {
-          console.log("signatureData", signatureData);
-          
-          (window as any).cloudinary.openUploadWidget(
-            {
-              cloudName: this.cloudName,
-              apiKey: this.apiKey,
-              uploadSignatureTimestamp: signatureData.timestamp,
-              uploadSignature: signatureData.signature,
-              clientAllowedFormats: ['image'],
-              resourceType: 'image',
-              source: "uw",
-              publicId: this.someFunctions.extractIdFromUrl(url) ,
-              overwrite: true,
-              invalidate: true
-            },
-            (error: any, result: any) => this.processResultsAfterUpdatingPhoto(error, result, url)
-          );
-        },
-        error: () => {
-          this.notificationService.error("Impossible d'obtenir une autorisation pour le telechargement de l'image.")
-        }
-      })
 
+
+  processResultsAfterAddingPhoto = (error: any, result: any): void => {
+    if (result && result.event === 'success') {
+      const secureUrl = result.info.secure_url;
+      const previewUrl = secureUrl.replace('/upload/', '/upload/w_400/');
+      
+      //ajout d'une position dans positionOrderOptions
+      this.positionOrderOptions.push(this.photos().length + 1)
+
+      //création d'une nouvelle photo
+      const newPhoto: Photo = {
+        appartmentId: this.photos()[0].appartmentId,
+        positionOrder: this.photos().length + 1,
+        imgUrl: previewUrl
+      }
+      this.appartmentPhotosService.create(newPhoto).pipe(take(1)).subscribe(
+        {
+          next: () => {
+            this.updateOrderEmitter.emit(this.photos()[0].appartmentId) //pour la mise à jour de l'appartement dans le parent
+          },
+          error: () => {
+            this.notificationService.error("Une erreur s'est produite lors de l'enregistrement de la photo.")
+            //TODO : Effacer la photo dans cloudinary
+          }
+        }
+      )
+    }
+    if (error) {
+      this.notificationService.error("Il y a eu une erreur lors du téléchargement de l'image.")
+    }
   };
 
-  processResultsAfterUpdatingPhoto = (error: any, result: any, url: string): void => {
+
+
+
+  processResultsAfterUpdatingPhoto = (error: any, result: any, oldUrl: string): void => {
     if (result && result.event === 'success') {
       const secureUrl = result.info.secure_url;
       const previewUrl = secureUrl.replace('/upload/', '/upload/w_400/');
 
-      // pour que l'image se mette à jour :
-      const photoToUpdate = this.photoArray.controls.find(control => control.get('imgUrl')?.value === url)?.getRawValue();
-      this.removePhotoFromForm(url)
-      this.addNewPhotoInForm(photoToUpdate)
-      this.sortPhotoArray()
-   
+      const oldPhoto: Photo = this.photoArray.controls.find(control => control.get('imgUrl')?.value === oldUrl)?.getRawValue();
 
-      // this.uploadedImages.push(previewUrl);
-      console.log("previewUrl", previewUrl);
-      //ajout d'une position dans positionOrderOptions
-      // this.positionOrderOptions.push(this.photos().length + 1)
-      // //création d'une nouvelle photo
-      // const newPhoto: Photo = {
-      //   appartmentId: this.photos()[0].appartmentId,
-      //   positionOrder: this.photos().length + 1,
-      //   imgUrl: previewUrl
-      // }
-      this.cdr.detectChanges()
+      const newPhoto: Photo = {
+        id: oldPhoto.id,
+        appartmentId: oldPhoto.appartmentId,
+        positionOrder: oldPhoto.positionOrder,
+        imgUrl: previewUrl
+      }
+
+      const convertedOldImgId: string = this.someFunctions.convertImgId(this.someFunctions.extractIdFromUrl(oldUrl))
+
+      //TODO : Appel de la fonction update du back
+      this.appartmentPhotosService.update(newPhoto, convertedOldImgId).pipe(take(1)).subscribe({
+        next: () => {
+          this.updateOrderEmitter.emit(this.photos()[0].appartmentId)
+        },
+        error: () => {
+          this.notificationService.error("Une erreur s'est produite lors de l'enregistrement de l'image.")
+        }
+      })
       
     }
     if (error) {
       this.notificationService.error("Il y a eu une erreur lors du téléchargement de l'image.")
     }
   };
+
+  
 
   deleteImage(url: string): void {
     const photoToDelete = this.photoArray.controls.find(control => control.get('imgUrl')?.value === url)?.getRawValue();
@@ -316,8 +285,11 @@ export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges{
     this.appartmentPhotosService.delete(photoToDelete, convertedUrl).pipe(take(1)).subscribe(
       {
         next: () => {
-          // this.removePhotoFromForm(url)
+          this.positionOrderOptions.pop()
           this.updateOrderEmitter.emit(this.photos()[0].appartmentId)
+        },
+        error: () => {
+          this.notificationService.error("Une erreur s'est produite lors de la suppression de l'image.")
         }
       }
     )

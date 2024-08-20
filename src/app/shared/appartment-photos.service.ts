@@ -20,8 +20,8 @@ export class AppartmentPhotosService {
     )
   }
 
-  update(photo: Photo): Observable<Photo> {
-    return this.http.put<Photo>(environment.BACKEND_BASE_URL + '/photo/' + photo.id, photo).pipe(
+  update(photo: Photo, oldImgId: string): Observable<Photo> {
+    return this.http.put<Photo>(environment.BACKEND_BASE_URL + '/photo/' + photo.id + "/oldImgId/" + oldImgId, photo).pipe(
       tap((data) => {
         this.appstore.updatePhotoInAppartment(data)
       })
