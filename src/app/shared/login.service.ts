@@ -39,6 +39,7 @@ export class LoginService {
         this.appstore.setToken(`${data.token}`)
 
         localStorage.setItem("refreshToken", data.token)
+        localStorage.setItem("currentUser", JSON.stringify(data.utilisateur))
       })
       )
   }
@@ -48,6 +49,8 @@ export class LoginService {
       tap(() => {
         this.appstore.setToken("")
         this.appstore.resetTraveller();
+        this.appstore.setCurrentUser(null)
+        localStorage.setItem("currentUser", JSON.stringify(null))
       })
       )
   }
@@ -79,6 +82,7 @@ export class LoginService {
         this.appstore.setToken(`${data.token}`)
 
         localStorage.setItem("refreshToken", data.token)
+        localStorage.setItem("currentUser", JSON.stringify(data.utilisateur))
       })
       )
   }

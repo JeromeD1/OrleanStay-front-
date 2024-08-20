@@ -401,7 +401,7 @@ export class AppstoreService {
     return this._currentUser
   }
 
-  setCurrentUser(user: User): void {
+  setCurrentUser(user: User | null): void {
     this._currentUser.set(user)
   }
 

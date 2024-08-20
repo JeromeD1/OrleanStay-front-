@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { AppstoreService } from './shared/appstore.service';
+import { User } from './models/User.model';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +10,19 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'OrleanStay';
+
+  constructor(private readonly appstore: AppstoreService) {}
+
+  ngOnInit(): void {
+   this.initSession()   
+  }
+
+  initSession(): void {
+    if(localStorage.getItem("currentUser")){
+      const sessionUser: User | null = JSON.parse(localStorage.getItem("currentUser")!)
+      this.appstore.setCurrentUser(sessionUser)
+    }
+  }
 }
