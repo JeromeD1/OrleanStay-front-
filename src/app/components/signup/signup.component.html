@@ -1,0 +1,140 @@
+<main>
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+        <h1>Création d'un compte</h1>
+
+        <div class="flex-input">
+            <div class="label-error">
+                <label for="email">Email :</label>
+                @if(emailError) {
+                    <span class="large-screen">{{emailError}} </span>
+                }
+            </div>
+            <input type="email" formControlName="email" id="email" placeholder="ex : john.doe@gmail.com" required>
+            @if(emailError) {
+                <span class="small-screen">{{emailError}} </span>
+            }
+        </div>
+
+        <div class="flex-input">
+            <div class="label-error">
+                <label for="password1">Mot ce passe :</label>
+                @if(password1Error) {
+                    <span class="large-screen">{{password1Error}} </span>
+                }
+            </div>
+            <input type="text" formControlName="password1" id="password1" placeholder="Saisissez votre mot de passe" required>
+            @if(password1Error) {
+                <span class="small-screen">{{password1Error}} </span>
+            }
+        </div>
+
+        <div class="flex-input">
+            <div class="label-error">
+                <label for="password2">Confirmation mot ce passe :</label>
+                @if(password2Error) {
+                    <span class="large-screen">{{password2Error}} </span>
+                }
+            </div>
+            <input type="text" formControlName="password2" id="password2" placeholder="Saisissez votre mot de passe" required>
+            @if(password2Error) {
+                <span class="small-screen">{{password2Error}} </span>
+            }
+        </div>
+
+        <div class="flex-input">
+            <div class="label-error">
+                <label for="firstname">Prénom :</label>
+                @if(firstnameError) {
+                    <span class="large-screen">{{firstnameError}} </span>
+                }
+            </div>
+            <input type="text" formControlName="firstname" id="firstname" placeholder="Saisissez votre prénom" required>
+            @if(firstnameError) {
+                <span class="small-screen">{{firstnameError}} </span>
+            }
+        </div>
+
+        <div class="flex-input">
+            <div class="label-error">
+                <label for="lastname">Nom :</label>
+                @if(lastnameError) {
+                    <span class="large-screen">{{lastnameError}} </span>
+                }
+            </div>
+            <input type="text" formControlName="lastname" id="lastname" placeholder="Saisissez votre nom" required>
+            @if(lastnameError) {
+                <span class="small-screen">{{lastnameError}} </span>
+            }
+        </div>
+
+        <div class="flex-input">
+            <div class="label-error">
+                <label for="address">Adresse :</label>
+                @if(addressError) {
+                    <span class="large-screen">{{addressError}} </span>
+                }
+            </div>
+            <input type="text" formControlName="address" id="address" placeholder="Saisissez votre adresse" required>
+            @if(addressError) {
+                <span class="small-screen">{{addressError}} </span>
+            }
+        </div>
+
+        <div class="flex-input">
+            <div class="label-error">
+                <label for="zipcode">Code postal :</label>
+                @if(zipcodeError) {
+                    <span class="large-screen">{{zipcodeError}} </span>
+                }
+            </div>
+            <input type="text" formControlName="zipcode" id="zipcode" placeholder="ex : 27 500" required>
+            @if(zipcodeError) {
+                <span class="small-screen">{{zipcodeError}} </span>
+            }
+        </div>
+
+        <div class="flex-input">
+            <div class="label-error">
+                <label for="city">Ville :</label>
+                @if(cityError) {
+                    <span class="large-screen">{{cityError}} </span>
+                }
+            </div>
+            <input type="text" formControlName="city" id="city" placeholder="ex : Paris" required>
+            @if(cityError) {
+                <span class="small-screen">{{cityError}} </span>
+            }
+        </div>
+
+        <div class="flex-input">
+            <div class="label-error">
+                <label for="country">Pays :</label>
+                @if(countryError) {
+                    <span class="large-screen">{{countryError}} </span>
+                }
+            </div>
+            <input type="text" formControlName="country" id="country" placeholder="Ex : France" required>
+            @if(countryError) {
+                <span class="small-screen">{{countryError}} </span>
+            }
+        </div>
+
+        <div class="flex-input">
+            <div class="label-error">
+                <label for="phone">Téléphone :</label>
+                @if(phoneError) {
+                    <span class="large-screen">{{phoneError}} </span>
+                }
+            </div>
+            <input type="text" formControlName="phone" id="phone" placeholder="ex : +33 6 75 75 75 75" required>
+            @if(phoneError) {
+                <span class="small-screen">{{phoneError}} </span>
+            }
+        </div>
+
+        <div class="div-button">
+            <button type="button" (click)="closeSignup()" >Annuler</button>
+            <button type="submit">Se connecter</button>
+        </div>
+    </form>
+</main>

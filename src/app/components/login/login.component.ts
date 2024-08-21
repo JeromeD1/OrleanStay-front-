@@ -1,12 +1,8 @@
-import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
+import { Component, OnDestroy, output, signal} from '@angular/core';
 import { LoginService } from '../../shared/login.service';
 import { Subject } from 'rxjs';
-import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AppstoreService } from '../../shared/appstore.service';
-
-
 
 @Component({
   selector: 'app-login',
@@ -20,16 +16,16 @@ import { AppstoreService } from '../../shared/appstore.service';
 })
 export class LoginComponent implements OnDestroy {
 
-  constructor(private loginService: LoginService, private router: Router, private appstore: AppstoreService) {}
+  constructor(private readonly loginService: LoginService) {}
 
   destroy$: Subject<void> = new Subject()
 
-  @Output()
-  closeEmitter: EventEmitter<void> = new EventEmitter()
+  closeEmitter = output<void>()
+  createAccountEmitter = output<void>()
 
   login: string = ""
   password: string = ""
-  wrongUserMessage!: string
+  wrongUserMessage = signal<string>("")
 
   closeLogin(): void {
     this.closeEmitter.emit()
@@ -43,52 +39,19 @@ export class LoginComponent implements OnDestroy {
 
     this.loginService.login(formData).subscribe(
       {
-        next: (data) => {          
-          if(data?.utilisateur.role === "ADMIN"){
-            this.router.navigate(['/admin'])
-          } else {
-            this.wrongUserMessage = "Vous n'avez pas les droits pour vous connecter !"
-          }
+        next: () => {          
+          this.closeLogin()
         },
 
         error: () => {
-          // FIXME / A SUPPRIMER 
-          this.appstore.setCurrentUser({
-            id: 0,
-            role: "USER",
-            personalInformations: {
-              firstname: "Hector",
-            lastname: "Legrand",
-            email: "hector.legrand@gmail.com",
-            phone: "06 87 78 98 24",
-            address: "Dans ton cul",
-            zipcode: "99 999",
-            city: "Lune",
-            country: "Espace"
-            },
-            creationDate: new Date()
-          })
-
-          this.appstore.setTraveller(
-            {
-              personalInformations: {
-                firstname: "Hector",
-                lastname: "Legrand",
-                email: "hector.legrand@gmail.com",
-                phone: "06 87 78 98 24",
-                address: "Dans ton cul",
-                zipcode: "99 999",
-                city: "Lune",
-                country: "Espace",
-              }
-              
-            }
-          )
+          this.wrongUserMessage.set("Votre email ou votre mot de passe n'est pas correct !")
         }
-      }
-      
-      )
+      } 
+    )
+  }
 
+  openSignup(): void {
+    this.createAccountEmitter.emit()
   }
 
   ngOnDestroy(): void {

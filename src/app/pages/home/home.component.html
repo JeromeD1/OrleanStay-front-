@@ -1,8 +1,18 @@
 <main>
     <section class="openImage" (click)="onClickSeveralTimes()">
+        <div class="menu">
+            @if(!currentUser()){
+                <img [src]="iconConnect" alt="connexion" title="Se connecter" class="img-menu" (click)="openLogin()">
+            } @else {
+                <img [src]="iconMenu" alt="menu" title="Navigation" class="img-menu" (click)="openMenu()">
+                <app-menu
+                *ngIf="showMenu"
+                (mouseleave)="closeMenu()"
+                ></app-menu>
+            }
+        </div>
         <div id="landingPage">
             <img src="../assets/global-pictures/landingPagePicture2.png" alt="locations à Orléans" (load)="onImageLoad($event)">
-
         </div>
         <div id="nuage">
             <img src="../assets/global-pictures/nuages.png" alt="nuages" >
@@ -23,6 +33,12 @@
     <app-login
     *ngIf="showLogin"
     (closeEmitter)="closeLogin()"
+    (createAccountEmitter)="openSignup()"
     ></app-login>
+
+    <app-signup
+    *ngIf="showSignup"
+    (closeEmitter)="closeSignup()"
+    ></app-signup>
     
 </main>

@@ -1,0 +1,33 @@
+@import "../../styles/mixins";
+
+ul {
+    width: 300px;
+    list-style-type: none;
+
+    li {
+        width: 100%;
+        height: 60px;
+        background-color: var(--colorMid);
+        color: black;
+        border: 2px outset var(--colorDark);
+
+        &:hover {
+            background-color: var(--colorBrand);
+        }
+
+        a {
+            @include flex-column-center-center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            list-style-type: none;
+            list-style: none;
+            color: black;
+
+            p{
+                margin: 0;
+                padding: 0;
+            }
+        }
+    }
+}

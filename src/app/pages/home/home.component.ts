@@ -4,6 +4,9 @@ import { Traveller } from '../../models/Traveller.model'
 import { AppstoreService } from '../../shared/appstore.service'
 import { CommonModule } from '@angular/common'
 import { BookingGestionComponent } from '../../components/booking-gestion/booking-gestion.component'
+import { SignupComponent } from '../../components/signup/signup.component'
+import { User } from '../../models/User.model'
+import { MenuComponent } from '../../components/menu/menu.component'
 
 @Component({
   selector: 'app-home',
@@ -12,6 +15,8 @@ import { BookingGestionComponent } from '../../components/booking-gestion/bookin
     CommonModule,
     LoginComponent,
     BookingGestionComponent,
+    SignupComponent,
+    MenuComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -20,9 +25,15 @@ export class HomeComponent implements OnInit{
   constructor(private renderer: Renderer2, private el: ElementRef, private appstore: AppstoreService) {}
 
   traveller: WritableSignal<Traveller> = this.appstore.getTraveller()
+  currentUser: WritableSignal<User | null> = this.appstore.getCurrentUser()
   showLogin: boolean = false
+  showSignup: boolean = false
+  showMenu: boolean = false
   clickCount: number = 0
   timerId: any = null
+
+  iconConnect: string = "../assets/icons/icon-connect-blanc.png"
+  iconMenu: string = "../assets/icons/icon-menu-blanc.png"
   
   numberResize = signal<number>(0)
   landingPageImage = signal<HTMLImageElement | null>(null)
@@ -86,9 +97,30 @@ export class HomeComponent implements OnInit{
     const openImageSection = this.el.nativeElement.querySelector('.openImage')
     this.renderer.setStyle(openImageSection,'height', this.imageHeight() + 'px')    
   }
+
+  openLogin(): void {
+    this.showLogin = true
+  }
   
   closeLogin(): void {
     this.showLogin = false
+  }
+
+  openSignup(): void {
+    this.closeLogin()
+    this.showSignup = true
+  }
+
+  closeSignup(): void {
+    this.showSignup = false
+  }
+
+  openMenu(): void {
+    this.showMenu = true
+  }
+
+  closeMenu(): void {
+    this.showMenu = false
   }
   
   onClickSeveralTimes() {

@@ -19,11 +19,13 @@
             <span *ngIf="inputPassword.errors?.['required']">Champ obligatoire</span>
         </ng-container>
 
-        <span *ngIf="wrongUserMessage">{{wrongUserMessage}}</span>
+        <span *ngIf="wrongUserMessage() !== ''">{{wrongUserMessage()}}</span>
 
         <div class="div-button">
             <button type="button" (click)="closeLogin()" >Annuler</button>
             <button type="submit">Se connecter</button>
         </div>
+
+        <p class="noAccount" (click)="openSignup()">Pas encore de compte ?</p>
     </form>
 </main>

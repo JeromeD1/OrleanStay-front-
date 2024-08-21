@@ -49,6 +49,13 @@
     align-items: flex-start;
 }
 
+@mixin flex-column-center-end {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+}
+
 //----------flex row-------------------
 
 
@@ -252,5 +259,14 @@
         &:focus {
             outline: none;
         }
+    }
+}
+
+@mixin linked {
+    color: rgb(20, 20, 190);
+
+    &:hover {
+        cursor: pointer;
+        filter: sepia();
     }
 }
