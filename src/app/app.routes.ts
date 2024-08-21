@@ -5,6 +5,7 @@ import { AdminInterfaceComponent } from './pages/admin-interface/admin-interface
 import { AcceptReservationComponent } from './pages/admin-interface/accept-reservation/accept-reservation.component';
 import { AddReservationComponent } from './pages/admin-interface/add-reservation/add-reservation.component';
 import { AppartmentGestionComponent } from './pages/admin-interface/appartment-gestion/appartment-gestion.component';
+import { TravelInfoEditionComponent } from './pages/travel-info-edition/travel-info-edition.component';
 
 export const routes: Routes = 
 [
@@ -15,7 +16,8 @@ export const routes: Routes =
             {path:"acceptReservation", component: AcceptReservationComponent},
             {path:"", redirectTo:"acceptReservation", pathMatch: 'full'},
             {path: "addReservation", component: AddReservationComponent},
-            {path: "appartGestion", component: AppartmentGestionComponent}
+            {path: "appartGestion", component: AppartmentGestionComponent},
+            {path: "travelInfo/edit/:appartmentId", component: TravelInfoEditionComponent}
         ]
     },
 ];

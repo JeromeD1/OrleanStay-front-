@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, input, OnChanges, OnInit, output, signal, SimpleChanges } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, input, OnChanges, OnInit, output, signal, SimpleChanges } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AppartmentPhotosService } from '../../shared/appartment-photos.service';
 import { Photo } from '../../models/Photo.model';
 import { take } from 'rxjs';
@@ -30,10 +30,6 @@ export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges{
     photos: this.fb.array([])
   })
 
-  get photoArray():FormArray {
-    return this.formPhoto.controls['photos'] as FormArray
-  }
-
   isOrderModified = signal<boolean>(false)
   initialPhotos: Photo[] = []
   positionOrderOptions: number[] = []
@@ -44,8 +40,7 @@ export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges{
     private readonly notificationService: NotificationService,
     private readonly someFunctions: SomeFunctionsService,
     private readonly cloudinaryService: CloudinaryService,
-    private readonly scriptService: ScriptService, 
-    private readonly cdr: ChangeDetectorRef) {
+    private readonly scriptService: ScriptService) {
       this.scriptService.load('uw');
     }
 
@@ -297,5 +292,8 @@ export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges{
   }
 
 
+  get photoArray():FormArray {
+    return this.formPhoto.controls['photos'] as FormArray
+  }
 }
   
