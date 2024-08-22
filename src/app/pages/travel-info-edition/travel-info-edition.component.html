@@ -1,0 +1,67 @@
+<section class="header">
+    <h1>Informations voyageur</h1>
+    <h2 *ngIf="appartment()" >Logement : <span>{{appartment()!.description}}</span> </h2>
+    <h2>Renseignez ici les informations nécessaires pour l'arrivée et le séjour des voyageurs.</h2> 
+    <div>
+        <button type="button" (click)="goBackToGestion()">Retour</button>
+        <button type="button" (click)="openOverView()">Voir le rendu</button>
+    </div>
+</section>
+
+<form [formGroup]="travelInfoForm" >
+    <ng-container formArrayName="infos">
+        <ng-container *ngFor="let infoGroup of infoArray.controls; let i = index">
+            <ng-container [formGroupName]="i" >
+                @if (infoGroup.getRawValue().contentType === "TEXT") {
+                    <div class="div-text">
+                        <textarea formControlName="content" placeholder="Ecrivez votre texte ici..." (blur)="autoSaveText(infoGroup.getRawValue())"></textarea>
+                        <div class="actions">
+                            <select name="position" #position formControlName="positionOrder">
+                                <option *ngFor="let position of positionOrderOptions" [ngValue]="position" >{{position}} </option>
+                            </select>
+        
+                            <div class="button-container">
+                                <button type="button" style="opacity: 0;"><img src="../../../../../../assets/icons/icons-edit.png" alt="Modifier"></button>
+                                <button type="button" (click)="deleteElement(infoGroup.getRawValue())"><img src="../../../../../../assets/icons/icons-supprimer.png" alt="Supprimer"></button>
+                            </div>
+                        </div>
+                    </div>
+                } @else {
+                    <div class="div-image">
+                        <img [src]="infoGroup.get('content')?.value" alt="image" >
+                        <div class="actions">
+                            <select name="position" #position formControlName="positionOrder">
+                                <option *ngFor="let position of positionOrderOptions" [ngValue]="position" >{{position}} </option>
+                            </select>
+        
+                            <div class="button-container">
+                                <button type="button" (click)="addOrUpdateImage(infoGroup.getRawValue().content)"><img src="../../../../../../assets/icons/icons-edit.png" alt="Modifier"></button>
+                                <button type="button" (click)="deleteElement(infoGroup.getRawValue())"><img src="../../../../../../assets/icons/icons-supprimer.png" alt="Supprimer"></button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </ng-container>
+        </ng-container>
+    </ng-container>
+</form>
+
+<section class="form-buttons-container">
+    <div>
+        <button type="button" (click)="addNewText()">Ajouter un texte</button>
+        <button type="button" (click)="addOrUpdateImage()">Ajouter une image</button>
+    </div>
+    <button type="button">Sauvegarder les changements de positions</button>
+</section>
+
+
+@if(showOverview) {
+    <article>
+        <div class="overview-container">
+            <img src="../../../../../../assets/icons/icon-close-window.png" (click)="closeOverView()" alt="close" class="img-close">
+            <app-travel-info-overview
+            [travelInfos]="travelInfos()"
+            ></app-travel-info-overview>
+        </div>
+    </article>
+}

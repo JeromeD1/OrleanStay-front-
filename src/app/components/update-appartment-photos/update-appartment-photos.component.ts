@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, input, OnChanges, OnInit, output, signal, SimpleChanges } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, input, OnChanges, OnDestroy, OnInit, output, signal, SimpleChanges } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AppartmentPhotosService } from '../../shared/appartment-photos.service';
 import { Photo } from '../../models/Photo.model';
-import { take } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 import { NotificationService } from '../../shared/notification.service';
 import { environment } from '../../../environment/environment';
 import { ScriptService } from '../../shared/script.service';
@@ -19,7 +19,7 @@ import { CacheBusterPipe } from '../../pipes/cache-buster.pipe';
   styleUrl: './update-appartment-photos.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges{
+export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges, OnDestroy{
 
   photos = input.required<Photo[]>()
 
@@ -30,13 +30,11 @@ export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges{
     photos: this.fb.array([])
   })
 
-  get photoArray():FormArray {
-    return this.formPhoto.controls['photos'] as FormArray
-  }
-
   isOrderModified = signal<boolean>(false)
   initialPhotos: Photo[] = []
   positionOrderOptions: number[] = []
+
+  destroy$:Subject<void> = new Subject()
 
   constructor(
     private readonly appartmentPhotosService: AppartmentPhotosService, 
@@ -44,8 +42,7 @@ export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges{
     private readonly notificationService: NotificationService,
     private readonly someFunctions: SomeFunctionsService,
     private readonly cloudinaryService: CloudinaryService,
-    private readonly scriptService: ScriptService, 
-    private readonly cdr: ChangeDetectorRef) {
+    private readonly scriptService: ScriptService) {
       this.scriptService.load('uw');
     }
 
@@ -97,7 +94,7 @@ export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges{
       if (control instanceof FormGroup) {
         const positionOrderControl = control.get('positionOrder');
         if (positionOrderControl) {
-          positionOrderControl.valueChanges.subscribe((value) => {
+          positionOrderControl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
             this.isOrderModified.set(true)
             this.updateAllPositionOrder(control, value)
             
@@ -297,5 +294,13 @@ export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges{
   }
 
 
+  get photoArray():FormArray {
+    return this.formPhoto.controls['photos'] as FormArray
+  }
+
+  ngOnDestroy(): void {
+      this.destroy$.next()
+      this.destroy$.complete()
+  }
 }
   

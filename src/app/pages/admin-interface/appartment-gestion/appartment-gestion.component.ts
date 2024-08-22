@@ -9,6 +9,7 @@ import { ReactiveFormsModule, } from '@angular/forms';
 import { Discount } from '../../../models/Discount.model';
 import { DiscountService } from '../../../shared/discount.service';
 import { MatSelect, MatSelectModule} from '@angular/material/select';
+import {MatExpansionModule} from '@angular/material/expansion';
 import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
@@ -19,22 +20,24 @@ import { AppartmentSaveRequest } from '../../../models/Request/AppartmentSaveReq
 import { ModalChangeAppartmentComponent } from '../../../components/modal-change-appartment/modal-change-appartment.component';
 import { CreateAppartmentComponent } from '../../../components/create-appartment/create-appartment.component';
 import { UpdateAppartmentPhotosComponent } from '../../../components/update-appartment-photos/update-appartment-photos.component';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-appartment-gestion',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatSelectModule, MatOptionModule, MatFormFieldModule, UpdateAppartmentComponent, ModalChangeAppartmentComponent, CreateAppartmentComponent, UpdateAppartmentPhotosComponent],
+  imports: [CommonModule, ReactiveFormsModule, MatSelectModule, MatOptionModule, MatFormFieldModule, UpdateAppartmentComponent, ModalChangeAppartmentComponent, CreateAppartmentComponent, UpdateAppartmentPhotosComponent, MatExpansionModule],
   templateUrl: './appartment-gestion.component.html',
   styleUrl: './appartment-gestion.component.scss'
 })
 export class AppartmentGestionComponent implements OnInit, OnDestroy {
 
   constructor(
-    private appstore: AppstoreService, 
-    private appartmentService: AppartmentsService, 
-    private notificationService: NotificationService, 
-    private discountService: DiscountService, 
-    private utilisateurService: UtilisateurService){}
+    private readonly appstore: AppstoreService, 
+    private readonly appartmentService: AppartmentsService, 
+    private readonly notificationService: NotificationService, 
+    private readonly discountService: DiscountService, 
+    private readonly utilisateurService: UtilisateurService,
+    private readonly router: Router){}
 
   destroy$: Subject<void> = new Subject()
   currentUser: WritableSignal<User | null> = this.appstore.getCurrentUser()
@@ -242,6 +245,10 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
 
   showWarningNotificationForSavingPhotoOrder(): void {
     this.notificationService.error("Veuillez sauvegarder l'ordre des photos avant de changer d'appartement.")
+  }
+
+  goToTravelInfoEdition():void {
+    this.router.navigate([`/admin/travelInfo/edit/${this.selectedAppartment().id}`])
   }
 
   ngOnDestroy(): void {

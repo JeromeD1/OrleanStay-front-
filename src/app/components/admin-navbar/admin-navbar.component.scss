@@ -41,6 +41,7 @@ nav {
 
         a.leaveAdmin {
             color: rgb(200, 0, 0);
+            cursor: pointer;
 
             &:hover {
                 background-color: var(--colorDarkest);

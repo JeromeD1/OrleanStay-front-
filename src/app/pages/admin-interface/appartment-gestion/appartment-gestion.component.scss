@@ -13,6 +13,14 @@ main {
         white-space: nowrap;
     }
 
+    .appart-gestion-container{
+        @include flex-column-center-center;
+       width: 100%;
+
+       button {
+        @include button-colorBrand;
+       }
+    }
 
     .choix-appart {
         @include flex-row-between-center;
