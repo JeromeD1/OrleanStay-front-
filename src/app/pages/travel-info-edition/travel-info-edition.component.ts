@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { NotificationService } from '../../shared/notification.service';
-import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CloudinaryService } from '../../shared/cloudinary.service';
 import { ScriptService } from '../../shared/script.service';
@@ -100,6 +100,7 @@ export class TravelInfoEditionComponent implements OnInit, OnDestroy {
       this.travelInfos().forEach(info => {
         this.addNewInfoInForm(info)
       });
+      this.initEvents()
       this.cdr.detectChanges()
     }
 
@@ -113,6 +114,19 @@ export class TravelInfoEditionComponent implements OnInit, OnDestroy {
       });
   
       this.infoArray.push(infoGroup);
+    }
+
+    initEvents(): void {
+      this.infoArray.controls.forEach((control, index) => {
+        if (control instanceof FormGroup) {
+          const positionOrderControl = control.get('positionOrder');
+          if (positionOrderControl) {
+            positionOrderControl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+              this.updateAllPositionOrder(control, value)  
+            });
+          }
+        }
+      });
     }
 
 
@@ -129,7 +143,7 @@ export class TravelInfoEditionComponent implements OnInit, OnDestroy {
           this.positionOrderOptions.push(this.travelInfos().length + 1)
           this.addNewInfoInForm(data)
           this.travelInfos.update(value => ([...value, data]))
-          
+          this.initEvents()
           this.cdr.detectChanges()
         },
         error:() => {
@@ -198,7 +212,7 @@ export class TravelInfoEditionComponent implements OnInit, OnDestroy {
               this.positionOrderOptions.push(this.travelInfos().length + 1)
               this.addNewInfoInForm(data)
               this.travelInfos.update(value => ([...value, data]))
-              
+              this.initEvents()
               this.cdr.detectChanges()
             },
             error: () => {
@@ -232,11 +246,17 @@ export class TravelInfoEditionComponent implements OnInit, OnDestroy {
         }
   
         //TODO : Appel de la fonction update du back
-        this.travelInfoService.update(newTravelInfo).pipe(take(1)).subscribe({
+        this.travelInfoService.update(newTravelInfo, oldUrl).pipe(take(1)).subscribe({
           next: (data) => {
             this.travelInfos.update(value => value.map(item => (
               item.id === data.id ? data : item
             )))
+            // modification de l'url de la photo dans le groupe
+            const groupToChange: FormGroup = this.infoArray.controls.find(control => control.get("id")?.value === data.id) as FormGroup
+            groupToChange.patchValue({
+              content: data.content
+            })
+            this.cdr.detectChanges()
           },
           error: () => {
             this.notificationService.error("Une erreur s'est produite lors de l'enregistrement de l'image.")
@@ -264,6 +284,67 @@ export class TravelInfoEditionComponent implements OnInit, OnDestroy {
       })
     }
 
+
+    /*******Update de l'ordre des éléments ***************/
+    updateAllPositionOrder(updatedControl: FormGroup, updatedPositionOrder: number): void{
+      const initialPosition = this.travelInfos().find(item => item.id === updatedControl.get('id')?.value)?.positionOrder
+  
+      this.infoArray.controls.forEach((control) => {
+        if (control instanceof FormGroup){
+          if(control.value != updatedControl.value && initialPosition){
+            const controlPositionOrder = control.get('positionOrder')!.value
+            //Cas ou la nouvelle valeur est supérieure à l'ancienne
+            if(updatedPositionOrder > initialPosition) {
+              //les controls qui ont un positionOrder > initialPosition et inferieur ou egal à updatedPositionOrder baissent de 1
+              if(controlPositionOrder > initialPosition && controlPositionOrder <= updatedPositionOrder ){
+                control.get('positionOrder')?.setValue(controlPositionOrder - 1, {emitEvent: false})
+              }
+            } else {
+              //Cas ou la nouvelle valeur est inférieure à l'ancienne
+              if(controlPositionOrder >= updatedPositionOrder && controlPositionOrder < initialPosition){
+                control.get('positionOrder')?.setValue(controlPositionOrder + 1, {emitEvent: false})
+              }
+            }
+            //on récupère les nouvelles valeurs du formulaire pour les réinjecter dans initialPhotos
+            this.travelInfos.set(this.infoArray.getRawValue())
+          }
+        }
+      })
+  
+        //   // On trie le FormArray après avoir mis à jour toutes les positions
+      this.sortPhotoArray();
+      //on sauvegarde automatiquement l'ordre en bdd
+      this.saveUpdatedOrder()
+    }
+  
+    sortPhotoArray(): void {
+      const sortedControls = this.infoArray.controls
+        .slice()
+        .sort((a, b) => {
+          const posA = a.get('positionOrder')?.value;
+          const posB = b.get('positionOrder')?.value;
+          return posA - posB;
+        });
+  
+      // Remplacez les contrôles dans le FormArray par les contrôles triés
+      this.infoArray.clear();
+      sortedControls.forEach(control => this.infoArray.push(control));
+    }
+
+    saveUpdatedOrder(): void {
+      const formData: TravelInfo[] = this.travelInfoForm.getRawValue().infos as TravelInfo[]
+      this.travelInfoService.updateOrder(this.appartmentId, formData).pipe(take(1)).subscribe(
+        {
+          error: () => {
+            this.notificationService.error("Attention, le nouvel ordre n'a pas pu être sauvegardé.")
+          }
+        }
+      )
+    }
+
+
+
+/************************************** */
     get infoArray():FormArray {
       return this.travelInfoForm.controls['infos'] as FormArray
     }

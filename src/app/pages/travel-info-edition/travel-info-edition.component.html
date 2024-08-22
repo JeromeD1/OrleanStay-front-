@@ -25,7 +25,7 @@
                             </select>
         
                             <div class="button-container">
-                                <button type="button"><img src="../../../../../../assets/icons/icons-edit.png" alt="Modifier"></button>
+                                <button type="button" (click)="addOrUpdateImage(infoGroup.getRawValue().content)"><img src="../../../../../../assets/icons/icons-edit.png" alt="Modifier"></button>
                                 <button type="button" (click)="deleteElement(infoGroup.getRawValue())"><img src="../../../../../../assets/icons/icons-supprimer.png" alt="Supprimer"></button>
                             </div>
                         </div>

@@ -19,11 +19,12 @@ import { AppartmentSaveRequest } from '../../../models/Request/AppartmentSaveReq
 import { ModalChangeAppartmentComponent } from '../../../components/modal-change-appartment/modal-change-appartment.component';
 import { CreateAppartmentComponent } from '../../../components/create-appartment/create-appartment.component';
 import { UpdateAppartmentPhotosComponent } from '../../../components/update-appartment-photos/update-appartment-photos.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-appartment-gestion',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatSelectModule, MatOptionModule, MatFormFieldModule, UpdateAppartmentComponent, ModalChangeAppartmentComponent, CreateAppartmentComponent, UpdateAppartmentPhotosComponent],
+  imports: [CommonModule, ReactiveFormsModule, MatSelectModule, MatOptionModule, MatFormFieldModule, UpdateAppartmentComponent, ModalChangeAppartmentComponent, CreateAppartmentComponent, UpdateAppartmentPhotosComponent, RouterModule],
   templateUrl: './appartment-gestion.component.html',
   styleUrl: './appartment-gestion.component.scss'
 })

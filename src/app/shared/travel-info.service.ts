@@ -20,14 +20,14 @@ export class TravelInfoService {
     return this.http.post<TravelInfo>(`${environment.BACKEND_BASE_URL}/travelInfo`, travelInfo)
   }
 
-  update(travelInfo: TravelInfo): Observable<TravelInfo> {
+  update(travelInfo: TravelInfo, oldImgUrl?: string): Observable<TravelInfo> {
     let params = new HttpParams();
     console.log("travelInfo", travelInfo);
     
-    if(travelInfo.contentType === "IMG_URL"){
+    if(oldImgUrl){
       console.log("dans condition");
       
-      const oldImgId = this.someFunctions.convertImgId(this.someFunctions.extractIdFromUrl(travelInfo.content))
+      const oldImgId = this.someFunctions.convertImgId(this.someFunctions.extractIdFromUrl(oldImgUrl))
       params = params.set('oldImgId', oldImgId)
     }
 
@@ -38,23 +38,9 @@ export class TravelInfoService {
   }
 
   updateOrder(appartmentId: number, travelInfos: TravelInfo[]): Observable<TravelInfo[]> {
-    return this.http.put<TravelInfo[]>(`${environment.BACKEND_BASE_URL}/travelInfo/appartment/${appartmentId}`, travelInfos)
+    return this.http.put<TravelInfo[]>(`${environment.BACKEND_BASE_URL}/travelInfo/appartment/${appartmentId}`, {travelInfos: travelInfos})
   }
 
-  // delete(id: number, oldImgUrl?: string): Observable<TravelInfo[]> {
-  //   let params = new HttpParams();
-    
-  //   if(oldImgUrl){
-  //     const oldImgId = this.someFunctions.convertImgId(this.someFunctions.extractIdFromUrl(oldImgUrl))
-  //     params = params.set('oldImgId', oldImgId)
-  //   }
-
-  //   const options = {
-  //     params: params
-  //   }
-
-  //   return this.http.delete<TravelInfo[]>(`${environment.BACKEND_BASE_URL}/travelInfo/${id}`,  options)
-  // }
 
   delete(travelInfoToDelete: TravelInfo): Observable<TravelInfo[]> {
     let params = new HttpParams();
