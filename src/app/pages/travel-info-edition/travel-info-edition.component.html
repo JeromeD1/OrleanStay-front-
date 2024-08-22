@@ -1,3 +1,13 @@
+<section class="header">
+    <h1>Informations voyageur</h1>
+    <h2 *ngIf="appartment()" >Logement : <span>{{appartment()!.description}}</span> </h2>
+    <h2>Renseignez ici les informations nécessaires pour l'arrivée et le séjour des voyageurs.</h2> 
+    <div>
+        <button type="button" (click)="goBackToGestion()">Retour</button>
+        <button type="button" (click)="openOverView()">Voir le rendu</button>
+    </div>
+</section>
+
 <form [formGroup]="travelInfoForm" >
     <ng-container formArrayName="infos">
         <ng-container *ngFor="let infoGroup of infoArray.controls; let i = index">
@@ -43,3 +53,15 @@
     </div>
     <button type="button">Sauvegarder les changements de positions</button>
 </section>
+
+
+@if(showOverview) {
+    <article>
+        <div class="overview-container">
+            <img src="../../../../../../assets/icons/icon-close-window.png" (click)="closeOverView()" alt="close" class="img-close">
+            <app-travel-info-overview
+            [travelInfos]="travelInfos()"
+            ></app-travel-info-overview>
+        </div>
+    </article>
+}

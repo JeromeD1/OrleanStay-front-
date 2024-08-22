@@ -1,0 +1,10 @@
+
+<section>
+    @for (info of travelInfos(); track info.id) {
+        @if(info.contentType === "TEXT") {
+            <p>{{info.content}}</p>
+        } @else {
+            <img [src]="info.content" alt="image">
+        }
+    }
+</section>

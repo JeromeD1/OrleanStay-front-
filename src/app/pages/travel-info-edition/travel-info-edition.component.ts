@@ -5,15 +5,18 @@ import { CommonModule } from '@angular/common';
 import { CloudinaryService } from '../../shared/cloudinary.service';
 import { ScriptService } from '../../shared/script.service';
 import { TravelInfo } from '../../models/TravelInfo.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, take, takeUntil } from 'rxjs';
 import { TravelInfoService } from '../../shared/travel-info.service';
 import { environment } from '../../../environment/environment';
+import { AppartmentsService } from '../../shared/appartments.service';
+import { Appartment } from '../../models/Appartment.model';
+import { TravelInfoOverviewComponent } from '../../components/travel-info-overview/travel-info-overview.component';
 
 @Component({
   selector: 'app-travel-info-edition',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TravelInfoOverviewComponent],
   templateUrl: './travel-info-edition.component.html',
   styleUrl: './travel-info-edition.component.scss'
 })
@@ -21,11 +24,12 @@ export class TravelInfoEditionComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly travelInfoService: TravelInfoService,
+    private readonly appartmentService: AppartmentsService,
     private readonly notificationService: NotificationService, 
     private readonly fb: FormBuilder,
     private readonly cloudinaryService: CloudinaryService,
-    private readonly scriptService: ScriptService,
     private readonly route: ActivatedRoute,
+    private readonly router: Router,
     private readonly cdr: ChangeDetectorRef) {}
 
     /************Cloudinary *******************/
@@ -38,9 +42,12 @@ export class TravelInfoEditionComponent implements OnInit, OnDestroy {
 
     travelInfos = signal<TravelInfo[]>([])
     appartmentId!: number 
+    appartment = signal<Appartment | null>(null)
 
     positionOrderOptions: number[] = []
     destroy$: Subject<void> = new Subject()
+
+    showOverview: boolean = false
 
     travelInfoForm = this.fb.group({
       infos: this.fb.array([])
@@ -58,22 +65,13 @@ export class TravelInfoEditionComponent implements OnInit, OnDestroy {
       const id = this.route.snapshot.paramMap.get("appartmentId")
       if(id){
         this.appartmentId = parseInt(id, 10)
+        this.appartmentService.getAppartmentById(this.appartmentId).pipe(take(1)).subscribe({
+          next: (data) => this.appartment.set(data)
+        })
       }
     }
 
     getTravelInfos(): void {
-      // const travelInfosExample: TravelInfo[] = [
-      //   {id: 1, appartmentId: 1, content: "Ceci est mon premier texte.", contentType: "TEXT", positionOrder: 1},
-      //   {id: 2, appartmentId: 1, content: "Ceci est deuxième premier texte.", contentType: "TEXT", positionOrder: 2},
-      //   {id: 3, appartmentId: 1, content: "https://res.cloudinary.com/dqizqxdgn/image/upload/t_horizontal-w1000/v1720446528/image10_xiin1g.jpg", contentType: "IMG_URL", positionOrder: 3},
-      //   {id: 4, appartmentId: 1,content: "Ceci est mon 3eme texte.", contentType: "TEXT", positionOrder: 4},
-      //   {id: 5, appartmentId: 1,content: "https://res.cloudinary.com/dqizqxdgn/image/upload/t_horizontal-w1000/v1720446528/image10_xiin1g.jpg",contentType: "IMG_URL", positionOrder: 5},
-      //   {id: 6, appartmentId: 1, content: "https://res.cloudinary.com/dqizqxdgn/image/upload/t_horizontal-w1000/v1720446433/image8_pgk4ak.jpg", contentType: "IMG_URL", positionOrder: 6},
-      //   {id: 7, appartmentId: 1, content: "Ceci est mon 4eme texte.", contentType: "TEXT", positionOrder: 7}
-      // ]
-
-      // //TODO: appeler le service
-      // this.travelInfos.set(travelInfosExample)
       this.travelInfoService.getByAppartmentId(this.appartmentId).pipe(takeUntil(this.destroy$)).subscribe({
         next:(data) => {
           this.travelInfos.set(data)
@@ -329,6 +327,9 @@ export class TravelInfoEditionComponent implements OnInit, OnDestroy {
       // Remplacez les contrôles dans le FormArray par les contrôles triés
       this.infoArray.clear();
       sortedControls.forEach(control => this.infoArray.push(control));
+
+      //on met également à jour travelInfos
+      this.travelInfos.set(this.infoArray.getRawValue())
     }
 
     saveUpdatedOrder(): void {
@@ -342,9 +343,22 @@ export class TravelInfoEditionComponent implements OnInit, OnDestroy {
       )
     }
 
+/************* Boutons du header ************************* */
+    goBackToGestion(): void {
+      this.router.navigate(['/admin/appartGestion'])
+    }
+
+    openOverView(): void {
+      this.showOverview = true
+    }
+
+    closeOverView(): void {
+      this.showOverview = false
+    }
 
 
-/************************************** */
+    /***************** *************************/
+
     get infoArray():FormArray {
       return this.travelInfoForm.controls['infos'] as FormArray
     }
