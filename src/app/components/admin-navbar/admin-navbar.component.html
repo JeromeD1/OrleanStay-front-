@@ -2,7 +2,7 @@
     <div class="navPage">
         <a [routerLink]="['/admin/acceptReservation']" (click)="setCurrentPageToReservationRequest()" [class.highlighted]="currentPage() === 'reservationRequest'"><p>Demandes de réservation</p></a>
         <a [routerLink]="['/admin/addReservation']" (click)="setCurrentPageToReservationRegistoring()" [class.highlighted]="currentPage() === 'reservationRegistoring'"><p>Enregistrement de réservations</p></a>
-        <a [routerLink]="['/admin/appartGestion']" (click)="setCurrentPageToGlobalGestion()" [class.highlighted]="currentPage() === 'globalGestion'"><p>Gestion globale</p></a>
+        <a [routerLink]="['/admin/appartGestion']" (click)="setCurrentPageToGlobalGestion()" [class.highlighted]="currentPage() === 'globalGestion'"><p>Gestion des appartements</p></a>
         <a class="leaveAdmin" (click)="logout()"><p>Quitter le mode admin</p></a>
     </div>
 
@@ -17,7 +17,7 @@
     <div class="navBurger" *ngIf="showMenuBurger">
         <a [routerLink]="['/admin/acceptReservation']" (click)="setShowMenuBurger()"><p>Demandes de réservation</p></a>
         <a [routerLink]="['/admin/addReservation']" (click)="setShowMenuBurger()"><p>Enregistrement de réservations</p></a>
-        <a [routerLink]="['/admin/appartGestion']" (click)="setShowMenuBurger()"><p>Gestion globale</p></a>
+        <a [routerLink]="['/admin/appartGestion']" (click)="setShowMenuBurger()"><p>Gestion des appartements</p></a>
         <a [routerLink]="['/']" class="leaveAdmin" (click)="logout()"><p>Quitter le mode admin</p></a>
     </div>
 
