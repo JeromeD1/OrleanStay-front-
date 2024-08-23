@@ -37,4 +37,12 @@ export class UtilisateurService {
       })
     )
   }
+
+  updateRole(userId: number, newRole: string): Observable<User> {
+    return this.http.put<User>(`${environment.BACKEND_BASE_URL}/utilisateurs/${userId}/role`, {newRole}).pipe(
+      tap((data) => {
+        this.appstore.updateOneUserInAllUsers(data)
+      })
+    )
+  }
 }

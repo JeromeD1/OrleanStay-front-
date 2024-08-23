@@ -20,7 +20,7 @@ export class AdminNavbarComponent implements OnDestroy{
 
   destroy$: Subject<void> = new Subject()
 
-  currentPage = signal<"reservationRequest" | "reservationRegistoring" | "globalGestion">("reservationRequest")
+  currentPage = signal<"reservationRequest" | "reservationRegistoring" | "globalGestion" | "gestionUtilisateurs">("reservationRequest")
 
   setShowMenuBurger(): void {
     this.showMenuBurger = !this.showMenuBurger
@@ -53,6 +53,10 @@ export class AdminNavbarComponent implements OnDestroy{
 
   setCurrentPageToGlobalGestion(): void {
     this.currentPage.set("globalGestion")
+  }
+
+  setCurrentPageToGestionUtilisateurs(): void {
+    this.currentPage.set("gestionUtilisateurs")
   }
 
   ngOnDestroy(): void {

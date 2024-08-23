@@ -1,0 +1,68 @@
+@import "../../../styles/mixins";
+
+main {
+    @include flex-column-start-start;
+    gap: 24px;
+    width: 1700px;
+    max-width: 95vw;
+    margin: auto;
+    margin-top: 48px;
+
+    .div-in-table {
+        margin-top: 8px;
+    }
+
+    select {
+        width: 130px;
+        border-radius: 8px;
+        padding: 8px;
+    }
+
+    .mat-column-role {
+        max-width: 150px;
+    }
+
+    .mat-column-phone {
+        max-width: 150px;
+        border-right: 1px solid var(--colorMid);
+    }
+
+    .mat-column-username {
+        max-width: 220px;
+        border-right: 1px solid var(--colorMid);
+    }
+
+    .mat-column-creationDate {
+        max-width: 150px;
+        border-right: 1px solid var(--colorMid);
+    }
+
+    .mat-column-address {
+        border-right: 1px solid var(--colorMid);
+    }
+
+    .mat-column-email {
+        border-right: 1px solid var(--colorMid);
+    }
+
+    .header-cell {
+        @include flex-column-center-center;
+        border-bottom: 2px solid var(--colorDark);
+
+        p{
+            margin: 0;
+        }
+    }
+
+    .cell-center {
+        @include flex-column-center-center;
+        p{
+            margin: 0;
+        }
+    }
+
+    .userTable {
+        border: 1px solid var(--colorMid);
+    }
+
+}
