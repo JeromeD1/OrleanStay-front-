@@ -1,1 +1,171 @@
-<p>add-reservation works!</p>
+<main>
+    <form [formGroup]="formResa" (ngSubmit)="saveReservation()">
+        <h1>Enregistrement d'une réservation</h1>
+
+        <fieldset>
+
+            <div class="flex-input">
+                <div class="label-error">
+                    <label for="logement">Logement :</label>
+                    @if(appartmentIdError) {
+                        <span class="large-screen">{{appartmentIdError}} </span>
+                    }
+                </div>
+                <select formControlName="appartmentId" id="logement" placeholder="Choisissez un logement" required>
+                    @for (appart of ownerAppartments(); track appart.id) {
+                        <option [value]="appart.id" >{{appart.description}} </option>
+                    }
+                </select>
+                @if(appartmentIdError) {
+                    <span class="small-screen">{{appartmentIdError}} </span>
+                }
+            </div>
+
+
+            <div class="flex-input">
+                <p>Date d'arrivée : {{!showPickerarrival ? (formResa.get("checkinDate")?.value | date: 'dd/MM/yyyy') : null}} </p>
+                <button type="button" *ngIf="!showPickerarrival" (click)="changeShowPickerarrival()">Modifier</button>
+                <app-date-picker *ngIf="showPickerarrival"
+                [initDateValue]="formResa.getRawValue().checkinDate"
+                [importedCheckoutDate]="formResa.getRawValue().checkoutDate"
+                [importedReservations]="selectedAppartment()?.reservations!"
+                [dateType]="'checkin'"
+                (dateEmitter)="handleChangeCheckinOrCheckout($event)"
+                (closeEmitter)="closeAllPicker()"
+                ></app-date-picker>
+            </div>
+            @if(checkinDateError) {
+                <span class="small-screen">{{checkinDateError}} </span>
+            }
+
+            <div class="flex-input">
+                <p>Date de départ : {{!showPickerDeparture ? (formResa.get("checkoutDate")?.value | date: 'dd/MM/yyyy') : null}} </p>
+                <button type="button" *ngIf="!showPickerDeparture" (click)="changeShowPickerDeparture()">Modifier</button>
+                <app-date-picker *ngIf="showPickerDeparture"
+                [initDateValue]="formResa.getRawValue().checkoutDate"
+                [importedCheckinDate]="formResa.getRawValue().checkinDate"
+                [importedReservations]="selectedAppartment()?.reservations!"
+                [dateType]="'checkout'"
+                (dateEmitter)="handleChangeCheckinOrCheckout($event)"
+                (closeEmitter)="closeAllPicker()"
+                ></app-date-picker>
+            </div>
+            @if(checkoutDateError) {
+                <span class="small-screen">{{checkoutDateError}} </span>
+            }
+
+
+        </fieldset>
+
+        <fieldset>
+            <div class="flex-input">
+                <div class="label-error">
+                    <label for="firstname">Prénom :</label>
+                    @if(firstnameError) {
+                        <span class="large-screen">{{firstnameError}} </span>
+                    }
+                </div>
+                <input type="text" formControlName="firstname" id="firstname" placeholder="Saisissez votre prénom" required>
+                @if(firstnameError) {
+                    <span class="small-screen">{{firstnameError}} </span>
+                }
+            </div>
+    
+            <div class="flex-input">
+                <div class="label-error">
+                    <label for="lastname">Nom :</label>
+                    @if(lastnameError) {
+                        <span class="large-screen">{{lastnameError}} </span>
+                    }
+                </div>
+                <input type="text" formControlName="lastname" id="lastname" placeholder="Saisissez votre nom" required>
+                @if(lastnameError) {
+                    <span class="small-screen">{{lastnameError}} </span>
+                }
+            </div>
+    
+            <div class="flex-input">
+                <div class="label-error">
+                    <label for="address">Adresse :</label>
+                    @if(addressError) {
+                        <span class="large-screen">{{addressError}} </span>
+                    }
+                </div>
+                <input type="text" formControlName="address" id="address" placeholder="Saisissez votre adresse" required>
+                @if(addressError) {
+                    <span class="small-screen">{{addressError}} </span>
+                }
+            </div>
+    
+            <div class="flex-input">
+                <div class="label-error">
+                    <label for="zipcode">Code postal :</label>
+                    @if(zipcodeError) {
+                        <span class="large-screen">{{zipcodeError}} </span>
+                    }
+                </div>
+                <input type="text" formControlName="zipcode" id="zipcode" placeholder="ex : 27 500" required>
+                @if(zipcodeError) {
+                    <span class="small-screen">{{zipcodeError}} </span>
+                }
+            </div>
+    
+            <div class="flex-input">
+                <div class="label-error">
+                    <label for="city">Ville :</label>
+                    @if(cityError) {
+                        <span class="large-screen">{{cityError}} </span>
+                    }
+                </div>
+                <input type="text" formControlName="city" id="city" placeholder="ex : Paris" required>
+                @if(cityError) {
+                    <span class="small-screen">{{cityError}} </span>
+                }
+            </div>
+    
+            <div class="flex-input">
+                <div class="label-error">
+                    <label for="country">Pays :</label>
+                    @if(countryError) {
+                        <span class="large-screen">{{countryError}} </span>
+                    }
+                </div>
+                <input type="text" formControlName="country" id="country" placeholder="Ex : France" required>
+                @if(countryError) {
+                    <span class="small-screen">{{countryError}} </span>
+                }
+            </div>
+    
+            <div class="flex-input">
+                <div class="label-error">
+                    <label for="email">Email :</label>
+                    @if(emailError) {
+                        <span class="large-screen">{{emailError}} </span>
+                    }
+                </div>
+                <input type="email" formControlName="email" id="email" placeholder="ex : john.doe@gmail.com" required>
+                @if(emailError) {
+                    <span class="small-screen">{{emailError}} </span>
+                }
+            </div>
+    
+            <div class="flex-input">
+                <div class="label-error">
+                    <label for="phone">Téléphone :</label>
+                    @if(phoneError) {
+                        <span class="large-screen">{{phoneError}} </span>
+                    }
+                </div>
+                <input type="text" formControlName="phone" id="phone" placeholder="ex : +33 6 75 75 75 75" required>
+                @if(phoneError) {
+                    <span class="small-screen">{{phoneError}} </span>
+                }
+            </div>
+        </fieldset>
+
+        <div class="div-button">
+            <button type="button" >Annuler</button>
+            <button type="submit">Se connecter</button>
+        </div>
+    </form>
+</main>
