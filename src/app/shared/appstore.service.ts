@@ -508,6 +508,11 @@ export class AppstoreService {
       this._allUsers.set(users)
     }
 
+    updateOneUserInAllUsers(user: User): void {
+      this._allUsers.update(value => value.map(item => (
+        item.id === user.id ? {...user} : item
+      )))
+    }
 
     /****Reset des signaux réservés à la session lors du logout ******/
     resetAutenticatedSignals(): void {

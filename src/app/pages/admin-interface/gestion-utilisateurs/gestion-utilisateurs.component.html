@@ -1,0 +1,52 @@
+<main>
+    <h1>Gestion du role des utilisateurs ({{sortedUsers().length}}) </h1>
+    <mat-table [dataSource]="sortedUsers()" class="userTable">
+        <ng-container matColumnDef="username">
+            <mat-header-cell *matHeaderCellDef class="header-cell"> <p>Nom - Prénom</p></mat-header-cell>
+            <mat-cell *matCellDef="let row" class="cell-center"> <p>{{row.personalInformations.lastname}} {{row.personalInformations.firstname}}</p></mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="creationDate">
+            <mat-header-cell *matHeaderCellDef class="header-cell"> <p>Inscrit depuis</p></mat-header-cell>
+            <mat-cell *matCellDef="let row" class="cell-center"> <p>{{row.creationDate | date: 'dd/MM/yyyy'}}</p></mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="address">
+            <mat-header-cell *matHeaderCellDef class="header-cell"> <p>Adresse</p></mat-header-cell>
+            <mat-cell *matCellDef="let row"> 
+                <div class="div-in-table">
+                    <p>{{row.personalInformations.address}}</p>
+                    <p>{{row.personalInformations.zipcode}} {{row.personalInformations.city}}</p>
+                    <p>{{row.personalInformations.country}}</p>
+                </div>  
+             </mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="email">
+            <mat-header-cell *matHeaderCellDef class="header-cell"> <p>Email</p></mat-header-cell>
+            <mat-cell *matCellDef="let row" class="cell-center"> <p>{{row.personalInformations.email}}</p></mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="phone">
+            <mat-header-cell *matHeaderCellDef class="header-cell"> <p>Téléphone</p></mat-header-cell>
+            <mat-cell *matCellDef="let row" class="cell-center"><p>{{row.personalInformations.phone}}</p></mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="role">
+            <mat-header-cell *matHeaderCellDef class="header-cell"><p>Role</p></mat-header-cell>
+            <mat-cell *matCellDef="let row" class="cell-center"> 
+                @if(row.personalInformations.email === superAdmin) {
+                    <p>{{row.role}}</p>
+                } @else {
+                    <select [ngModel]="row.role" (ngModelChange)="changeRole(row, $event)" [attr.id]="'role-select-' + row.id">
+                        <option *ngFor="let option of roleOptions" [value]="option">{{option}} </option>
+                    </select>
+                }
+            </mat-cell>
+          </ng-container>
+    
+          <!-- Header and Row Declarations -->
+      <mat-header-row *matHeaderRowDef="['username', 'creationDate','address', 'email', 'phone', 'role']"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: ['username', 'creationDate', 'address', 'email', 'phone', 'role']"></mat-row>
+    </mat-table>    
+</main>

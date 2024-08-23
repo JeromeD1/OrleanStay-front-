@@ -93,7 +93,6 @@ export class TravelInfoEditionComponent implements OnInit, OnDestroy {
     initForm(): void {
       this.infoArray.clear()
       this.initPositionOrder()
-      console.log("initialisation", this.travelInfos());
       
       this.travelInfos().forEach(info => {
         this.addNewInfoInForm(info)
