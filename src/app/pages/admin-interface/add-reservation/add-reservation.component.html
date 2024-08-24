@@ -24,7 +24,7 @@
 
             <div class="flex-input">
                 <p>Date d'arrivée : {{!showPickerarrival ? (formResa.get("checkinDate")?.value | date: 'dd/MM/yyyy') : null}} </p>
-                <button type="button" *ngIf="!showPickerarrival" (click)="changeShowPickerarrival()">Modifier</button>
+                <button type="button" *ngIf="!showPickerarrival" (click)="changeShowPickerarrival()" [disabled]="!selectedAppartment()" >Modifier</button>
                 <app-date-picker *ngIf="showPickerarrival"
                 [initDateValue]="formResa.getRawValue().checkinDate"
                 [importedCheckoutDate]="formResa.getRawValue().checkoutDate"
@@ -40,7 +40,7 @@
 
             <div class="flex-input">
                 <p>Date de départ : {{!showPickerDeparture ? (formResa.get("checkoutDate")?.value | date: 'dd/MM/yyyy') : null}} </p>
-                <button type="button" *ngIf="!showPickerDeparture" (click)="changeShowPickerDeparture()">Modifier</button>
+                <button type="button" *ngIf="!showPickerDeparture" (click)="changeShowPickerDeparture()" [disabled]="!selectedAppartment()">Modifier</button>
                 <app-date-picker *ngIf="showPickerDeparture"
                 [initDateValue]="formResa.getRawValue().checkoutDate"
                 [importedCheckinDate]="formResa.getRawValue().checkinDate"
@@ -54,6 +54,57 @@
                 <span class="small-screen">{{checkoutDateError}} </span>
             }
 
+            <div class="flex-input">
+                <div class="label-error">
+                    <label for="nbAdult">Nombre d'adultes :</label>
+                    @if(nbAdultError) {
+                        <span class="large-screen">{{nbAdultError}} </span>
+                    }
+                </div>
+                <input type="number" formControlName="nbAdult" id="nbAdult" min="0" required>
+                @if(nbAdultError) {
+                    <span class="small-screen">{{nbAdultError}} </span>
+                }
+            </div>
+
+            <div class="flex-input">
+                <div class="label-error">
+                    <label for="nbChild">Nombre d'enfants :</label>
+                    @if(nbChildError) {
+                        <span class="large-screen">{{nbChildError}} </span>
+                    }
+                </div>
+                <input type="number" formControlName="nbChild" id="nbChild" min="0" required>
+                @if(nbChildError) {
+                    <span class="small-screen">{{nbChildError}} </span>
+                }
+            </div>
+
+            <div class="flex-input">
+                <div class="label-error">
+                    <label for="nbBaby">Nombre de bébés (- 2 ans) :</label>
+                    @if(nbBabyError) {
+                        <span class="large-screen">{{nbBabyError}} </span>
+                    }
+                </div>
+                <input type="number" formControlName="nbBaby" id="nbBaby" min="0" required>
+                @if(nbBabyError) {
+                    <span class="small-screen">{{nbBabyError}} </span>
+                }
+            </div>
+
+            <div class="flex-input">
+                <div class="label-error">
+                    <label for="reservationPrice">Cout de la réservation :</label>
+                    @if(reservationPriceError) {
+                        <span class="large-screen">{{reservationPriceError}} </span>
+                    }
+                </div>
+                <input type="number" formControlName="reservationPrice" id="reservationPrice" min="0" required>
+                @if(reservationPriceError) {
+                    <span class="small-screen">{{reservationPriceError}} </span>
+                }
+            </div>
 
         </fieldset>
 

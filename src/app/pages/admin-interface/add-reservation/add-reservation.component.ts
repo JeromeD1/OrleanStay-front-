@@ -47,6 +47,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     nbAdult: [0, Validators.required],
     nbChild: [0, Validators.required],
     nbBaby: [0, Validators.required],
+    accepted: [true],
     reservationPrice: [0, Validators.required],
     platform: ["Leboncoin", Validators.required],
     enterTravelerInfo: [false, Validators.required],
@@ -116,12 +117,14 @@ initEvents(): void {
   this.formResa.get("nbAdult")?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
     if(value && value > 0){
       this.nbAdultError = null
+      this.calculateReservationPrice()
     }
   })
 
   this.formResa.get("nbChild")?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
     if(value && value >= 0){
       this.nbChildError = null
+      this.calculateReservationPrice()
     }
   })
 
@@ -390,6 +393,7 @@ saveReservation(): void {
       nbChild: this.formResa.getRawValue().nbChild!,
       nbBaby: this.formResa.getRawValue().nbBaby!,
       reservationPrice: this.formResa.getRawValue().reservationPrice!,
+      accepted: this.formResa.getRawValue().accepted!
     }
 
     console.log("formData", formData);
@@ -426,12 +430,17 @@ handleChangeCheckinOrCheckout(event: DateFromPicker): void {
     this.changeShowPickerDeparture();
   }
 
-  if(this.formResa.getRawValue().checkinDate && this.formResa.getRawValue().checkoutDate && this.formResa.getRawValue().nbAdult && this.formResa.getRawValue().nbChild){ 
+  this.calculateReservationPrice()
+  
+
+}
+
+calculateReservationPrice(): void {
+  if(this.formResa.getRawValue().checkinDate && this.formResa.getRawValue().checkoutDate && this.formResa.getRawValue().nbAdult){ 
     this.formResa.patchValue({
       reservationPrice: this.selectedAppartment()?.calculateReservationPrice(this.formResa.getRawValue().nbAdult!, this.formResa.getRawValue().nbChild!, this.formResa.getRawValue().checkinDate!, this.formResa.getRawValue().checkoutDate!)
     })   
   }
-
 }
 
 
