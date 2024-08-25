@@ -6,16 +6,17 @@ import { AppstoreService } from '../../../shared/appstore.service';
 import { Appartment } from '../../../models/Appartment.model';
 import { User } from '../../../models/User.model';
 import { Router } from '@angular/router';
-import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ReservationRequest } from '../../../models/Request/ReservationRequest.model';
 import { CommonModule } from '@angular/common';
 import { DatePickerComponent } from '../../../components/date-picker/date-picker.component';
 import { DateFromPicker } from '../../../models/DateFromPicker.model';
+import { ReactiveInputComponent } from '../../../shared/library/reactive-input/reactive-input.component';
 
 @Component({
   selector: 'app-add-reservation',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DatePickerComponent],
+  imports: [CommonModule, ReactiveFormsModule, DatePickerComponent, ReactiveInputComponent],
   templateUrl: './add-reservation.component.html',
   styleUrl: './add-reservation.component.scss'
 })
@@ -39,27 +40,28 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     private readonly router: Router, 
     private readonly fb: FormBuilder ){}
 
+    formResa!: FormGroup
 
-  formResa = this.fb.group({
-    appartmentId: [0, Validators.required],
-    checkinDate: new FormControl<Date | null>(null, Validators.required),
-    checkoutDate: new FormControl<Date | null>(null, Validators.required),
-    nbAdult: [0, Validators.required],
-    nbChild: [0, Validators.required],
-    nbBaby: [0, Validators.required],
-    accepted: [true],
-    reservationPrice: [0, Validators.required],
-    platform: ["Leboncoin", Validators.required],
-    enterTravelerInfo: [false, Validators.required],
-    firstname: ["", Validators.required],
-    lastname: ["", Validators.required],
-    email: ["", [Validators.required, Validators.email]],
-    phone: ["", Validators.required],
-    address: ["", Validators.required],
-    zipcode: ["", Validators.required],
-    city: ["", Validators.required],
-    country: ["", Validators.required],
-  })
+  // formResa = this.fb.group({
+  //   appartmentId: [0, Validators.required],
+  //   checkinDate: new FormControl<Date | null>(null, Validators.required),
+  //   checkoutDate: new FormControl<Date | null>(null, Validators.required),
+  //   nbAdult: [0, Validators.required],
+  //   nbChild: [0, Validators.required],
+  //   nbBaby: [0, Validators.required],
+  //   accepted: [true],
+  //   reservationPrice: [0, Validators.required],
+  //   platform: ["Leboncoin", Validators.required],
+  //   enterTravelerInfo: [false, Validators.required],
+  //   firstname: ["", Validators.required],
+  //   lastname: ["", Validators.required],
+  //   email: ["", [Validators.required, Validators.email]],
+  //   phone: ["", Validators.required],
+  //   address: ["", Validators.required],
+  //   zipcode: ["", Validators.required],
+  //   city: ["", Validators.required],
+  //   country: ["", Validators.required],
+  // })
 
   appartmentIdError: string | null = null
   checkinDateError: string | null = null
@@ -81,6 +83,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
 
 ngOnInit(): void {
     this.getOwnerAppartments()
+    this.initForm()
     this.initEvents()
 }
 
@@ -93,6 +96,28 @@ getOwnerAppartments(): void {
   }
 }
 
+initForm():void {
+  this.formResa = this.fb.group({
+    appartmentId: [0, Validators.required],
+    checkinDate: new FormControl<Date | null>(null, Validators.required),
+    checkoutDate: new FormControl<Date | null>(null, Validators.required),
+    nbAdult: [0, Validators.required],
+    nbChild: [0, Validators.required],
+    nbBaby: [0, Validators.required],
+    accepted: [true],
+    reservationPrice: [0, Validators.required],
+    platform: ["Leboncoin", Validators.required],
+    enterTravelerInfo: [false, Validators.required],
+    firstname: ["", Validators.required],
+    lastname: ["", Validators.required],
+    email: ["", [Validators.required, Validators.email]],
+    phone: ["", Validators.required],
+    address: ["", Validators.required],
+    zipcode: ["", Validators.required],
+    city: ["", Validators.required],
+    country: ["", Validators.required],
+  })
+}
 
 initEvents(): void {
   this.formResa.get("appartmentId")?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
