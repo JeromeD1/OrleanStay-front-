@@ -1,0 +1,32 @@
+@import "../../../styles/mixins";
+main{
+    @include flex-column-center-center;
+
+    form {
+        @include flex-column-center-center;
+        width: 1000px;
+        max-width: 95vw;
+        gap: 24px;
+
+        button {
+            @include button-colorBrand;
+        }
+
+        fieldset {
+            border-radius: 24px;
+            padding: 8px;
+            background-color: var(--colorLight);
+            width: 100%;
+
+        }
+
+        .div-button {
+            @include flex-row-between-center;
+            gap: 48px;
+            max-width: 400px;
+            button {
+                width: 150px;
+            }
+        }
+    }
+}

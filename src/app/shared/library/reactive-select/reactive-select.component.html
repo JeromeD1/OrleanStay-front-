@@ -5,15 +5,19 @@
             <span class="large-screen">{{error}} </span>
         }
     </div>
-    <input 
-        [type]="type" 
+    <select  
         [id]="label" 
-        [placeholder]="placeholder" 
         (input)="getChange($event)"
         [disabled]="disabled"
         [value]="control.value"
-        [checked]="type === 'checkbox' ? control.value : null"
         required>
+        @if(placeholder){
+            <option [value]="null" hidden selected>{{ placeholder }}</option>
+        }
+        @for (option of options; track $index) {
+            <option [value]="option.optionValue" >{{option.optionLabel}} </option>
+        }
+    </select>
     @if(error) {
         <span class="small-screen">{{error}} </span>
     }

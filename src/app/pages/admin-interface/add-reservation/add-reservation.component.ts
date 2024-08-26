@@ -12,11 +12,12 @@ import { CommonModule } from '@angular/common';
 import { DatePickerComponent } from '../../../components/date-picker/date-picker.component';
 import { DateFromPicker } from '../../../models/DateFromPicker.model';
 import { ReactiveInputComponent } from '../../../shared/library/reactive-input/reactive-input.component';
+import { ReactiveSelectComponent } from '../../../shared/library/reactive-select/reactive-select.component';
 
 @Component({
   selector: 'app-add-reservation',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DatePickerComponent, ReactiveInputComponent],
+  imports: [CommonModule, ReactiveFormsModule, DatePickerComponent, ReactiveInputComponent, ReactiveSelectComponent],
   templateUrl: './add-reservation.component.html',
   styleUrl: './add-reservation.component.scss'
 })
@@ -27,7 +28,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   selectedAppartment: WritableSignal<Appartment | null> = signal(null)
   currentUser: User | null = this.appstore.getCurrentUser()()
 
-  platformOptions: string[] = ["Leboncoin", "Airbnb", "Booking"]
+  platformOptions: {platform: string}[] = [{platform: "Leboncoin"}, {platform: "Airbnb"}, {platform: "Booking"}]
 
   destroy$: Subject<void> = new Subject()
 
@@ -41,27 +42,6 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     private readonly fb: FormBuilder ){}
 
     formResa!: FormGroup
-
-  // formResa = this.fb.group({
-  //   appartmentId: [0, Validators.required],
-  //   checkinDate: new FormControl<Date | null>(null, Validators.required),
-  //   checkoutDate: new FormControl<Date | null>(null, Validators.required),
-  //   nbAdult: [0, Validators.required],
-  //   nbChild: [0, Validators.required],
-  //   nbBaby: [0, Validators.required],
-  //   accepted: [true],
-  //   reservationPrice: [0, Validators.required],
-  //   platform: ["Leboncoin", Validators.required],
-  //   enterTravelerInfo: [false, Validators.required],
-  //   firstname: ["", Validators.required],
-  //   lastname: ["", Validators.required],
-  //   email: ["", [Validators.required, Validators.email]],
-  //   phone: ["", Validators.required],
-  //   address: ["", Validators.required],
-  //   zipcode: ["", Validators.required],
-  //   city: ["", Validators.required],
-  //   country: ["", Validators.required],
-  // })
 
   appartmentIdError: string | null = null
   checkinDateError: string | null = null
@@ -98,7 +78,7 @@ getOwnerAppartments(): void {
 
 initForm():void {
   this.formResa = this.fb.group({
-    appartmentId: [0, Validators.required],
+    appartmentId: new FormControl<number | null>(null, Validators.required),
     checkinDate: new FormControl<Date | null>(null, Validators.required),
     checkoutDate: new FormControl<Date | null>(null, Validators.required),
     nbAdult: [0, Validators.required],
@@ -163,6 +143,11 @@ initEvents(): void {
     if(value && value >= 0){
       this.reservationPriceError = null
     }
+  })
+
+  this.formResa.get("accepted")?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+    console.log(value);
+    
   })
 
   this.formResa.get("platform")?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -395,6 +380,28 @@ checkForm(): boolean {
   return isValid
 }
 
+resetForm():void {
+  this.formResa.patchValue({
+    appartmentId: null,
+    checkinDate: null,
+    checkoutDate: null,
+    nbAdult: 0,
+    nbChild: 0,
+    nbBaby: 0,
+    accepted: true,
+    reservationPrice: 0,
+    platform: "Leboncoin",
+    enterTravelerInfo: false,
+    firstname: "",
+    lastname: "",
+    email: "",
+    phone: "",
+    address: "",
+    zipcode: "",
+    city: "",
+    country: "",
+  })
+}
 
 saveReservation(): void {
   if(this.checkForm()){

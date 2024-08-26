@@ -13,14 +13,9 @@ export class ReactiveInputComponent implements ControlValueAccessor  {
   @Input() label: string = ""
   @Input() placeholder: string = ""
   @Input() type: string = "text"
-  // @Output() valueChange = new EventEmitter<string>();
 
     value!: any;
     disabled = false;
-    // error: string | null = null;
-    // placeholder: string = ""
-    // label: string = ""
-    // type: string = "text"
     onChange: any = (value: any) => {};
     onTouched: any = () => {};
 	
@@ -35,7 +30,8 @@ export class ReactiveInputComponent implements ControlValueAccessor  {
      }
      
      getChange(event: any) {
-      this.onChange(event.target.value);
+      const value = this.type === 'checkbox' ? event.target.checked : event.target.value;
+      this.onChange(value);
       this.onTouched();
      }
 

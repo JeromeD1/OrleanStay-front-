@@ -4,22 +4,15 @@
 
         <fieldset>
 
-            <div class="flex-input">
-                <div class="label-error">
-                    <label for="logement">Logement :</label>
-                    @if(appartmentIdError) {
-                        <span class="large-screen">{{appartmentIdError}} </span>
-                    }
-                </div>
-                <select formControlName="appartmentId" id="logement" placeholder="Choisissez un logement" required>
-                    @for (appart of ownerAppartments(); track appart.id) {
-                        <option [value]="appart.id" >{{appart.description}} </option>
-                    }
-                </select>
-                @if(appartmentIdError) {
-                    <span class="small-screen">{{appartmentIdError}} </span>
-                }
-            </div>
+            <app-reactive-select
+            formControlName="appartmentId"
+            [options]="ownerAppartments()" 
+            [optionLabelParts]="['description']" 
+            [optionValue]="'id'" 
+            [error]="appartmentIdError"
+            label="Logement" 
+            placeholder="Choisissez un logement"
+            ></app-reactive-select>
 
 
             <div class="flex-input">
@@ -63,29 +56,47 @@
 
             <app-reactive-input [error]="reservationPriceError" formControlName="reservationPrice" label="Cout de la réservation" type="number"></app-reactive-input>
 
-        </fieldset>
+            <app-reactive-input type="checkbox" [error]="null" formControlName="accepted" label="Réservation acceptée"></app-reactive-input>
 
+
+        </fieldset>
+        
         <fieldset>
-            <app-reactive-input [error]="firstnameError" formControlName="firstname" label="Prénom" placeholder="Saisissez votre prénom"></app-reactive-input>
-
-            <app-reactive-input [error]="lastnameError" formControlName="lastname" label="Nom" placeholder="Saisissez votre nom"></app-reactive-input>
-
-            <app-reactive-input [error]="addressError" formControlName="address" label="Numéro et rue" placeholder="Saisissez votre adresse"></app-reactive-input>
-
-            <app-reactive-input [error]="zipcodeError" formControlName="zipcode" label="Code postal" placeholder="Ex : 27 100"></app-reactive-input>
-
-            <app-reactive-input [error]="cityError" formControlName="city" label="Ville" placeholder="Ex : Paris"></app-reactive-input>
-
-            <app-reactive-input [error]="countryError" formControlName="country" label="Pays" placeholder="Ex : France"></app-reactive-input>
-
-            <app-reactive-input [error]="emailError" formControlName="email" label="Email" placeholder="Ex : john.doe@gmail.com"></app-reactive-input>
-
-            <app-reactive-input [error]="phoneError" formControlName="phone" label="Téléphone" placeholder="Ex : +33 6 75 75 75 75"></app-reactive-input>
+            <app-reactive-select
+                formControlName="platform"
+                [options]="platformOptions" 
+                [optionLabelParts]="['platform']" 
+                [optionValue]="'platform'" 
+                [error]="appartmentIdError"
+                label="Plateforme de réservation" 
+                ></app-reactive-select>
+    
+            <app-reactive-input type="checkbox" [error]="null" formControlName="enterTravelerInfo" label="Entrer les informations voyageur"></app-reactive-input>
         </fieldset>
+
+        @if(formResa.getRawValue().enterTravelerInfo){
+            <fieldset>
+                <app-reactive-input [error]="firstnameError" formControlName="firstname" label="Prénom" placeholder="Saisissez votre prénom"></app-reactive-input>
+    
+                <app-reactive-input [error]="lastnameError" formControlName="lastname" label="Nom" placeholder="Saisissez votre nom"></app-reactive-input>
+    
+                <app-reactive-input [error]="addressError" formControlName="address" label="Numéro et rue" placeholder="Saisissez votre adresse"></app-reactive-input>
+    
+                <app-reactive-input [error]="zipcodeError" formControlName="zipcode" label="Code postal" placeholder="Ex : 27 100"></app-reactive-input>
+    
+                <app-reactive-input [error]="cityError" formControlName="city" label="Ville" placeholder="Ex : Paris"></app-reactive-input>
+    
+                <app-reactive-input [error]="countryError" formControlName="country" label="Pays" placeholder="Ex : France"></app-reactive-input>
+    
+                <app-reactive-input [error]="emailError" formControlName="email" label="Email" placeholder="Ex : john.doe@gmail.com"></app-reactive-input>
+    
+                <app-reactive-input [error]="phoneError" formControlName="phone" label="Téléphone" placeholder="Ex : +33 6 75 75 75 75"></app-reactive-input>
+            </fieldset>
+        }
 
         <div class="div-button">
-            <button type="button" >Annuler</button>
-            <button type="submit">Se connecter</button>
+            <button type="button" (click)="resetForm()">Effacer</button>
+            <button type="submit">Sauvegarder</button>
         </div>
     </form>
 </main>
