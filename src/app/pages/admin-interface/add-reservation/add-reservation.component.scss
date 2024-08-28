@@ -18,6 +18,16 @@ main{
             background-color: var(--colorLight);
             width: 100%;
 
+            .bold {
+                font-weight: 700;
+                padding-left: 8px;
+            }
+
+            h2 {
+                font-weight: 600;
+                padding-left: 8px;
+            }
+
         }
 
         .div-button {

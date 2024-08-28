@@ -61,6 +61,14 @@ export class SomeFunctionsService {
     return arriveOuDepart === "arrive" ? "Choisissez une date d'arrivée" : "Choisissez une date de départ";
   }
 
+  convertToUTCDate = (time: Date): Date => {
+    const day = time.getDate()
+    const month = time.getMonth()
+    const year = time.getFullYear()
+
+    const UTCTime = new Date(Date.UTC(year,month,day))
+    return new Date(UTCTime)
+  }
 
   getInfoDiscountById(id: number, discounts: Discount[]): string | null {
     const discount: Discount | undefined = discounts.find(discount => discount.id === id)

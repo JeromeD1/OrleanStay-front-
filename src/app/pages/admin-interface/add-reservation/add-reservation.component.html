@@ -3,7 +3,7 @@
         <h1>Enregistrement d'une réservation</h1>
 
         <fieldset>
-
+            <h2>Détails de la réservation</h2>
             <app-reactive-select
             formControlName="appartmentId"
             [options]="ownerAppartments()" 
@@ -47,6 +47,7 @@
                 <span class="small-screen">{{checkoutDateError}} </span>
             }
 
+            <p class="bold">Nombre de nuits : {{numberNight() ? numberNight() : "---"}} </p>
 
             <app-reactive-input [error]="nbAdultError" formControlName="nbAdult" label="Nombre d'adultes" type="number"></app-reactive-input>
 
@@ -62,6 +63,7 @@
         </fieldset>
         
         <fieldset>
+            <h2>Plateforme de réservation</h2>
             <app-reactive-select
                 formControlName="platform"
                 [options]="platformOptions" 
@@ -76,6 +78,7 @@
 
         @if(formResa.getRawValue().enterTravelerInfo){
             <fieldset>
+                <h2>Informations personnelles du voyageur</h2>
                 <app-reactive-input [error]="firstnameError" formControlName="firstname" label="Prénom" placeholder="Saisissez votre prénom"></app-reactive-input>
     
                 <app-reactive-input [error]="lastnameError" formControlName="lastname" label="Nom" placeholder="Saisissez votre nom"></app-reactive-input>

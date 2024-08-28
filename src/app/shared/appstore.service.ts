@@ -7,13 +7,14 @@ import { AppartmentNameAndOwner } from '../models/AppartmentNameAndOwner.model'
 import { Discount } from '../models/Discount.model'
 import { Owner } from '../models/Owner.model'
 import { Photo } from '../models/Photo.model'
+import { SomeFunctionsService } from './some-functions.service'
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppstoreService {
 
-  constructor() { }
+  constructor(private readonly someFunctions: SomeFunctionsService) { }
 
   /***************Signal declarations ***************************/
     private _token = signal<string>("")
@@ -123,7 +124,7 @@ export class AppstoreService {
   }
 
   addReservationIntoAppartment(reservation: any): void {
-    const newReservation: Reservation = {...reservation, checkinDate: new Date(reservation.checkinDate), checkoutDate: new Date(reservation.checkoutDate)}
+    const newReservation: Reservation = {...reservation, checkinDate: this.someFunctions.convertToUTCDate(new Date(reservation.checkinDate)), checkoutDate: this.someFunctions.convertToUTCDate(new Date(reservation.checkoutDate))}
     //Ajout dans activeAppartments dans l'appartment de bon id
     this._activeAppartments.update(value => 
       value.map(appartment => {

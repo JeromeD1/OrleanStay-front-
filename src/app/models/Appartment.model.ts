@@ -3,6 +3,8 @@ import { Reservation } from "./Reservation.model";
 import { Info } from "./Info.model";
 import { Discount } from "./Discount.model";
 import { Owner } from "./Owner.model";
+import { SomeFunctionsService } from "../shared/some-functions.service";
+import { inject } from "@angular/core";
 
 
 export class Appartment {

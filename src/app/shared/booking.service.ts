@@ -15,7 +15,9 @@ export class BookingService {
 
   postTravellerReservation(reservationRequest: ReservationRequest): Observable<Reservation> {    
     return this.http.post<any>(environment.BACKEND_BASE_URL + '/reservation',reservationRequest).pipe(
-      tap((response) => {        
+      tap((response) => {    
+        console.log("response", response);
+            
         this.appstore.addReservationIntoAppartment(response)
       })
       )

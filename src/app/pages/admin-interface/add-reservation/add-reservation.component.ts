@@ -13,6 +13,10 @@ import { DatePickerComponent } from '../../../components/date-picker/date-picker
 import { DateFromPicker } from '../../../models/DateFromPicker.model';
 import { ReactiveInputComponent } from '../../../shared/library/reactive-input/reactive-input.component';
 import { ReactiveSelectComponent } from '../../../shared/library/reactive-select/reactive-select.component';
+import { SomeFunctionsService } from '../../../shared/some-functions.service';
+import { Reservation } from '../../../models/Reservation.model';
+import { BookingService } from '../../../shared/booking.service';
+import { NotificationService } from '../../../shared/notification.service';
 
 @Component({
   selector: 'app-add-reservation',
@@ -30,6 +34,8 @@ export class AddReservationComponent implements OnInit, OnDestroy {
 
   platformOptions: {platform: string}[] = [{platform: "Leboncoin"}, {platform: "Airbnb"}, {platform: "Booking"}]
 
+  numberNight = signal<number | null>(null)
+
   destroy$: Subject<void> = new Subject()
 
   showPickerarrival: boolean = false
@@ -38,6 +44,9 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   constructor(
     private readonly appartmentService: AppartmentsService,
     private readonly appstore: AppstoreService,
+    private readonly someFunctions: SomeFunctionsService,
+    private readonly reservationService: BookingService,
+    private readonly notificationService: NotificationService,
     private readonly router: Router, 
     private readonly fb: FormBuilder ){}
 
@@ -88,14 +97,14 @@ initForm():void {
     reservationPrice: [0, Validators.required],
     platform: ["Leboncoin", Validators.required],
     enterTravelerInfo: [false, Validators.required],
-    firstname: ["", Validators.required],
-    lastname: ["", Validators.required],
-    email: ["", [Validators.required, Validators.email]],
-    phone: ["", Validators.required],
-    address: ["", Validators.required],
-    zipcode: ["", Validators.required],
-    city: ["", Validators.required],
-    country: ["", Validators.required],
+    firstname: ["Leboncoin", Validators.required],
+    lastname: ["Leboncoin", Validators.required],
+    email: ["Leboncoin@wrongemail.com", [Validators.required, Validators.email]],
+    phone: ["Leboncoin", Validators.required],
+    address: ["Leboncoin", Validators.required],
+    zipcode: ["Leboncoin", Validators.required],
+    city: ["Leboncoin", Validators.required],
+    country: ["Leboncoin", Validators.required],
   })
 }
 
@@ -110,12 +119,14 @@ initEvents(): void {
   this.formResa.get("checkinDate")?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
     if(value){
       this.checkinDateError = null
+      this.calculateNumberOfNight()
     }
   })
 
   this.formResa.get("checkoutDate")?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
     if(value){
       this.checkoutDateError = null
+      this.calculateNumberOfNight()
     }
   })
 
@@ -392,14 +403,14 @@ resetForm():void {
     reservationPrice: 0,
     platform: "Leboncoin",
     enterTravelerInfo: false,
-    firstname: "",
-    lastname: "",
-    email: "",
-    phone: "",
-    address: "",
-    zipcode: "",
-    city: "",
-    country: "",
+    firstname: "Leboncoin",
+    lastname: "Leboncoin",
+    email: "Leboncoin@wrongemail.com",
+    phone: "Leboncoin",
+    address: "Leboncoin",
+    zipcode: "Leboncoin",
+    city: "Leboncoin",
+    country: "Leboncoin",
   })
 }
 
@@ -419,8 +430,8 @@ saveReservation(): void {
         }
       },
       appartmentId: this.formResa.getRawValue().appartmentId!,
-      checkinDate: this.formResa.getRawValue().checkinDate!,
-      checkoutDate: this.formResa.getRawValue().checkoutDate!,
+      checkinDate: this.someFunctions.convertToUTCDate(this.formResa.getRawValue().checkinDate!),
+      checkoutDate: this.someFunctions.convertToUTCDate(this.formResa.getRawValue().checkoutDate!),
       nbAdult: this.formResa.getRawValue().nbAdult!,
       nbChild: this.formResa.getRawValue().nbChild!,
       nbBaby: this.formResa.getRawValue().nbBaby!,
@@ -429,9 +440,19 @@ saveReservation(): void {
     }
 
     console.log("formData", formData);
+    this.reservationService.postTravellerReservation(formData).pipe(take(1)).subscribe({
+      next: () => {
+        this.notificationService.success("Votre réservation a bien été ajoutée.")
+        this.resetForm()
+      },
+      error: () => {
+        this.notificationService.error("Une erreur s'est produite lors de l'enregistrement de votre réservation.")
+      }
+    })
     
   }
 }
+
 
 
 /***********Date pickers ***************/
@@ -472,6 +493,19 @@ calculateReservationPrice(): void {
     this.formResa.patchValue({
       reservationPrice: this.selectedAppartment()?.calculateReservationPrice(this.formResa.getRawValue().nbAdult!, this.formResa.getRawValue().nbChild!, this.formResa.getRawValue().checkinDate!, this.formResa.getRawValue().checkoutDate!)
     })   
+  }
+}
+
+calculateNumberOfNight(): void {
+  if(this.formResa.getRawValue().checkinDate && this.formResa.getRawValue().checkoutDate){
+    const resaData: Reservation = {
+      checkinDate: this.formResa.getRawValue().checkinDate,
+      checkoutDate: this.formResa.getRawValue().checkoutDate,
+      nbAdult:1,
+      nbBaby:0,
+      nbChild:0
+    }
+    this.numberNight.set(this.someFunctions.getNumberOfDays(resaData))
   }
 }
 
