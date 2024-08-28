@@ -1,6 +1,7 @@
 @import "../../../styles/mixins";
 main{
     @include flex-column-center-center;
+    margin-top: 48px;
 
     form {
         @include flex-column-center-center;

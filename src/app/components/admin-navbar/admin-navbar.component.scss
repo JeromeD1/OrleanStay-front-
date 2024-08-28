@@ -21,6 +21,63 @@ nav {
         @include flex-row-start-center;
         gap: 24px;
 
+        .section-menu {
+            @include flex-column-center-center;
+            position: relative;
+            height: 70px;
+            padding: 8px;
+
+
+            &:hover {
+                cursor: pointer;
+                background-color: var(--colorLight);
+                border-radius: 35px;
+            }
+
+            .pSmall {
+                @include flex-column-center-center;
+                width: 100%;
+                position: absolute;
+                bottom: 4px;
+                left: 0;
+                z-index: 10000;
+
+                small {
+                    color: blue;
+                }
+            }
+
+            p{
+                margin: 0;
+            }
+
+            ul {
+                position: absolute;
+                top: 70px;
+                left: 0;
+                list-style-type: none;
+                background-color: var(--colorMid);
+                border-bottom-left-radius: 35px;
+                border-bottom-right-radius: 35px;
+                max-height: 0;
+                animation: openFromTop 0.3s ease-out forwards;
+
+
+                li{
+                    a {
+                        border-radius: 0;
+                    }
+
+                    &:last-child {
+                        a {
+                            border-bottom-left-radius: 35px;
+                            border-bottom-right-radius: 35px;
+                        }
+                    }
+                }
+            }
+        }
+
         a{
             @include flex-row-center-center;
             height: 70px;
@@ -66,6 +123,26 @@ nav {
         }
     }
 }
+
+@keyframes openFromTop {
+    from {
+      max-height: 0;
+      overflow: hidden;
+    }
+    to {
+      max-height: 500px;
+    }
+  }
+
+  @keyframes closeFromBottom {
+    from {
+      max-height: 500px;
+      overflow: hidden;
+    }
+    to {
+      max-height: 0;
+    }
+  }
 
 @media screen and (max-width: 700px) {
     nav {
