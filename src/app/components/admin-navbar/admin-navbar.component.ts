@@ -1,4 +1,4 @@
-import { Component, computed, OnDestroy, signal } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, computed, OnDestroy, OnInit, signal } from '@angular/core';
 import { LoginService } from '../../shared/login.service';
 import { Subject, takeUntil } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
@@ -13,12 +13,12 @@ import { AppstoreService } from '../../shared/appstore.service';
   templateUrl: './admin-navbar.component.html',
   styleUrl: './admin-navbar.component.scss'
 })
-export class AdminNavbarComponent implements OnDestroy{
+export class AdminNavbarComponent implements AfterViewInit, OnDestroy{
   constructor(private loginService: LoginService, private router: Router, private notificationService: NotificationService, private appstore: AppstoreService){}
 
   showMenuBurger: boolean = false
   showMenuReservation: boolean = false
-  isOnPageReservation: boolean = false
+  isOnPageReservation = signal<boolean>(false)
 
   destroy$: Subject<void> = new Subject()
 
@@ -39,6 +39,33 @@ export class AdminNavbarComponent implements OnDestroy{
               break
     }
   })
+
+  ngAfterViewInit(): void {
+      this.getCurrentPage()
+  }
+
+  getCurrentPage():void {
+    const adminPage = this.router.url.split("/").slice(-1)[0].trim()
+    console.log("adminPage", adminPage);
+    
+    switch (adminPage){
+      case "acceptReservation":
+        this.setCurrentPageToReservationRequest()
+        break
+        case "addReservation":
+        this.setCurrentPageToReservationRegistoring()
+        break
+        case "editReservation":
+        this.setCurrentPageToReservationEdition()
+        break
+        case "appartGestion":
+        this.setCurrentPageToGlobalGestion()
+        break
+        case "gestionUtilisateurs":
+        this.setCurrentPageToGestionUtilisateurs()
+        break
+    }
+  }
 
   setShowMenuBurger(): void {
     this.showMenuBurger = !this.showMenuBurger
@@ -71,27 +98,29 @@ export class AdminNavbarComponent implements OnDestroy{
 
   setCurrentPageToReservationRequest(): void {
     this.currentPage.set("reservationRequest")
-    this.isOnPageReservation = true
+    this.isOnPageReservation.set(true)
+    console.log("test");
+    
   }
 
   setCurrentPageToReservationRegistoring(): void {
     this.currentPage.set("reservationRegistoring")
-    this.isOnPageReservation = true
+    this.isOnPageReservation.set(true)  
   }
 
   setCurrentPageToReservationEdition(): void {
     this.currentPage.set("reservationEdition")
-    this.isOnPageReservation = true
+    this.isOnPageReservation.set(true)
   }
 
   setCurrentPageToGlobalGestion(): void {
     this.currentPage.set("globalGestion")
-    this.isOnPageReservation = false
+    this.isOnPageReservation.set(false)
   }
 
   setCurrentPageToGestionUtilisateurs(): void {
     this.currentPage.set("gestionUtilisateurs")
-    this.isOnPageReservation = false
+    this.isOnPageReservation.set(false)
   }
 
   ngOnDestroy(): void {

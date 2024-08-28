@@ -148,6 +148,35 @@ export class AppstoreService {
     )
   }
 
+  updateReservationIntoAppartment(reservation: any) {
+    const updatedReservation: Reservation = {...reservation, checkinDate: this.someFunctions.convertToUTCDate(new Date(reservation.checkinDate)), checkoutDate: this.someFunctions.convertToUTCDate(new Date(reservation.checkoutDate))}
+    //Ajout dans activeAppartments dans l'appartment de bon id
+    this._activeAppartments.update(value => 
+      value.map(appartment => {
+        if (appartment.id === reservation.appartmentId) {
+          appartment.updateReservation(updatedReservation)
+          // return appartment
+          return Appartment.createFromOtherAppartment(appartment)
+        }
+        // return appartment
+        return Appartment.createFromOtherAppartment(appartment)
+      })
+    )
+
+     //Ajout dans allAppartments dans l'appartment de bon id
+     this._allAppartments.update(value => 
+      value.map(appartment => {
+        if (appartment.id === reservation.appartmentId) {
+          appartment.updateReservation(updatedReservation)
+          // return appartment
+          return Appartment.createFromOtherAppartment(appartment)
+        }
+        // return appartment
+        return Appartment.createFromOtherAppartment(appartment)
+      })
+    )
+  }
+
   updateAppartment(appartment: Appartment): void {
     this._activeAppartments.update(appartments => 
       appartments.map(item => (

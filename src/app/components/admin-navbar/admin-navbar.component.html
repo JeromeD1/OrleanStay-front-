@@ -1,6 +1,6 @@
 <nav>
     <div class="navPage">
-        <div class="section-menu" [class.highlighted]="isOnPageReservation" (click)="openMenuReservation()" (mouseleave)="closeMenuReservation()">
+        <div class="section-menu" [class.highlighted]="isOnPageReservation()" (click)="openMenuReservation()" (mouseleave)="closeMenuReservation()">
             <p>Gestion des réservations</p>
             @if(reservationCurrentPageText()){
                 <p class="pSmall"><small>{{reservationCurrentPageText()}}</small></p>
@@ -33,8 +33,11 @@
 
 
     <div class="navBurger" *ngIf="showMenuBurger">
+        
         <a [routerLink]="['/admin/acceptReservation']" (click)="setShowMenuBurger()"><p>Demandes de réservation</p></a>
         <a [routerLink]="['/admin/addReservation']" (click)="setShowMenuBurger()"><p>Enregistrement de réservations</p></a>
+        <a [routerLink]="['/admin/editReservation']" (click)="setShowMenuBurger()"><p>Modifier une réservation</p></a>
+
         <a [routerLink]="['/admin/appartGestion']" (click)="setShowMenuBurger()"><p>Gestion des appartements</p></a>
         <a [routerLink]="['/admin/gestionUtilisateurs']" (click)="setShowMenuBurger()"><p>Gestion des utilisateurs</p></a>
         <a [routerLink]="['/']" class="leaveAdmin" (click)="logout()"><p>Quitter le mode admin</p></a>

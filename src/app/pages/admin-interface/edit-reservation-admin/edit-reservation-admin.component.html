@@ -1,1 +1,104 @@
-<p>edit-reservation-admin works!</p>
+<main>
+    <form [formGroup]="formResa" (ngSubmit)="saveReservation()">
+        <h1>Modifier une réservation</h1>
+
+        <div class="request-choice">
+            @if(filteredReservationRequests()){
+                <mat-form-field>
+                    <mat-label>Choisissez une réservation</mat-label>
+                    <!-- <mat-select [value]="filteredReservationRequests()[0]" (selectionChange)="handleChangeReservation($event.value)"> -->
+                        <mat-select [value]="selectedReservation()" (selectionChange)="handleChangeReservation($event.value)">
+                        <mat-option *ngFor="let reservation of filteredReservationRequests()" [value]="reservation">
+                       {{findAppartmentNameById(reservation.appartmentId!)}}  -  Du {{reservation.checkinDate | date:'dd/MM/yyyy' }} au {{reservation.checkoutDate | date:'dd/MM/yyyy'}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+            }
+        </div>
+
+        <fieldset>
+            <h2>Détails de la réservation</h2>
+            <app-reactive-select
+            formControlName="appartmentId"
+            [options]="ownerAppartments()" 
+            [optionLabelParts]="['description']" 
+            [optionValue]="'id'" 
+            [error]="appartmentIdError"
+            label="Logement" 
+            placeholder="Choisissez un logement"
+            ></app-reactive-select>
+
+
+            <div class="flex-input">
+                <p>Date d'arrivée : {{!showPickerarrival ? formResa.get("checkinDate")?.value ? (formResa.get("checkinDate")?.value | date: 'dd/MM/yyyy') : "Choisissez une date" : null}} </p>
+                <button type="button" *ngIf="!showPickerarrival" (click)="changeShowPickerarrival()" [disabled]="!selectedAppartment()" >Modifier</button>
+                <app-date-picker *ngIf="showPickerarrival"
+                [initDateValue]="formResa.getRawValue().checkinDate"
+                [importedCheckoutDate]="formResa.getRawValue().checkoutDate"
+                [importedReservations]="selectedAppartment()?.reservations!"
+                [dateType]="'checkin'"
+                (dateEmitter)="handleChangeCheckinOrCheckout($event)"
+                (closeEmitter)="closeAllPicker()"
+                ></app-date-picker>
+            </div>
+            @if(checkinDateError) {
+                <span class="small-screen">{{checkinDateError}} </span>
+            }
+
+            <div class="flex-input">
+                <p>Date de départ : {{!showPickerDeparture ? formResa.get("checkoutDate")?.value ? (formResa.get("checkoutDate")?.value | date: 'dd/MM/yyyy') : "Choisissez une date" : null}} </p>
+                <button type="button" *ngIf="!showPickerDeparture" (click)="changeShowPickerDeparture()" [disabled]="!selectedAppartment()">Modifier</button>
+                <app-date-picker *ngIf="showPickerDeparture"
+                [initDateValue]="formResa.getRawValue().checkoutDate"
+                [importedCheckinDate]="formResa.getRawValue().checkinDate"
+                [importedReservations]="selectedAppartment()?.reservations!"
+                [dateType]="'checkout'"
+                (dateEmitter)="handleChangeCheckinOrCheckout($event)"
+                (closeEmitter)="closeAllPicker()"
+                ></app-date-picker>
+            </div>
+            @if(checkoutDateError) {
+                <span class="small-screen">{{checkoutDateError}} </span>
+            }
+
+            <p class="bold">Nombre de nuits : {{numberNight() ? numberNight() : "---"}} </p>
+
+            <app-reactive-input [error]="nbAdultError" formControlName="nbAdult" label="Nombre d'adultes" type="number"></app-reactive-input>
+
+            <app-reactive-input [error]="nbChildError" formControlName="nbChild" label="Nombre d'enfants" type="number"></app-reactive-input>
+
+            <app-reactive-input [error]="nbBabyError" formControlName="nbBaby" label="Nombre de bébés (- 2 ans)" type="number"></app-reactive-input>
+
+            <app-reactive-input [error]="reservationPriceError" formControlName="reservationPrice" label="Cout de la réservation" type="number"></app-reactive-input>
+
+            <app-reactive-input type="checkbox" [error]="null" formControlName="cancelled" label="Réservation annulée ?"></app-reactive-input>
+
+
+        </fieldset>
+        
+
+        <fieldset>
+            <h2>Informations personnelles du voyageur</h2>
+            <app-reactive-input [error]="firstnameError" formControlName="firstname" label="Prénom" placeholder="Saisissez votre prénom"></app-reactive-input>
+
+            <app-reactive-input [error]="lastnameError" formControlName="lastname" label="Nom" placeholder="Saisissez votre nom"></app-reactive-input>
+
+            <app-reactive-input [error]="addressError" formControlName="address" label="Numéro et rue" placeholder="Saisissez votre adresse"></app-reactive-input>
+
+            <app-reactive-input [error]="zipcodeError" formControlName="zipcode" label="Code postal" placeholder="Ex : 27 100"></app-reactive-input>
+
+            <app-reactive-input [error]="cityError" formControlName="city" label="Ville" placeholder="Ex : Paris"></app-reactive-input>
+
+            <app-reactive-input [error]="countryError" formControlName="country" label="Pays" placeholder="Ex : France"></app-reactive-input>
+
+            <app-reactive-input [error]="emailError" formControlName="email" label="Email" placeholder="Ex : john.doe@gmail.com"></app-reactive-input>
+
+            <app-reactive-input [error]="phoneError" formControlName="phone" label="Téléphone" placeholder="Ex : +33 6 75 75 75 75"></app-reactive-input>
+        </fieldset>
+
+        <div class="div-button">
+            <button type="button" (click)="resetForm()">Réinitialiser</button>
+            <button type="submit">Sauvegarder</button>
+        </div>
+    </form>
+</main>

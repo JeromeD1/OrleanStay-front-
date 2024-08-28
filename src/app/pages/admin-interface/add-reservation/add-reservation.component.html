@@ -16,7 +16,7 @@
 
 
             <div class="flex-input">
-                <p>Date d'arrivée : {{!showPickerarrival ? (formResa.get("checkinDate")?.value | date: 'dd/MM/yyyy') : null}} </p>
+                <p>Date d'arrivée : {{!showPickerarrival ? formResa.get("checkinDate")?.value ? (formResa.get("checkinDate")?.value | date: 'dd/MM/yyyy') : "Choisissez une date" : null}} </p>
                 <button type="button" *ngIf="!showPickerarrival" (click)="changeShowPickerarrival()" [disabled]="!selectedAppartment()" >Modifier</button>
                 <app-date-picker *ngIf="showPickerarrival"
                 [initDateValue]="formResa.getRawValue().checkinDate"
@@ -32,7 +32,7 @@
             }
 
             <div class="flex-input">
-                <p>Date de départ : {{!showPickerDeparture ? (formResa.get("checkoutDate")?.value | date: 'dd/MM/yyyy') : null}} </p>
+                <p>Date de départ : {{!showPickerDeparture ? formResa.get("checkoutDate")?.value ? (formResa.get("checkoutDate")?.value | date: 'dd/MM/yyyy') : "Choisissez une date" : null}} </p>
                 <button type="button" *ngIf="!showPickerDeparture" (click)="changeShowPickerDeparture()" [disabled]="!selectedAppartment()">Modifier</button>
                 <app-date-picker *ngIf="showPickerDeparture"
                 [initDateValue]="formResa.getRawValue().checkoutDate"
