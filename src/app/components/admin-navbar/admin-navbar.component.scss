@@ -12,6 +12,8 @@ nav {
     margin-bottom: 16px;
     border-bottom-left-radius: 24px;
     border-bottom-right-radius: 24px;
+    box-shadow: 2px 2px 2px 2px var(--colorDark);
+
 
     .navBurger {
         display: none;
@@ -24,6 +26,7 @@ nav {
         .section-menu {
             @include flex-column-center-center;
             position: relative;
+            z-index: 1000;
             height: 70px;
             padding: 8px;
 
@@ -40,7 +43,7 @@ nav {
                 position: absolute;
                 bottom: 4px;
                 left: 0;
-                z-index: 10000;
+                z-index: 1001;
 
                 small {
                     color: blue;
@@ -61,6 +64,7 @@ nav {
                 border-bottom-right-radius: 35px;
                 max-height: 0;
                 animation: openFromTop 0.3s ease-out forwards;
+                box-shadow: 2px 2px 2px 2px var(--colorDark);
 
 
                 li{

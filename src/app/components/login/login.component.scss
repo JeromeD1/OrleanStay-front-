@@ -17,6 +17,7 @@ main {
     align-items: center;
 
     form {
+        @include fieldset-style;
         width: 500px;
         max-width: 90vw;
         display: flex;
@@ -24,11 +25,8 @@ main {
         justify-content: space-around;
         align-items: center;
         gap: 16px;
-        border: 1px solid var(--colorDark);
-        border-radius: 24px;
         padding: 16px;
         min-height: 30dvh;
-        background-color: var(--colorLight);
 
         div {
             display: flex;

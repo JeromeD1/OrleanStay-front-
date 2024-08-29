@@ -126,14 +126,14 @@ initForm():void {
     nbBaby: [0, Validators.required],
     reservationPrice: [0, Validators.required],
     cancelled:[false, Validators.required],
-    firstname: ["Leboncoin", Validators.required],
-    lastname: ["Leboncoin", Validators.required],
-    email: ["Leboncoin@wrongemail.com", [Validators.required, Validators.email]],
-    phone: ["Leboncoin", Validators.required],
-    address: ["Leboncoin", Validators.required],
-    zipcode: ["Leboncoin", Validators.required],
-    city: ["Leboncoin", Validators.required],
-    country: ["Leboncoin", Validators.required],
+    firstname: ["", Validators.required],
+    lastname: ["", Validators.required],
+    email: ["", [Validators.required, Validators.email]],
+    phone: ["", Validators.required],
+    address: ["", Validators.required],
+    zipcode: ["", Validators.required],
+    city: ["", Validators.required],
+    country: ["", Validators.required],
   })
 }
 
@@ -332,24 +332,47 @@ checkForm(): boolean {
 }
 
 resetForm():void {
-  this.formResa.patchValue({
-    appartmentId: this.selectedReservation()?.appartmentId,
-    checkinDate: this.selectedReservation()?.checkinDate,
-    checkoutDate: this.selectedReservation()?.checkoutDate,
-    nbAdult: this.selectedReservation()?.nbAdult,
-    nbChild: this.selectedReservation()?.nbChild,
-    nbBaby: this.selectedReservation()?.nbBaby,
-    reservationPrice: this.selectedReservation()?.reservationPrice,
-    cancelled: this.selectedReservation()?.cancelled,
-    firstname: this.selectedReservation()?.traveller?.personalInformations.firstname,
-    lastname: this.selectedReservation()?.traveller?.personalInformations.lastname,
-    email: this.selectedReservation()?.traveller?.personalInformations.email,
-    phone: this.selectedReservation()?.traveller?.personalInformations.phone,
-    address: this.selectedReservation()?.traveller?.personalInformations.address,
-    zipcode: this.selectedReservation()?.traveller?.personalInformations.zipcode,
-    city: this.selectedReservation()?.traveller?.personalInformations.city,
-    country: this.selectedReservation()?.traveller?.personalInformations.country,
-  })
+
+  if(this.selectedReservation()){
+    this.formResa.patchValue({
+      appartmentId: this.selectedReservation()?.appartmentId,
+      checkinDate: this.selectedReservation()?.checkinDate,
+      checkoutDate: this.selectedReservation()?.checkoutDate,
+      nbAdult: this.selectedReservation()?.nbAdult,
+      nbChild: this.selectedReservation()?.nbChild,
+      nbBaby: this.selectedReservation()?.nbBaby,
+      reservationPrice: this.selectedReservation()?.reservationPrice,
+      cancelled: this.selectedReservation()?.cancelled,
+      firstname: this.selectedReservation()?.traveller?.personalInformations.firstname,
+      lastname: this.selectedReservation()?.traveller?.personalInformations.lastname,
+      email: this.selectedReservation()?.traveller?.personalInformations.email,
+      phone: this.selectedReservation()?.traveller?.personalInformations.phone,
+      address: this.selectedReservation()?.traveller?.personalInformations.address,
+      zipcode: this.selectedReservation()?.traveller?.personalInformations.zipcode,
+      city: this.selectedReservation()?.traveller?.personalInformations.city,
+      country: this.selectedReservation()?.traveller?.personalInformations.country,
+    })
+  } else {
+    this.formResa.patchValue({
+      appartmentId: null,
+      checkinDate: null,
+      checkoutDate: null,
+      nbAdult: 0,
+      nbChild: 0,
+      nbBaby: 0,
+      reservationPrice: 0,
+      cancelled: false,
+      firstname: "",
+      lastname: "",
+      email: "",
+      phone: "",
+      address: "",
+      zipcode: "",
+      city: "",
+      country: "",
+    })
+  }
+  
 }
 
 saveReservation(): void {
@@ -385,13 +408,11 @@ saveReservation(): void {
 
     console.log("formData", formData);
     this.reservationService.update(formData, this.selectedReservation()!.id!).pipe(take(1)).subscribe({
-      next: (data) => {
+      next: () => {
         this.notificationService.success("Votre réservation a bien été modifiée.")
-        this.selectedReservation.set((data as Reservation))
-        this.cdr.detectChanges()
-        console.log("selectedReservation",this.selectedReservation());
-        console.log("filteredReservationRequests", this.filteredReservationRequests());
-        
+        this.selectedReservation.set(null)
+        this.resetForm()
+        // this.cdr.detectChanges()        
       },
       error: () => {
         this.notificationService.error("Une erreur s'est produite lors de l'enregistrement de votre réservation.")

@@ -2,12 +2,13 @@
 
 .main-appartment-card {
     @include flex-column-between-center;
+    @include fieldset-style;
     max-width: 90vw;
     width: 700px;
     height: auto;
     background-color: var(--colorLight);
     border-radius: 50px;
-    box-shadow: 1px 1px 0 2px var(--colorMid);
+    // box-shadow: 1px 1px 0 2px var(--colorMid);
     padding: 16px;
 
     h1 {

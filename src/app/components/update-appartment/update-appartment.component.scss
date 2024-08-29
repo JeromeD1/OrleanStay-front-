@@ -3,13 +3,11 @@
 
 form {
     @include flex-column-start-center;
+    @include fieldset-style;
     width: 900px;
     max-width: 95vw;
-    background-color: var(--colorLight);
-    padding: 8px;
-    border: 1px solid var(--colorMid);
-    border-radius: 24px;
     margin-bottom: 48px;
+    margin-top: 4px;
 
     .flex-input {
         @include flex-row-between-center;
