@@ -1,36 +1,54 @@
-import { Component, computed, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
-import { AppartmentsService } from '../../../shared/appartments.service';
-import { Subject, take, takeUntil } from 'rxjs';
-import { AppartmentNameAndOwner } from '../../../models/AppartmentNameAndOwner.model';
-import { AppstoreService } from '../../../shared/appstore.service';
-import { Appartment } from '../../../models/Appartment.model';
-import { User } from '../../../models/User.model';
-import { Router } from '@angular/router';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ReservationRequest } from '../../../models/Request/ReservationRequest.model';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef, Component, computed, Signal, signal, WritableSignal } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DatePickerComponent } from '../../../components/date-picker/date-picker.component';
-import { DateFromPicker } from '../../../models/DateFromPicker.model';
 import { ReactiveInputComponent } from '../../../shared/library/reactive-input/reactive-input.component';
 import { ReactiveSelectComponent } from '../../../shared/library/reactive-select/reactive-select.component';
-import { SomeFunctionsService } from '../../../shared/some-functions.service';
 import { Reservation } from '../../../models/Reservation.model';
+import { DateFromPicker } from '../../../models/DateFromPicker.model';
+import { ReservationRequest } from '../../../models/Request/ReservationRequest.model';
+import { Subject, take, takeUntil } from 'rxjs';
+import { Appartment } from '../../../models/Appartment.model';
+import { User } from '../../../models/User.model';
+import { SomeFunctionsService } from '../../../shared/some-functions.service';
+import { AppartmentsService } from '../../../shared/appartments.service';
+import { AppstoreService } from '../../../shared/appstore.service';
 import { BookingService } from '../../../shared/booking.service';
 import { NotificationService } from '../../../shared/notification.service';
+import { Router } from '@angular/router';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatOptionModule } from '@angular/material/core';
 
 @Component({
-  selector: 'app-add-reservation',
+  selector: 'app-edit-reservation-admin',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DatePickerComponent, ReactiveInputComponent, ReactiveSelectComponent],
-  templateUrl: './add-reservation.component.html',
-  styleUrl: './add-reservation.component.scss'
+  imports: [CommonModule, ReactiveFormsModule, DatePickerComponent, ReactiveInputComponent, ReactiveSelectComponent, MatSelectModule, MatFormFieldModule, MatOptionModule],
+  templateUrl: './edit-reservation-admin.component.html',
+  styleUrl: '../add-reservation/add-reservation.component.scss'
 })
-export class AddReservationComponent implements OnInit, OnDestroy {
-
+export class EditReservationAdminComponent {
   ownerAppartments: WritableSignal<Appartment[]> = this.appstore.getAllAppartments()
   appartmentIds = computed(() => this.ownerAppartments().map(item => item.id))
   selectedAppartment: WritableSignal<Appartment | null> = signal(null)
   currentUser: User | null = this.appstore.getCurrentUser()()
+
+  selectedReservation: WritableSignal<Reservation | null> = signal(null)
+
+  filteredReservationRequests = computed(() => {
+    const reservations: Reservation[] = []
+    const now = new Date()
+    const threeDaysInMilliseconds = 3 * 24 * 60 * 60 * 1000
+    // this.ownerAppartments().forEach(appart => {
+      this.appstore.getAllAppartments()().forEach(appart => {
+      appart.reservations.forEach(resa => {
+        if(resa.checkoutDate!.getTime() + threeDaysInMilliseconds > now.getTime()){
+          reservations.push(resa)
+        }
+      })
+    })
+    return reservations
+  })
 
   platformOptions: {platform: string}[] = [{platform: "Leboncoin"}, {platform: "Airbnb"}, {platform: "Booking"}]
 
@@ -48,7 +66,8 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     private readonly reservationService: BookingService,
     private readonly notificationService: NotificationService,
     private readonly router: Router, 
-    private readonly fb: FormBuilder ){}
+    private readonly fb: FormBuilder,
+    private readonly  cdr: ChangeDetectorRef ){}
 
     formResa!: FormGroup
 
@@ -85,7 +104,19 @@ getOwnerAppartments(): void {
   }
 }
 
+/*******************Choix de la réservation ************/
+handleChangeReservation(reservation: Reservation) {
+  this.selectedReservation.set(reservation) 
+  this.resetForm()
+}
+
+/************* Fonction pour trouver un nom d'appartement en fonction de son id ***************/
+findAppartmentNameById(id: number): string | undefined {
+  return this.ownerAppartments().find(appartment => appartment.id == id)?.name
+}
+
 initForm():void {
+
   this.formResa = this.fb.group({
     appartmentId: new FormControl<number | null>(null, Validators.required),
     checkinDate: new FormControl<Date | null>(null, Validators.required),
@@ -93,18 +124,16 @@ initForm():void {
     nbAdult: [0, Validators.required],
     nbChild: [0, Validators.required],
     nbBaby: [0, Validators.required],
-    accepted: [true],
     reservationPrice: [0, Validators.required],
-    platform: ["Leboncoin", Validators.required],
-    enterTravelerInfo: [false, Validators.required],
-    firstname: ["Leboncoin", Validators.required],
-    lastname: ["Leboncoin", Validators.required],
-    email: ["Leboncoin@wrongemail.com", [Validators.required, Validators.email]],
-    phone: ["Leboncoin", Validators.required],
-    address: ["Leboncoin", Validators.required],
-    zipcode: ["Leboncoin", Validators.required],
-    city: ["Leboncoin", Validators.required],
-    country: ["Leboncoin", Validators.required],
+    cancelled:[false, Validators.required],
+    firstname: ["", Validators.required],
+    lastname: ["", Validators.required],
+    email: ["", [Validators.required, Validators.email]],
+    phone: ["", Validators.required],
+    address: ["", Validators.required],
+    zipcode: ["", Validators.required],
+    city: ["", Validators.required],
+    country: ["", Validators.required],
   })
 }
 
@@ -156,95 +185,6 @@ initEvents(): void {
     }
   })
 
-  this.formResa.get("accepted")?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-    console.log(value);
-    
-  })
-
-  this.formResa.get("platform")?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-    if(value === "Leboncoin" && this.formResa.get("enterTravelerInfo")?.value === false){
-      this.formResa.patchValue({
-        firstname: "Leboncoin",
-        lastname: "Leboncoin",
-        email: "Leboncoin@wrongemail.com",
-        phone: "Leboncoin",
-        address: "Leboncoin",
-        zipcode: "Leboncoin",
-        city: "Leboncoin",
-        country: "Leboncoin"
-      })
-    } else if(value === "Airbnb" && this.formResa.get("enterTravelerInfo")?.value === false){
-      this.formResa.patchValue({
-        firstname: "Airbnb",
-        lastname: "Airbnb",
-        email: "Airbnb@wrongemail.com",
-        phone: "Airbnb",
-        address: "Airbnb",
-        zipcode: "Airbnb",
-        city: "Airbnb",
-        country: "Airbnb"
-      })
-    } else if(value === "Booking" && this.formResa.get("enterTravelerInfo")?.value === false){
-      this.formResa.patchValue({
-        firstname: "Booking",
-        lastname: "Booking",
-        email: "Booking@wrongemail.com",
-        phone: "Booking",
-        address: "Booking",
-        zipcode: "Booking",
-        city: "Booking",
-        country: "Booking"
-      })
-    }
-  })
-
-  this.formResa.get("enterTravelerInfo")?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-    if(value === true){
-      this.formResa.patchValue({
-        firstname: "",
-        lastname: "",
-        email: "",
-        phone: "",
-        address: "",
-        zipcode: "",
-        city: "",
-        country: ""
-      })
-    } else if(this.formResa.get("platform")?.value === "Leboncoin"){
-      this.formResa.patchValue({
-        firstname: "Leboncoin",
-        lastname: "Leboncoin",
-        email: "Leboncoin@wrongemail.com",
-        phone: "Leboncoin",
-        address: "Leboncoin",
-        zipcode: "Leboncoin",
-        city: "Leboncoin",
-        country: "Leboncoin"
-      })
-    } else if(this.formResa.get("platform")?.value === "Airbnb"){
-      this.formResa.patchValue({
-        firstname: "Airbnb",
-        lastname: "Airbnb",
-        email: "Airbnb@wrongemail.com",
-        phone: "Airbnb",
-        address: "Airbnb",
-        zipcode: "Airbnb",
-        city: "Airbnb",
-        country: "Airbnb"
-      })
-    } else if(this.formResa.get("platform")?.value === "Booking"){
-      this.formResa.patchValue({
-        firstname: "Booking",
-        lastname: "Booking",
-        email: "Booking@wrongemail.com",
-        phone: "Booking",
-        address: "Booking",
-        zipcode: "Booking",
-        city: "Booking",
-        country: "Booking"
-      })
-    }
-  })
 
   this.formResa.get("firstname")?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
     if(value){
@@ -312,6 +252,18 @@ checkForm(): boolean {
     isValid = false
     this.checkoutDateError = "Le champ est requis."
   }
+
+  this.selectedAppartment()?.reservations.forEach(resa => {
+    const checkin = this.someFunctions.convertToUTCDate(this.formResa.get("checkinDate")?.value).getTime()!
+    const checkout = this.someFunctions.convertToUTCDate(this.formResa.get("checkoutDate")?.value).getTime()!
+    const isCheckinInTwoDates: boolean = checkin >= resa.checkinDate!.getTime() && checkin < resa.checkoutDate!.getTime()
+    const isCheckoutInTwoDates: boolean = checkout > resa.checkinDate!.getTime() && checkout <= resa.checkoutDate!.getTime()
+    if((isCheckinInTwoDates || isCheckoutInTwoDates) && !resa.cancelled){
+      isValid = false
+      this.checkinDateError = "Les dates actuelles chevauchent une autre réservation."
+      this.checkoutDateError = "Les dates actuelles chevauchent une autre réservation."      
+    }
+  })
 
   if(this.formResa.get("checkinDate")?.value?.getTime()! > this.formResa.get("checkoutDate")?.value?.getTime()!){
     isValid = false
@@ -392,33 +344,57 @@ checkForm(): boolean {
 }
 
 resetForm():void {
-  this.formResa.patchValue({
-    appartmentId: null,
-    checkinDate: null,
-    checkoutDate: null,
-    nbAdult: 0,
-    nbChild: 0,
-    nbBaby: 0,
-    accepted: true,
-    reservationPrice: 0,
-    platform: "Leboncoin",
-    enterTravelerInfo: false,
-    firstname: "Leboncoin",
-    lastname: "Leboncoin",
-    email: "Leboncoin@wrongemail.com",
-    phone: "Leboncoin",
-    address: "Leboncoin",
-    zipcode: "Leboncoin",
-    city: "Leboncoin",
-    country: "Leboncoin",
-  })
+
+  if(this.selectedReservation()){
+    this.formResa.patchValue({
+      appartmentId: this.selectedReservation()?.appartmentId,
+      checkinDate: this.selectedReservation()?.checkinDate,
+      checkoutDate: this.selectedReservation()?.checkoutDate,
+      nbAdult: this.selectedReservation()?.nbAdult,
+      nbChild: this.selectedReservation()?.nbChild,
+      nbBaby: this.selectedReservation()?.nbBaby,
+      reservationPrice: this.selectedReservation()?.reservationPrice,
+      cancelled: this.selectedReservation()?.cancelled,
+      firstname: this.selectedReservation()?.traveller?.personalInformations.firstname,
+      lastname: this.selectedReservation()?.traveller?.personalInformations.lastname,
+      email: this.selectedReservation()?.traveller?.personalInformations.email,
+      phone: this.selectedReservation()?.traveller?.personalInformations.phone,
+      address: this.selectedReservation()?.traveller?.personalInformations.address,
+      zipcode: this.selectedReservation()?.traveller?.personalInformations.zipcode,
+      city: this.selectedReservation()?.traveller?.personalInformations.city,
+      country: this.selectedReservation()?.traveller?.personalInformations.country,
+    })
+  } else {
+    this.formResa.patchValue({
+      appartmentId: null,
+      checkinDate: null,
+      checkoutDate: null,
+      nbAdult: 0,
+      nbChild: 0,
+      nbBaby: 0,
+      reservationPrice: 0,
+      cancelled: false,
+      firstname: "",
+      lastname: "",
+      email: "",
+      phone: "",
+      address: "",
+      zipcode: "",
+      city: "",
+      country: "",
+    })
+  }
+  
 }
 
 saveReservation(): void {
   if(this.checkForm()){
     const formData: ReservationRequest = {
       traveller: {
+        id: this.selectedReservation()?.traveller?.id,
+        utilisateurId: this.selectedReservation()?.traveller?.utilisateurId,
         personalInformations: {
+          id: this.selectedReservation()?.traveller?.personalInformations.id,
           firstname: this.formResa.getRawValue().firstname!,
           lastname: this.formResa.getRawValue().lastname!,
           email: this.formResa.getRawValue().email!,
@@ -436,14 +412,19 @@ saveReservation(): void {
       nbChild: this.formResa.getRawValue().nbChild!,
       nbBaby: this.formResa.getRawValue().nbBaby!,
       reservationPrice: this.formResa.getRawValue().reservationPrice!,
-      accepted: this.formResa.getRawValue().accepted!
+      cancelled: this.formResa.getRawValue().cancelled!,
+      accepted: this.selectedReservation()?.accepted,
+      depositAsked: this.selectedReservation()?.depositAsked,
+      depositReceived: this.selectedReservation()?.depositReceived
     }
 
     console.log("formData", formData);
-    this.reservationService.postTravellerReservation(formData).pipe(take(1)).subscribe({
+    this.reservationService.update(formData, this.selectedReservation()!.id!).pipe(take(1)).subscribe({
       next: () => {
-        this.notificationService.success("Votre réservation a bien été ajoutée.")
+        this.notificationService.success("Votre réservation a bien été modifiée.")
+        this.selectedReservation.set(null)
         this.resetForm()
+        // this.cdr.detectChanges()        
       },
       error: () => {
         this.notificationService.error("Une erreur s'est produite lors de l'enregistrement de votre réservation.")

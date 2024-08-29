@@ -3,6 +3,8 @@ import { Reservation } from "./Reservation.model";
 import { Info } from "./Info.model";
 import { Discount } from "./Discount.model";
 import { Owner } from "./Owner.model";
+import { SomeFunctionsService } from "../shared/some-functions.service";
+import { inject } from "@angular/core";
 
 
 export class Appartment {
@@ -34,6 +36,7 @@ export class Appartment {
         public comments: Comment[]
     ) {
     }
+
 
 
     calculateReservationPrice(nbAdult: number, nbChild:number, checkinDate: Date, checkoutDate: Date) : number {
@@ -77,6 +80,44 @@ export class Appartment {
 
     addReservation(reservation: Reservation): void {
         this.reservations.push(reservation)
+    }
+
+    updateReservation(reservation: Reservation): void {
+        const newReservation = this.reservations.map(item => (
+            item.id == reservation.id ? reservation : item
+        ))
+
+        this.reservations = newReservation
+        console.log("reservations dans Appartment", this.reservations);
+        
+    }
+
+    static createFromOtherAppartment(appart: Appartment): Appartment {
+        return new Appartment(
+            appart.id,
+            appart.ownerId,
+            appart.discounts,
+            appart.name,
+            appart.description,
+            appart.address,
+            appart.zipcode,
+            appart.city,
+            appart.distanceCityCenter,
+            appart.distanceTrain,
+            appart.distanceTram,
+            appart.googleMapUrl,
+            appart.nightPrice,
+            appart.caution,
+            appart.menageCourtSejour,
+            appart.menageLongSejour,
+            appart.menageLongueDuree,
+            appart.type,
+            appart.active,
+            appart.infos,
+            appart.photos,
+            appart.reservations,
+            appart.comments
+        );
     }
 }
 

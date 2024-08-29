@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import "../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
-// @import "../src/app/styles/mixins";
+@import "../src/app/styles/mixins";
 
 
 
@@ -54,31 +54,54 @@ h2 {
     font-size: var(--mpFontSize) !important;
 }
 
-// ::ng-deep .mat-mdc-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-mdc-text-field-wrapper {
-//     width: 800px !important;
-//     max-width: 90vw !important;
-//   }
+.flex-input {
+    margin-bottom: 0;
+    @include flex-row-between-center;
+    gap: 16px;
+    margin-bottom: 8px;
+    padding: 8px;
+    border-radius: 8px;
 
+    &:focus-within {
+        box-shadow: 0px 0px 1px 4px var(--colorBrand);
+        background-color: #e0cdc881;
+    }
 
-//   ::ng-deep .mat-mdc-snack-bar-container {
-    
-//     &.success-snackbar {
-//       --mdc-snackbar-container-color: rgb(0, 175, 0);
-//       --mat-mdc-snack-bar-button-color: black;
-//       --mdc-snackbar-supporting-text-color: black;
-//     }
-//     &.error-snackbar {
-//         --mdc-snackbar-container-color: rgb(220, 0, 0);
-//         --mat-mdc-snack-bar-button-color: black;
-//         --mdc-snackbar-supporting-text-color: black;
-//       }
-//   }
+    .label-error {
+        @include flex-column-start-start;
+        gap: 4px;
+    }
 
-// ::ng-deep .mat-mdc-snack-bar-container .mdc-snackbar__label {
-//     // font-size: var(--mpFontSize) !important;
-//     // width: 800px !important;
-//     // max-width: 90vw !important;
-// }
+    input, select {
+        width: 300px;
+        max-width: 100%;
+        padding: 8px;
+        border-radius: 8px;
+        border: none;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    input[type="checkbox"] {
+        width: 150px;
+        max-width: 50%;
+        zoom: 2;
+      }
+}
+
+span.small-screen {
+    display: none;
+}
+
+fieldset {
+    border-radius: 24px;
+    padding: 8px;
+    background-color: var(--colorLight);
+    box-shadow: 1px 1px 2px 2px var(--colorDark);
+    border: none;
+}
 
 
 
@@ -116,5 +139,25 @@ h2 {
     --ppFontSize: 0.85rem;
     --tppFontSize: 0.8rem;
 
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .flex-input {
+        @include flex-column-start-start;
+        gap: 8px;
+        margin-bottom: 0;
+
+        span.large-screen {
+            display: none;
+        }
+
+        span.small-screen {
+            display: block;
+        }
+
+        input {
+            width: 100%;
+        }
     }
 }

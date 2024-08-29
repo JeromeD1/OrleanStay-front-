@@ -1,0 +1,24 @@
+<div class="flex-input">
+    <div class="label-error">
+        <label [for]="label">{{label}} :</label>
+        @if(error) {
+            <span class="large-screen">{{error}} </span>
+        }
+    </div>
+    <select  
+        [id]="label" 
+        (input)="getChange($event)"
+        [disabled]="disabled"
+        [value]="control.value"
+        required>
+        @if(placeholder){
+            <option [value]="null" hidden selected>{{ placeholder }}</option>
+        }
+        @for (option of options; track $index) {
+            <option [value]="option.optionValue" >{{option.optionLabel}} </option>
+        }
+    </select>
+    @if(error) {
+        <span class="small-screen">{{error}} </span>
+    }
+</div>

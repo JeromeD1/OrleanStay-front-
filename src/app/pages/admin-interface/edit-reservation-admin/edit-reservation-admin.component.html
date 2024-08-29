@@ -1,6 +1,20 @@
 <main>
     <form [formGroup]="formResa" (ngSubmit)="saveReservation()">
-        <h1>Enregistrement d'une réservation</h1>
+        <h1>Modifier une réservation</h1>
+
+        <div class="request-choice">
+            @if(filteredReservationRequests()){
+                <mat-form-field>
+                    <mat-label>Choisissez une réservation</mat-label>
+                    <!-- <mat-select [value]="filteredReservationRequests()[0]" (selectionChange)="handleChangeReservation($event.value)"> -->
+                        <mat-select [value]="selectedReservation()" (selectionChange)="handleChangeReservation($event.value)">
+                        <mat-option *ngFor="let reservation of filteredReservationRequests()" [value]="reservation">
+                       {{findAppartmentNameById(reservation.appartmentId!)}}  -  Du {{reservation.checkinDate | date:'dd/MM/yyyy' }} au {{reservation.checkoutDate | date:'dd/MM/yyyy'}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+            }
+        </div>
 
         <fieldset>
             <h2>Détails de la réservation</h2>
@@ -19,7 +33,7 @@
                 <div>
                     <p>Date d'arrivée : {{!showPickerarrival ? formResa.get("checkinDate")?.value ? (formResa.get("checkinDate")?.value | date: 'dd/MM/yyyy') : "Choisissez une date" : null}} </p>
                     @if(checkinDateError) {
-                        <span>{{checkinDateError}} </span>
+                        <span>{{checkinDateError}}</span>
                     }
                 </div>
                 <button type="button" *ngIf="!showPickerarrival" (click)="changeShowPickerarrival()" [disabled]="!selectedAppartment()" >Modifier</button>
@@ -50,7 +64,6 @@
                 (closeEmitter)="closeAllPicker()"
                 ></app-date-picker>
             </div>
-            
 
             <p class="bold">Nombre de nuits : {{numberNight() ? numberNight() : "---"}} </p>
 
@@ -62,48 +75,33 @@
 
             <app-reactive-input [error]="reservationPriceError" formControlName="reservationPrice" label="Cout de la réservation" type="number"></app-reactive-input>
 
-            <app-reactive-input type="checkbox" [error]="null" formControlName="accepted" label="Réservation acceptée"></app-reactive-input>
+            <app-reactive-input type="checkbox" [error]="null" formControlName="cancelled" label="Réservation annulée ?"></app-reactive-input>
 
 
         </fieldset>
         
+
         <fieldset>
-            <h2>Plateforme de réservation</h2>
-            <app-reactive-select
-                formControlName="platform"
-                [options]="platformOptions" 
-                [optionLabelParts]="['platform']" 
-                [optionValue]="'platform'" 
-                [error]="appartmentIdError"
-                label="Plateforme de réservation" 
-                ></app-reactive-select>
-    
-            <app-reactive-input type="checkbox" [error]="null" formControlName="enterTravelerInfo" label="Entrer les informations voyageur"></app-reactive-input>
+            <h2>Informations personnelles du voyageur</h2>
+            <app-reactive-input [error]="firstnameError" formControlName="firstname" label="Prénom" placeholder="Saisissez votre prénom"></app-reactive-input>
+
+            <app-reactive-input [error]="lastnameError" formControlName="lastname" label="Nom" placeholder="Saisissez votre nom"></app-reactive-input>
+
+            <app-reactive-input [error]="addressError" formControlName="address" label="Numéro et rue" placeholder="Saisissez votre adresse"></app-reactive-input>
+
+            <app-reactive-input [error]="zipcodeError" formControlName="zipcode" label="Code postal" placeholder="Ex : 27 100"></app-reactive-input>
+
+            <app-reactive-input [error]="cityError" formControlName="city" label="Ville" placeholder="Ex : Paris"></app-reactive-input>
+
+            <app-reactive-input [error]="countryError" formControlName="country" label="Pays" placeholder="Ex : France"></app-reactive-input>
+
+            <app-reactive-input [error]="emailError" formControlName="email" label="Email" placeholder="Ex : john.doe@gmail.com"></app-reactive-input>
+
+            <app-reactive-input [error]="phoneError" formControlName="phone" label="Téléphone" placeholder="Ex : +33 6 75 75 75 75"></app-reactive-input>
         </fieldset>
 
-        @if(formResa.getRawValue().enterTravelerInfo){
-            <fieldset>
-                <h2>Informations personnelles du voyageur</h2>
-                <app-reactive-input [error]="firstnameError" formControlName="firstname" label="Prénom" placeholder="Saisissez votre prénom"></app-reactive-input>
-    
-                <app-reactive-input [error]="lastnameError" formControlName="lastname" label="Nom" placeholder="Saisissez votre nom"></app-reactive-input>
-    
-                <app-reactive-input [error]="addressError" formControlName="address" label="Numéro et rue" placeholder="Saisissez votre adresse"></app-reactive-input>
-    
-                <app-reactive-input [error]="zipcodeError" formControlName="zipcode" label="Code postal" placeholder="Ex : 27 100"></app-reactive-input>
-    
-                <app-reactive-input [error]="cityError" formControlName="city" label="Ville" placeholder="Ex : Paris"></app-reactive-input>
-    
-                <app-reactive-input [error]="countryError" formControlName="country" label="Pays" placeholder="Ex : France"></app-reactive-input>
-    
-                <app-reactive-input [error]="emailError" formControlName="email" label="Email" placeholder="Ex : john.doe@gmail.com"></app-reactive-input>
-    
-                <app-reactive-input [error]="phoneError" formControlName="phone" label="Téléphone" placeholder="Ex : +33 6 75 75 75 75"></app-reactive-input>
-            </fieldset>
-        }
-
         <div class="div-button">
-            <button type="button" (click)="resetForm()">Effacer</button>
+            <button type="button" (click)="resetForm()">Réinitialiser</button>
             <button type="submit">Sauvegarder</button>
         </div>
     </form>

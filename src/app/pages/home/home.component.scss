@@ -3,6 +3,7 @@
 main {
     width: 100vw;
     @include flex-column-center-center;
+    padding-bottom: 24px;
 
     .openImage {
         width: 100vw;

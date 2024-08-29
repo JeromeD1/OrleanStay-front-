@@ -2,6 +2,7 @@
 
 main {
     @include flex-row-between-center;
+    @include fieldset-style;
     width: 95vw;
     max-width: 1600px;
     padding: 10px 50px;
