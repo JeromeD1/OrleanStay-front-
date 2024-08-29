@@ -30,7 +30,12 @@
 
 
             <div class="flex-input">
-                <p>Date d'arrivée : {{!showPickerarrival ? formResa.get("checkinDate")?.value ? (formResa.get("checkinDate")?.value | date: 'dd/MM/yyyy') : "Choisissez une date" : null}} </p>
+                <div>
+                    <p>Date d'arrivée : {{!showPickerarrival ? formResa.get("checkinDate")?.value ? (formResa.get("checkinDate")?.value | date: 'dd/MM/yyyy') : "Choisissez une date" : null}} </p>
+                    @if(checkinDateError) {
+                        <span>{{checkinDateError}}</span>
+                    }
+                </div>
                 <button type="button" *ngIf="!showPickerarrival" (click)="changeShowPickerarrival()" [disabled]="!selectedAppartment()" >Modifier</button>
                 <app-date-picker *ngIf="showPickerarrival"
                 [initDateValue]="formResa.getRawValue().checkinDate"
@@ -41,12 +46,14 @@
                 (closeEmitter)="closeAllPicker()"
                 ></app-date-picker>
             </div>
-            @if(checkinDateError) {
-                <span class="small-screen">{{checkinDateError}} </span>
-            }
 
             <div class="flex-input">
-                <p>Date de départ : {{!showPickerDeparture ? formResa.get("checkoutDate")?.value ? (formResa.get("checkoutDate")?.value | date: 'dd/MM/yyyy') : "Choisissez une date" : null}} </p>
+                <div>
+                    <p>Date de départ : {{!showPickerDeparture ? formResa.get("checkoutDate")?.value ? (formResa.get("checkoutDate")?.value | date: 'dd/MM/yyyy') : "Choisissez une date" : null}} </p>
+                    @if(checkoutDateError) {
+                        <span>{{checkoutDateError}} </span>
+                    }
+                </div>
                 <button type="button" *ngIf="!showPickerDeparture" (click)="changeShowPickerDeparture()" [disabled]="!selectedAppartment()">Modifier</button>
                 <app-date-picker *ngIf="showPickerDeparture"
                 [initDateValue]="formResa.getRawValue().checkoutDate"
@@ -57,9 +64,6 @@
                 (closeEmitter)="closeAllPicker()"
                 ></app-date-picker>
             </div>
-            @if(checkoutDateError) {
-                <span class="small-screen">{{checkoutDateError}} </span>
-            }
 
             <p class="bold">Nombre de nuits : {{numberNight() ? numberNight() : "---"}} </p>
 

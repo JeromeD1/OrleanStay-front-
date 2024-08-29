@@ -253,6 +253,18 @@ checkForm(): boolean {
     this.checkoutDateError = "Le champ est requis."
   }
 
+  this.selectedAppartment()?.reservations.forEach(resa => {
+    const checkin = this.someFunctions.convertToUTCDate(this.formResa.get("checkinDate")?.value).getTime()!
+    const checkout = this.someFunctions.convertToUTCDate(this.formResa.get("checkoutDate")?.value).getTime()!
+    const isCheckinInTwoDates: boolean = checkin >= resa.checkinDate!.getTime() && checkin < resa.checkoutDate!.getTime()
+    const isCheckoutInTwoDates: boolean = checkout > resa.checkinDate!.getTime() && checkout <= resa.checkoutDate!.getTime()
+    if((isCheckinInTwoDates || isCheckoutInTwoDates) && !resa.cancelled){
+      isValid = false
+      this.checkinDateError = "Les dates actuelles chevauchent une autre réservation."
+      this.checkoutDateError = "Les dates actuelles chevauchent une autre réservation."      
+    }
+  })
+
   if(this.formResa.get("checkinDate")?.value?.getTime()! > this.formResa.get("checkoutDate")?.value?.getTime()!){
     isValid = false
     this.checkoutDateError = "La date de sortie doit être ultérieure à la date d'entrée."
