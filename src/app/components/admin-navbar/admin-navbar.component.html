@@ -46,6 +46,13 @@
     <img src="../../../../../assets/icons/icon-calendrier.png" 
     alt="open-calendar"
     [class.keepOnRight]="showMenuBurger"
+    (click)="openStatComponent()"
     >
 
 </nav>
+
+@if (showStatComponent) {
+    <app-statistiques-resa
+    (closeEmitter)="closeStatComponent()"
+    ></app-statistiques-resa>
+}

@@ -77,11 +77,12 @@ ngOnInit(): void {
 }
 
 getOwnerAppartments(): void {
-  console.log("currentUser", this.currentUser);
-  if(this.currentUser && this.currentUser.role !== "USER") {   
-    this.appartmentService.getAppartmentsByOwnerId(this.currentUser?.id).pipe(take(1)).subscribe()
-  } else {
-    this.router.navigate(["/"])
+  if(this.ownerAppartments().length === 0){
+    if(this.currentUser && this.currentUser.role !== "USER") {   
+      this.appartmentService.getAppartmentsByOwnerId(this.currentUser?.id).pipe(take(1)).subscribe()
+    } else {
+      this.router.navigate(["/"])
+    }
   }
 }
 
