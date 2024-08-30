@@ -2,36 +2,62 @@
     <button type='button' (click)='clickMe()'>Click me</button>
     <button type='button' (click)='closeStatistics()'>Close</button>
 
-    <mat-table [dataSource]='ownerAppartStatistics()' class='userTable'>
-
-        <ng-container matColumnDef='Appartement'>
-            <mat-header-cell *matHeaderCellDef class='header-cell'> <p>Appartement</p></mat-header-cell>
-            <mat-cell *matCellDef='let row' class='cell-center'> <p>{{row.appartmentName}}</p></mat-cell>
-            <mat-footer-cell *matFooterCellDef class='footer-cell'> <p>Total</p></mat-footer-cell>
-          </ng-container>
-
-        @for (month of months; track $index) {
-
-            <ng-container [matColumnDef]='month'>
-                <mat-header-cell *matHeaderCellDef class='header-cell'> <p>{{month}} </p></mat-header-cell>
-                <mat-cell *matCellDef='let row' class='cell-center'> <p>{{getMonthlyEarns(row, $index)}} </p></mat-cell>
-                <mat-footer-cell *matFooterCellDef class='footer-cell'> <p>{{getMonthlyTotal($index)}}</p></mat-footer-cell>
+    <section class="table-container">
+        <mat-table [dataSource]='ownerAppartStatistics()' class='userTable'>
+    
+            <ng-container matColumnDef='Appartement'>
+                <mat-header-cell *matHeaderCellDef class='header-cell'> <p>Appartement</p></mat-header-cell>
+                <mat-cell *matCellDef='let row' class='cell-center'> <p>{{row.appartmentName}}</p></mat-cell>
+                <mat-footer-cell *matFooterCellDef class='footer-cell'> <p>Total</p></mat-footer-cell>
               </ng-container>
-        }
+    
+            @for (month of months; track $index) {
+    
+                <ng-container [matColumnDef]='month'>
+                    <mat-header-cell *matHeaderCellDef class='header-cell'> <p>{{month}} </p></mat-header-cell>
+                    <mat-cell *matCellDef='let row' class='cell-center'> <p>{{getMonthlyEarns(row, $index)}} </p></mat-cell>
+                    <mat-footer-cell *matFooterCellDef class='footer-cell'> <p>{{getMonthlyTotal($index)}}</p></mat-footer-cell>
+                  </ng-container>
+            }
+    
+    
+              <ng-container matColumnDef='Total'>
+                <mat-header-cell *matHeaderCellDef class='header-cell'> <p>Total annuel</p></mat-header-cell>
+                <mat-cell *matCellDef='let row' class='cell-center'> <p>{{getYearTotal(row)}}</p></mat-cell>
+                <mat-footer-cell *matFooterCellDef class='footer-cell'> <p>{{getYearTotalForAll()}}</p></mat-footer-cell>
+              </ng-container>
+        
+        
+        
+              <!-- Header and Row Declarations -->
+          <mat-header-row *matHeaderRowDef="['Appartement', 'Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre', 'Total']"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: ['Appartement', 'Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre', 'Total']"></mat-row>
+          <mat-footer-row *matFooterRowDef="['Appartement', 'Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre', 'Total']"></mat-footer-row>
+        </mat-table>    
+    </section>
 
+    <div class="cal-container">
+        <div class="button-change-month">
+            <button type="button" (click)="previousMonth()">{{getPreviousMonthName()}} </button>
+            <h2>{{getCurrentMonthName()}} </h2>
+            <button type="button" (click)="nextMonth()">{{getNextMonthName()}} </button>
 
-          <ng-container matColumnDef='Total'>
-            <mat-header-cell *matHeaderCellDef class='header-cell'> <p>Total annuel</p></mat-header-cell>
-            <mat-cell *matCellDef='let row' class='cell-center'> <p>{{getYearTotal(row)}}</p></mat-cell>
-            <mat-footer-cell *matFooterCellDef class='footer-cell'> <p>{{getYearTotalForAll()}}</p></mat-footer-cell>
-          </ng-container>
-    
-    
-    
-          <!-- Header and Row Declarations -->
-      <mat-header-row *matHeaderRowDef="['Appartement', 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Décembre', 'Total']"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: ['Appartement', 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Décembre', 'Total']"></mat-row>
-      <mat-footer-row *matFooterRowDef="['Appartement', 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Décembre', 'Total']"></mat-footer-row>
-    </mat-table>    
+        </div>
+        <mwl-calendar-month-view
+          [viewDate]="viewDate"
+          [events]="events()"
+          [cellTemplate]="cellTemplate">        
+        </mwl-calendar-month-view>
+
+        <ng-template #cellTemplate let-day="day">
+            <div class="cal-day-number">{{ day.date | date: 'dd' }}</div>
+            <div *ngFor="let event of day.events" [ngClass]="{'bordered-event': event.border}" [style.backgroundColor]="event.color.secondary">
+              <span class="event-title" [style.color]="isMiddleDay(day.date, event) ? 'rgba(0,0,0,0)' : getComplementaryColor(event.color.primary)" [title]="event.title">{{ event.title }}</span>
+            </div>
+          </ng-template>
+      </div>
+
+      
+      
 
 </main>

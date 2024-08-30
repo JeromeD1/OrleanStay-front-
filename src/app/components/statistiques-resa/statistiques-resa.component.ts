@@ -8,12 +8,26 @@ import { Router } from '@angular/router';
 import { take } from 'rxjs';
 import { AppartmentBusinessStat } from '../../models/AppartmentBusinessStat.model';
 import { MatTableModule } from '@angular/material/table';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CalendarA11y, CalendarDateFormatter, CalendarEvent, CalendarEventTitleFormatter, CalendarModule, CalendarUtils, CalendarView, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { CALENDAR_COLORS } from '../../shared/constantes/calendar-colors';
+import { MyCalendarEvent } from '../../models/MyCalendarEvents.model';
+import { addMonths, subMonths, format } from 'date-fns';
+import { fr } from 'date-fns/locale';
 
 @Component({
   selector: 'app-statistiques-resa',
   standalone: true,
-  imports: [CommonModule, MatTableModule],
+  imports: [CommonModule, MatTableModule, CalendarModule, DatePipe],
+  providers: [
+    { provide: DateAdapter, useFactory: adapterFactory },
+    CalendarUtils,
+    CalendarA11y,
+    CalendarDateFormatter,
+    CalendarEventTitleFormatter
+  ],
   templateUrl: './statistiques-resa.component.html',
   styleUrl: './statistiques-resa.component.scss'
 })
@@ -25,7 +39,7 @@ export class StatistiquesResaComponent implements OnInit {
   currentUser: User | null = this.appstore.getCurrentUser()()
   now = new Date()
   selectedYear = signal<number>(this.now.getFullYear())
-  months: string[] = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Décembre"]
+  months: string[] = ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre"]
   // yearOptionsLength = this.now.getFullYear() - 2020
   // yearOptions = Array.from({ length: this.yearOptionsLength }, (_, i) => 2020 + i);
   ownerAppartStatistics = computed<AppartmentBusinessStat[]>(() => this.ownerAppartments().map(appart => appart.calculateBusinessStatistics()))
@@ -85,6 +99,11 @@ export class StatistiquesResaComponent implements OnInit {
     }, 0)
   }
 
+
+  handleChangeYear(year: string) {
+    this.selectedYear.set(Number(year))
+  }
+
   clickMe(): void {
     console.log("yearOptions", this.yearOptions());
     console.log("ownerAppartStatistics", this.ownerAppartStatistics());
@@ -94,6 +113,84 @@ export class StatistiquesResaComponent implements OnInit {
 
   closeStatistics(): void {
     this.closeEmitter.emit()
+  }
+
+  /**********Test angular calendar */
+  view: CalendarView = CalendarView.Month;
+  viewDate: Date = new Date();
+  events = computed<MyCalendarEvent[]>(() => {
+    const allEvents: MyCalendarEvent[] = []
+    this.ownerAppartments().forEach((appart, index) => {
+      appart.reservations.forEach(resa => {
+        if(!resa.cancelled) {
+          const event: MyCalendarEvent = {
+            start: resa.checkinDate!,
+            end: resa.checkoutDate!,
+            title: resa.traveller?.personalInformations.lastname!,
+            color: CALENDAR_COLORS[index],
+            border: !resa.accepted
+          }
+
+          allEvents.push(event)
+        }
+      })
+    })
+
+    return allEvents
+  })
+  
+  previousMonth(): void {
+    this.viewDate = subMonths(this.viewDate, 1);
+  }
+
+  nextMonth(): void {
+    this.viewDate = addMonths(this.viewDate, 1);
+  }
+
+  getPreviousMonthName(): string {
+    return this.capitalizeFirstLetter(format(subMonths(this.viewDate, 1), 'MMMM', { locale: fr }))
+  }
+
+  getNextMonthName(): string {
+    return this.capitalizeFirstLetter(format(addMonths(this.viewDate, 1), 'MMMM', { locale: fr }))
+  }
+
+  getCurrentMonthName(): string {
+    return this.capitalizeFirstLetter(format(this.viewDate, 'MMMM', { locale: fr }))
+  }
+
+  capitalizeFirstLetter(string: string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  isSameDay(date1: Date, date2: Date): boolean {
+    return date1.getFullYear() === date2.getFullYear() &&
+           date1.getMonth() === date2.getMonth() &&
+           date1.getDate() === date2.getDate();
+  }
+
+  isMiddleDay(date: Date, event: CalendarEvent): boolean {
+    return date > event.start && date < event.end!;
+  }
+
+  getComplementaryColor(hex: string): string {
+    // Vérifie si le code hexadécimal commence par #
+    if (hex.startsWith('#')) {
+      hex = hex.slice(1);
+    }
+  
+    // Convertit le code hexadécimal en nombre entier
+    const r = parseInt(hex.slice(0, 2), 16);
+    const g = parseInt(hex.slice(2, 4), 16);
+    const b = parseInt(hex.slice(4, 6), 16);
+  
+    // Calcule la couleur complémentaire
+    const compR = (255 - r).toString(16).padStart(2, '0');
+    const compG = (255 - g).toString(16).padStart(2, '0');
+    const compB = (255 - b).toString(16).padStart(2, '0');
+  
+    // Retourne la couleur complémentaire en format hexadécimal
+    return `#${compR}${compG}${compB}`;
   }
 
 }
