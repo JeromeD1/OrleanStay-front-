@@ -67,7 +67,7 @@ export class EditReservationAdminComponent {
     private readonly notificationService: NotificationService,
     private readonly router: Router, 
     private readonly fb: FormBuilder,
-    private readonly  cdr: ChangeDetectorRef ){}
+    ){}
 
     formResa!: FormGroup
 

@@ -1,7 +1,7 @@
 @import '../../styles/mixins';
 
 main {
-    @include flex-column-center-center;
+    @include flex-column-start-center;
     width: 100vw;
     height: 100vh;
     position: fixed;
@@ -10,121 +10,67 @@ main {
     left: 0;
     background-color: #fae7e181;
     backdrop-filter: blur(10px);
-    overflow-y: auto;
+    // overflow-y: auto;
     padding: 24px;
 
+    article {
+        @include flex-column-start-center;
+        width: 100%;
+        gap: 48px;
+        overflow-y: scroll;
 
-
-    .mat-column-Appartement {
-        max-width: 200px;
-        border-right: 3px solid var(--colorDark);
-    }
-
-    .mat-column-Janvier {
-        max-width: 70px;
-        border-right: 1px solid var(--colorMid);
-    }
-
-    .mat-column-Fevrier {
-        max-width: 70px;
-        border-right: 1px solid var(--colorMid);
-    }
-
-    .mat-column-Mars {
-        max-width: 70px;
-        border-right: 1px solid var(--colorMid);
-    }
-
-    .mat-column-Avril {
-        max-width: 70px;
-        border-right: 1px solid var(--colorMid);
-    }
-
-    .mat-column-Mai {
-        max-width: 70px;
-        border-right: 1px solid var(--colorMid);
-    }
-
-    .mat-column-Juin {
-        max-width: 70px;
-        border-right: 1px solid var(--colorMid);
-    }
-
-    .mat-column-Juillet {
-        max-width: 70px;
-        border-right: 1px solid var(--colorMid);
-    }
-
-    .mat-column-Aout {
-        max-width: 70px;
-        border-right: 1px solid var(--colorMid);
-    }
-
-    .mat-column-Septembre {
-        max-width: 90px;
-        border-right: 1px solid var(--colorMid);
-    }
-
-    .mat-column-Octobre {
-        max-width: 90px;
-        border-right: 1px solid var(--colorMid);
-    }
-
-    .mat-column-Novembre {
-        max-width: 90px;
-        border-right: 1px solid var(--colorMid);
-    }
-
-    .mat-column-Decembre {
-        max-width: 90px;
-        border-right: 1px solid var(--colorMid);
-    }
-
-    .mat-column-Total {
-        max-width: 70px;
-        border-left: 3px double var(--colorDark);
-    }
-
-    .header-cell {
-        @include flex-column-center-center;
-        border-bottom: 2px solid var(--colorDark);
-        background-color: var(--colorLightest);
-        p{
-            margin: 0;
-        }
-    }
-
-    .footer-cell {
-        @include flex-column-center-center;
-        border-top: 2px solid var(--colorDark);
-        background-color: var(--colorLightest);
-
-        p{
-            margin: 0;
-            font-weight: bold;
-        }
-    }
-
-    .cell-center {
-        @include flex-column-center-center;
-        p{
-            margin: 0;
-        }
-    }
-
-    .userTable {
-        border: 1px solid var(--colorMid);
-    }
-    
-    .table-container {
-        max-width: 1190px !important;
-    }
-
-
-    /******** Calendar *******/
+         /******** Calendar *******/
     .cal-container {
+        @include fieldset-style;
+        padding: 24px;
         width: 1600px;
         max-width: 95vw;
+
+        .button-change-month {
+            @include flex-row-between-center;
+            width: 100%;
+            padding: 24px;
+
+            button {
+                @include button-colorBrand;
+            }
+        }
+
+        .calendar-legend {
+            @include flex-column-start-start;
+            gap: 8px;
+            margin-top: 24px;
+            width: 100%;
+
+            .p-legende {
+                font-weight: 600;
+                margin: 0 !important;
+            }
+
+            .group-legend-container {
+                @include flew-row-start-center-wrap;
+                width: 100%;
+                gap: 48px;
+
+                .legend-container {
+                    @include flex-row-start-center;
+                    gap: 24px;
+                    margin: 0;
+    
+                    .legend-bar{
+                        width: 150px;
+                        height: 16px;
+                        border: 1px solid var(--colorDark);
+                        margin: 0;
+                    }
+
+                    p {
+                        margin: 0;
+                    }
+                }
+            }
+
+        }
     }
 
     .bordered-event {
@@ -149,4 +95,137 @@ main {
         padding: 4px 8px;
         font-weight: 500;
       }
+    }
+
+    .table-container {
+        @include fieldset-style;
+        padding: 24px;
+        margin-bottom: 24px;
+        width: 1600px;
+        max-width: 95vw;
+        
+        
+        .mat-column-Appartement {
+            min-width: 100px;
+            width: 16.5%;
+            border-right: 3px solid var(--colorDark);
+        }
+    
+        .mat-column-Janvier {
+            // max-width: 70px;
+            width: 5.9%;
+            border-right: 1px solid var(--colorMid);
+        }
+    
+        .mat-column-Fevrier {
+            // max-width: 70px;
+            width: 5.9%;
+            border-right: 1px solid var(--colorMid);
+        }
+    
+        .mat-column-Mars {
+            // max-width: 70px;
+            width: 5.9%;
+            border-right: 1px solid var(--colorMid);
+        }
+    
+        .mat-column-Avril {
+            // max-width: 70px;
+            width: 5.9%;
+            border-right: 1px solid var(--colorMid);
+        }
+    
+        .mat-column-Mai {
+            // max-width: 70px;
+            width: 5.9%;
+            border-right: 1px solid var(--colorMid);
+        }
+    
+        .mat-column-Juin {
+            // max-width: 70px;
+            width: 5.9%;
+            border-right: 1px solid var(--colorMid);
+        }
+    
+        .mat-column-Juillet {
+            // max-width: 70px;
+            width: 5.9%;
+            border-right: 1px solid var(--colorMid);
+        }
+    
+        .mat-column-Aout {
+            // max-width: 70px;
+            width: 5.9%;
+            border-right: 1px solid var(--colorMid);
+        }
+    
+        .mat-column-Septembre {
+            min-width: 90px;
+            width: 7.6%;
+            border-right: 1px solid var(--colorMid);
+        }
+    
+        .mat-column-Octobre {
+            min-width: 75px;
+            width: 7.6%;
+            border-right: 1px solid var(--colorMid);
+        }
+    
+        .mat-column-Novembre {
+            min-width: 90px;
+            width: 7.6%;
+            border-right: 1px solid var(--colorMid);
+        }
+    
+        .mat-column-Decembre {
+            min-width: 90px;
+            width: 7.6%;
+            border-right: 1px solid var(--colorMid);
+        }
+    
+        .mat-column-Total {
+            // max-width: 70px;
+            width: 5.9%;
+            border-left: 3px double var(--colorDark);
+        }
+    
+        .header-cell {
+            @include flex-column-center-center;
+            border-bottom: 2px solid var(--colorDark);
+            background-color: var(--colorLightest);
+            p{
+                margin: 0;
+            }
+        }
+    
+        .footer-cell {
+            @include flex-column-center-center;
+            border-top: 2px solid var(--colorDark);
+            background-color: var(--colorLightest);
+    
+            p{
+                margin: 0;
+                font-weight: bold;
+            }
+        }
+    
+        .cell-center {
+            @include flex-column-center-center;
+            p{
+                margin: 0;
+            }
+        }
+    
+        .userTable {
+            border: 1px solid var(--colorMid);
+        }
+    }
+
+    
+    // .table-container {
+    //     max-width: 1190px !important;
+    // }
+
+
+   
 }

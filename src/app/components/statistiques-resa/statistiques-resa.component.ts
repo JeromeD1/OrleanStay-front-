@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { take } from 'rxjs';
 import { AppartmentBusinessStat } from '../../models/AppartmentBusinessStat.model';
 import { MatTableModule } from '@angular/material/table';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, registerLocaleData } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CalendarA11y, CalendarDateFormatter, CalendarEvent, CalendarEventTitleFormatter, CalendarModule, CalendarUtils, CalendarView, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
@@ -16,11 +16,17 @@ import { CALENDAR_COLORS } from '../../shared/constantes/calendar-colors';
 import { MyCalendarEvent } from '../../models/MyCalendarEvents.model';
 import { addMonths, subMonths, format } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import localeFr from '@angular/common/locales/fr';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatOptionModule } from '@angular/material/core';
+
+registerLocaleData(localeFr);
 
 @Component({
   selector: 'app-statistiques-resa',
   standalone: true,
-  imports: [CommonModule, MatTableModule, CalendarModule, DatePipe],
+  imports: [CommonModule, MatTableModule, CalendarModule, DatePipe, MatSelectModule, MatFormFieldModule, MatOptionModule],
   providers: [
     { provide: DateAdapter, useFactory: adapterFactory },
     CalendarUtils,
@@ -51,7 +57,8 @@ export class StatistiquesResaComponent implements OnInit {
         allYears.push(year.toString())
       })
     })
-
+    console.log("this.ownerAppartments()", this.ownerAppartments());
+    
     return new Set(allYears.sort((a,b) => Number(a) - Number(b)))
   })
 
@@ -138,6 +145,10 @@ export class StatistiquesResaComponent implements OnInit {
 
     return allEvents
   })
+
+  getAppartLegendColor(appartIndex: number) {
+    return CALENDAR_COLORS[appartIndex].secondary
+  }
   
   previousMonth(): void {
     this.viewDate = subMonths(this.viewDate, 1);
@@ -157,6 +168,14 @@ export class StatistiquesResaComponent implements OnInit {
 
   getCurrentMonthName(): string {
     return this.capitalizeFirstLetter(format(this.viewDate, 'MMMM', { locale: fr }))
+  }
+
+  getCurrentYear(): string {
+    return format(this.viewDate, "yyyy")
+  }
+
+  getDayName(date: Date): string {
+    return format(date, 'EEEE', { locale: fr });
   }
 
   capitalizeFirstLetter(string: string) {
