@@ -19,20 +19,38 @@ main {
         gap: 48px;
         overflow-y: scroll;
 
+        button {
+            @include button-colorBrand;
+        }
+
+        .img-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 40px;
+            height: auto;
+
+            &:hover {
+                cursor: pointer;
+                filter: hue-rotate(110deg);
+            }
+        }
+
          /******** Calendar *******/
     .cal-container {
         @include fieldset-style;
         padding: 24px;
         width: 1600px;
         max-width: 95vw;
+        margin-top: 24px;
 
         .button-change-month {
             @include flex-row-between-center;
             width: 100%;
             padding: 24px;
 
-            button {
-                @include button-colorBrand;
+            h2 {
+                text-align: center;
             }
         }
 
@@ -94,6 +112,7 @@ main {
         white-space: nowrap;
         padding: 4px 8px;
         font-weight: 500;
+        max-width: 14vw;
       }
     }
 
@@ -221,11 +240,32 @@ main {
         }
     }
 
-    
-    // .table-container {
-    //     max-width: 1190px !important;
-    // }
+}
 
+@media screen and (max-width: 1000px) {
+    main {
+        padding: 4px;
+    }
+}
 
-   
+@media screen and (max-width: 500px) {
+    main {
+        article {
+            .cal-container {        
+                .button-change-month {
+                    padding: 0;
+                    padding-bottom: 16px;
+                }
+            }
+        }
+    }
+
+    ::ng-deep .cal-month-view .cal-day-cell:not(:last-child){
+        max-width: 12vw !important;
+    }
+
+    .event-title, .cal-cel {
+        max-width: 12vw !important;
+
+    }
 }

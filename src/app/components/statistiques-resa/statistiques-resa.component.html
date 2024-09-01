@@ -1,8 +1,7 @@
 <main>
-    <article>
+    <article>    
+        <img src="../../../../../../assets/icons/icon-close-window.png" (click)="closeStatistics()"  alt="close" class="img-close"/>
 
-        <button type='button' (click)='closeStatistics()'>Close</button>
-    
         
         <div class="cal-container">
             <h1>Agenda des réservations</h1>
@@ -22,7 +21,7 @@
     
             <ng-template #cellTemplate let-day="day">
                 <div class="cal-day-number">{{ day.date | date: 'dd' }}</div>
-                <div *ngFor="let event of day.events" [ngClass]="{'bordered-event': event.border}" [style.backgroundColor]="event.color.secondary">
+                <div *ngFor="let event of day.events" [ngClass]="{'bordered-event': event.border}" [style.backgroundColor]="event.color.secondary" class="cal-cel">
                   <span class="event-title" [style.color]="isMiddleDay(day.date, event) ? 'rgba(0,0,0,0)' : getComplementaryColor(event.color.secondary)" [title]="event.title">{{ event.title }}</span>
                 </div>
               </ng-template>
@@ -88,7 +87,8 @@
     
     
     
-          
+        <button type='button' (click)='closeStatistics()'>Fermer</button>
+
           
     </article>
 
