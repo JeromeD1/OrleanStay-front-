@@ -1,0 +1,49 @@
+<main>
+    <section #formContainerElement class="page-container">
+        <div class="img-container">
+            <img #imgCathedraleElement [src]="imgCathedrale" alt="Photos Orleans">
+        </div>
+
+        <div class="menu">
+                <img [src]="iconMenu" alt="menu" title="Navigation" class="img-menu" (click)="openMenu()">
+                <app-menu
+                *ngIf="showMenu"
+                (mouseleave)="closeMenu()"
+                ></app-menu>
+        </div>
+
+        <div class="form-container">
+
+            <h1>Informations personnelles</h1>
+            <form [formGroup]="personalInfoForm">
+
+                <app-reactive-input [error]="firstnameError" formControlName="firstname" label="Prénom" type="text" placeholder="Saisissez votre prénom"></app-reactive-input>
+                <app-reactive-input [error]="lastnameError" formControlName="lastname" label="Nom" type="text" placeholder="Saisissez votre nom"></app-reactive-input>
+                <app-reactive-input [error]="addressError" formControlName="address" label="Adresse" type="text" placeholder="Saisissez votre adresse"></app-reactive-input>
+                <app-reactive-input [error]="zipcodeError" formControlName="zipcode" label="Code postal" type="text" placeholder="ex : 27 500"></app-reactive-input>
+                <app-reactive-input [error]="cityError" formControlName="city" label="Ville" type="text" placeholder="ex : Paris"></app-reactive-input>
+                <app-reactive-input [error]="countryError" formControlName="country" label="Pays" type="text" placeholder="ex : France"></app-reactive-input>
+                <app-reactive-input [error]="phoneError" formControlName="phone" label="Téléphone" type="text" placeholder="ex : +33 6 75 75 75 75"></app-reactive-input>
+                <app-reactive-input [error]="emailError" formControlName="email" label="Email" type="text" placeholder="ex : john.doe@gmail.com"></app-reactive-input>
+
+            </form>
+
+            <div class="button-container">
+                <button type="button" (click)="onSubmitPersonalInfo()">Enregistrer</button>
+            </div>
+
+            <h1 class="mTop">Modification du mot de passe</h1>
+            <form [formGroup]="passwordForm">
+
+                <app-reactive-input [error]="oldPasswordError" formControlName="oldPassword" label="Ancien mot de passe" type="password" placeholder="xxxxxxxxxx"></app-reactive-input>
+                <app-reactive-input [error]="newPasswordError" formControlName="newPassword" label="Nouveau mot de passe" type="password" placeholder="xxxxxxxxxx"></app-reactive-input>
+                <app-reactive-input [error]="confirmationPasswordError" formControlName="confirmationPassword" label="Confirmation du mot de passe" type="password" placeholder="xxxxxxxxxx"></app-reactive-input>                
+            </form>
+
+            <div class="button-container">
+                <button type="button" (click)="onSubmitPasswordForm()">Enregistrer</button>
+            </div>
+
+        </div>
+    </section>
+</main>

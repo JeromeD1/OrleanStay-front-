@@ -4,12 +4,21 @@
             <a [routerLink]="['/admin']" ><p>Administration</p></a>
         </li>
     }
-    <li>
-        <a [routerLink]="['/']" ><p>Mon profil</p></a>
-    </li>
-    <li>
-        <a [routerLink]="['/']" ><p>Mes réservations</p></a>
-    </li>
+    @if(currentPage != '/'){
+        <li>
+            <a [routerLink]="['/']" ><p>Page d'accueil</p></a>
+        </li>
+    }
+    @if(currentPage != '/userProfile'){
+        <li>
+            <a [routerLink]="['/userProfile']" ><p>Mon profil</p></a>
+        </li>
+    }
+    @if(currentPage != '/userReservation'){
+        <li>
+            <a [routerLink]="['/userReservation']" ><p>Mes réservations</p></a>
+        </li>
+    }
     <li>
         <a [routerLink]="['/']" (click)="logout()"><p>Se déconnecter</p></a>
     </li>

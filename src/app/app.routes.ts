@@ -8,6 +8,7 @@ import { AppartmentGestionComponent } from './pages/admin-interface/appartment-g
 import { TravelInfoEditionComponent } from './pages/travel-info-edition/travel-info-edition.component';
 import { GestionUtilisateursComponent } from './pages/admin-interface/gestion-utilisateurs/gestion-utilisateurs.component';
 import { EditReservationAdminComponent } from './pages/admin-interface/edit-reservation-admin/edit-reservation-admin.component';
+import { UserProfileComponent } from './pages/user-interface/user-profile/user-profile.component';
 
 export const routes: Routes = 
 [
@@ -24,4 +25,5 @@ export const routes: Routes =
             {path: "gestionUtilisateurs", component: GestionUtilisateursComponent},
         ]
     },
+    {path: "userProfile", component: UserProfileComponent}
 ];

@@ -7,11 +7,12 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UserSaveRequest } from '../../models/Request/UserSaveRequest.model';
 import { NotificationService } from '../../shared/notification.service';
+import { ReactiveInputComponent } from '../../shared/library/reactive-input/reactive-input.component';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ReactiveInputComponent],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss'
 })
