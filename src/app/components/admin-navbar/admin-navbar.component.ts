@@ -5,11 +5,12 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NotificationService } from '../../shared/notification.service';
 import { AppstoreService } from '../../shared/appstore.service';
+import { StatistiquesResaComponent } from '../statistiques-resa/statistiques-resa.component';
 
 @Component({
   selector: 'app-admin-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, StatistiquesResaComponent],
   templateUrl: './admin-navbar.component.html',
   styleUrl: './admin-navbar.component.scss'
 })
@@ -19,6 +20,8 @@ export class AdminNavbarComponent implements AfterViewInit, OnDestroy{
   showMenuBurger: boolean = false
   showMenuReservation: boolean = false
   isOnPageReservation = signal<boolean>(false)
+
+  showStatComponent: boolean = false
 
   destroy$: Subject<void> = new Subject()
 
@@ -77,6 +80,14 @@ export class AdminNavbarComponent implements AfterViewInit, OnDestroy{
 
   closeMenuReservation(): void {
     this.showMenuReservation = false
+  }
+
+  openStatComponent(): void {
+    this.showStatComponent = true
+  }
+
+  closeStatComponent(): void {
+    this.showStatComponent = false
   }
 
   logout(): void {    

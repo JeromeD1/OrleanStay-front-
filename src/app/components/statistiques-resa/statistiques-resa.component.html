@@ -1,0 +1,95 @@
+<main>
+    <article>    
+        <img src="../../../../../../assets/icons/icon-close-window.png" (click)="closeStatistics()"  alt="close" class="img-close"/>
+
+        
+        <div class="cal-container">
+            <h1>Agenda des réservations</h1>
+            <div class="button-change-month">
+                <button type="button" (click)="previousMonth()">{{getPreviousMonthName()}} </button>
+                <h2>{{getCurrentMonthName()}} {{getCurrentYear()}} </h2>
+                <button type="button" (click)="nextMonth()">{{getNextMonthName()}} </button>
+    
+            </div>
+            <mwl-calendar-month-view
+              [viewDate]="viewDate"
+              [events]="events()"
+              locale="fr"
+              [weekStartsOn]="1"
+              [cellTemplate]="cellTemplate">        
+            </mwl-calendar-month-view>
+    
+            <ng-template #cellTemplate let-day="day">
+                <div class="cal-day-number">{{ day.date | date: 'dd' }}</div>
+                <div *ngFor="let event of day.events" [ngClass]="{'bordered-event': event.border}" [style.backgroundColor]="event.color.secondary" class="cal-cel">
+                  <span class="event-title" [style.color]="isMiddleDay(day.date, event) ? 'rgba(0,0,0,0)' : getComplementaryColor(event.color.secondary)" [title]="event.title">{{ event.title }}</span>
+                </div>
+              </ng-template>
+
+              <div class="calendar-legend">
+                <p class="p-legende">Légende</p>
+                <div class="group-legend-container">
+                    @for (appart of ownerAppartStatistics(); track $index) {
+                        <div class="legend-container">
+                            <div class="legend-bar" [style.backgroundColor]="getAppartLegendColor($index)"></div>
+                            <p>{{appart.appartmentName}} </p>
+                        </div>
+                    }
+                </div>
+
+              </div>
+          </div>
+    
+          
+          <section class="table-container">
+              <h1>Résultats financiers ({{selectedYear()}})</h1>
+            @if(yearOptions()){
+                <mat-form-field>
+                    <mat-label>Choisissez une année</mat-label>
+                        <mat-select [value]="selectedYear().toString()" (selectionChange)="handleChangeYear($event.value)">
+                        <mat-option *ngFor="let year of yearOptions()" [value]="year">{{year.toString()}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+            }
+    
+            <mat-table [dataSource]='ownerAppartStatistics()' class='userTable'>
+        
+                <ng-container matColumnDef='Appartement'>
+                    <mat-header-cell *matHeaderCellDef class='header-cell'> <p>Appartement</p></mat-header-cell>
+                    <mat-cell *matCellDef='let row' class='cell-center'> <p>{{row.appartmentName}}</p></mat-cell>
+                    <mat-footer-cell *matFooterCellDef class='footer-cell'> <p>Total</p></mat-footer-cell>
+                  </ng-container>
+        
+                @for (month of months; track $index) {
+        
+                    <ng-container [matColumnDef]='month'>
+                        <mat-header-cell *matHeaderCellDef class='header-cell'> <p>{{month}} </p></mat-header-cell>
+                        <mat-cell *matCellDef='let row' class='cell-center'> <p>{{getMonthlyEarns(row, $index)}} </p></mat-cell>
+                        <mat-footer-cell *matFooterCellDef class='footer-cell'> <p>{{getMonthlyTotal($index)}}</p></mat-footer-cell>
+                      </ng-container>
+                }
+        
+        
+                  <ng-container matColumnDef='Total'>
+                    <mat-header-cell *matHeaderCellDef class='header-cell'> <p>Total annuel</p></mat-header-cell>
+                    <mat-cell *matCellDef='let row' class='cell-center'> <p>{{getYearTotal(row)}}</p></mat-cell>
+                    <mat-footer-cell *matFooterCellDef class='footer-cell'> <p>{{getYearTotalForAll()}}</p></mat-footer-cell>
+                  </ng-container>
+            
+            
+            
+                  <!-- Header and Row Declarations -->
+              <mat-header-row *matHeaderRowDef="['Appartement', 'Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre', 'Total']"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: ['Appartement', 'Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre', 'Total']"></mat-row>
+              <mat-footer-row *matFooterRowDef="['Appartement', 'Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre', 'Total']"></mat-footer-row>
+            </mat-table>    
+        </section>
+    
+    
+    
+        <button type='button' (click)='closeStatistics()'>Fermer</button>
+
+          
+    </article>
+
+</main>

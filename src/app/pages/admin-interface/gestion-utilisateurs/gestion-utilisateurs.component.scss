@@ -48,7 +48,8 @@ main {
     .header-cell {
         @include flex-column-center-center;
         border-bottom: 2px solid var(--colorDark);
-
+        background-color: var(--colorLightest);
+        
         p{
             margin: 0;
         }

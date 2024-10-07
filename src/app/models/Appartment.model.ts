@@ -5,6 +5,8 @@ import { Discount } from "./Discount.model";
 import { Owner } from "./Owner.model";
 import { SomeFunctionsService } from "../shared/some-functions.service";
 import { inject } from "@angular/core";
+import { AppartmentBusinessStat } from "./AppartmentBusinessStat.model";
+import { YearBusinessStat } from "./YearBusinessStat.model";
 
 
 export class Appartment {
@@ -91,6 +93,38 @@ export class Appartment {
         console.log("reservations dans Appartment", this.reservations);
         
     }
+
+    calculateBusinessStatistics(): AppartmentBusinessStat {
+       const appartBusinessStat: AppartmentBusinessStat = {
+        appartmentId: this.id,
+        appartmentName: this.name,
+        appartmentDescription: this.description,
+        yearStatistics: []
+       }
+
+       const yearOptions = new Set(this.reservations.map(resa => resa.checkinDate!.getFullYear()).sort((a, b) => a - b))
+       
+       yearOptions.forEach(year => {
+        const yearStat: YearBusinessStat = {
+            year: year,
+            monthlyEarns: [0,0,0,0,0,0,0,0,0,0,0,0],
+            yearTotal: 0
+        }
+
+        this.reservations.forEach(resa => {
+            const resaYear: number = resa.checkinDate!.getFullYear()
+            const resaMonth: number = resa.checkinDate!.getMonth()
+            if(resaYear === year && resa.accepted && !resa.cancelled) {
+                yearStat.monthlyEarns[resaMonth] += resa.reservationPrice!
+                yearStat.yearTotal += resa.reservationPrice!
+            }
+           })
+           appartBusinessStat.yearStatistics.push(yearStat)
+       })
+
+       return appartBusinessStat
+    }
+
 
     static createFromOtherAppartment(appart: Appartment): Appartment {
         return new Appartment(

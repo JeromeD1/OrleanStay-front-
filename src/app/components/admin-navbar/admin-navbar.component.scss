@@ -26,7 +26,7 @@ nav {
         .section-menu {
             @include flex-column-center-center;
             position: relative;
-            z-index: 1000;
+            z-index: 3;
             height: 70px;
             padding: 8px;
 
@@ -43,7 +43,6 @@ nav {
                 position: absolute;
                 bottom: 4px;
                 left: 0;
-                z-index: 1001;
 
                 small {
                     color: blue;
@@ -170,7 +169,7 @@ nav {
         div.navBurger {
             @include flex-column-center-center;
             position: absolute;
-            z-index: 1000;
+            z-index: 3;
             top: 0;
             left: 0;
             width: 70vw;

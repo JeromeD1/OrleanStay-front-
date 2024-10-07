@@ -67,7 +67,7 @@ export class EditReservationAdminComponent {
     private readonly notificationService: NotificationService,
     private readonly router: Router, 
     private readonly fb: FormBuilder,
-    private readonly  cdr: ChangeDetectorRef ){}
+    ){}
 
     formResa!: FormGroup
 
@@ -96,11 +96,12 @@ ngOnInit(): void {
 }
 
 getOwnerAppartments(): void {
-  console.log("currentUser", this.currentUser);
-  if(this.currentUser && this.currentUser.role !== "USER") {   
-    this.appartmentService.getAppartmentsByOwnerId(this.currentUser?.id).pipe(take(1)).subscribe()
-  } else {
-    this.router.navigate(["/"])
+  if(this.ownerAppartments().length === 0){
+    if(this.currentUser && this.currentUser.role !== "USER") {   
+      this.appartmentService.getAppartmentsByOwnerId(this.currentUser?.id).pipe(take(1)).subscribe()
+    } else {
+      this.router.navigate(["/"])
+    }
   }
 }
 
