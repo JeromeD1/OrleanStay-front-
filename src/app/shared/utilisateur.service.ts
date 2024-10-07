@@ -5,6 +5,8 @@ import { Observable, tap } from 'rxjs';
 import { User } from '../models/User.model';
 import { environment } from '../../environment/environment';
 import { Owner } from '../models/Owner.model';
+import { PersonalInformation } from '../models/PersonalInformation.model';
+import { ChangePasswordSaveRequest } from '../models/Request/ChangePasswordSaveRequest.model';
 
 @Injectable({
   providedIn: 'root'
@@ -44,5 +46,17 @@ export class UtilisateurService {
         this.appstore.updateOneUserInAllUsers(data)
       })
     )
+  }
+
+  updatePersonalInformation(personalInformation :PersonalInformation): Observable<PersonalInformation> {
+    return this.http.put<PersonalInformation>(`${environment.BACKEND_BASE_URL}/personalInformation/${personalInformation.id}`, personalInformation).pipe(
+      tap((data) => {
+        this.appstore.updateCurrentUserKey("personalInformations", data)
+      })
+    )
+  }
+
+  updateUserPassword(passwordSaveRequest: ChangePasswordSaveRequest, userId: number): Observable<number> {
+    return this.http.put<number>(`${environment.BACKEND_BASE_URL}/utilisateurs/${userId}/password`, passwordSaveRequest)
   }
 }
