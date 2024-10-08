@@ -1,0 +1,73 @@
+@import "../../../styles/mixins";
+
+main {
+    @include flex-column-center-center;
+    background-color: var(--colorLightest);
+
+    .page-container {
+        @include flex-column-center-center;
+        padding-top: 48px;
+        position: relative;
+        width: 95vw;
+        max-width: 1800px;
+        background-color: rgba(0,0,0,0);
+
+        .menu {
+            @include flex-column-center-end;
+            gap: 8px;
+            position: absolute;
+            top: 48px;
+            right: 48px;
+            z-index: 2;
+
+            .img-menu {
+                border-radius: 50%;
+                padding: 5px;
+                width: 60px;
+                height: 60px;
+                &:hover {
+                    cursor: pointer;
+                    filter: invert(48%) sepia(13%) saturate(3207%) hue-rotate(310deg) brightness(95%) contrast(80%);
+                    box-shadow: 0 0 10px 10px var(--colorMid);
+                }
+            }
+        }
+
+        .img-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+
+
+            &::after {
+                position: absolute;
+                top: 0;
+                left: -8px;
+                content: "";
+                width: calc(100% + 16px);
+                height: 100%;
+                background-color: var(--colorLightest);
+                opacity: 0.8;
+            }
+
+
+            img {
+                width: 100%;
+                filter: blur(8px);
+            }
+        }
+
+        .form-container {
+            position: relative;
+            z-index: 1;
+            width: 95vw;
+            max-width: 1600px;
+
+            .mTop {
+                margin-top: 64px;
+            }
+
+        }
+    }
+}

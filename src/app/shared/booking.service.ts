@@ -105,4 +105,8 @@ export class BookingService {
     )
   }
 
+  getReservationsByUserId(userId: number) : Observable<Reservation[]> {
+    return this.http.get<Reservation[]>(environment.BACKEND_BASE_URL + `/reservation/user/${userId}`)
+  }
+
 }

@@ -1,0 +1,52 @@
+@import '../../styles/mixins';
+
+main {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    background-color: #fae7e181;
+    backdrop-filter: blur(10px);
+    overflow-y: auto;
+
+    section {
+        margin: auto;
+        margin-top: 24px;
+        margin-bottom: 32px;
+        position: relative;
+        width: 1600px;
+        max-width: 95vw;
+        box-shadow: 0 1px 0 2px var(--colorMid);
+        min-height: 50vh;
+        overflow-y: auto;
+        background-color: #fafafa9e;
+        backdrop-filter: blur(40px);
+        gap: 32px;
+        padding: 16px 64px;
+        border-radius: 24px;
+        
+
+            .img-close {
+                position: absolute;
+                top: 8px;
+                right: 8px;
+                width: 40px;
+                height: auto;
+    
+                &:hover {
+                    cursor: pointer;
+                    filter: hue-rotate(110deg);
+                }
+            }
+
+            button {
+                @include button-colorBrand;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 24px;
+            }
+        }
+    }
