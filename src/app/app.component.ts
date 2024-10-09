@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, OnInit, WritableSignal } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 import { AppstoreService } from './shared/appstore.service';
 import { User } from './models/User.model';
+import { LoginService } from './shared/login.service';
+import { UtilisateurService } from './shared/utilisateur.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +16,14 @@ import { User } from './models/User.model';
 export class AppComponent implements OnInit {
   title = 'OrleanStay';
 
-  constructor(private readonly appstore: AppstoreService) {}
+  currentUser: WritableSignal<User | null> = this.appstore.getCurrentUser()
+
+  constructor(
+    private readonly appstore: AppstoreService,
+    private readonly router: Router,
+    private readonly loginService: LoginService,
+    private readonly utilisateurService: UtilisateurService
+  ) {}
 
   ngOnInit(): void {
    this.initSession()   
@@ -22,7 +32,21 @@ export class AppComponent implements OnInit {
   initSession(): void {
     if(localStorage.getItem("currentUser")){
       const sessionUser: User | null = JSON.parse(localStorage.getItem("currentUser")!)
-      this.appstore.setCurrentUser(sessionUser)
+      if(sessionUser) {
+        this.appstore.setCurrentUser(sessionUser)
+        this.verifySessionActivity()
+      }
     }
+  }
+
+  verifySessionActivity(): void {
+    this.utilisateurService.findById(this.currentUser()?.id as number).pipe(take(1)).subscribe(
+      {
+        error: () => {
+          this.loginService.logout().pipe(take(1)).subscribe()
+          this.router.navigate(["/"])
+        }
+      }
+    )
   }
 }

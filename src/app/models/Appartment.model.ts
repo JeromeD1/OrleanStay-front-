@@ -84,6 +84,10 @@ export class Appartment {
         this.reservations.push(reservation)
     }
 
+    removeReservation(reservation: Reservation): void {
+        this.reservations = this.reservations.filter(resa => resa.id !== reservation.id)
+    }
+
     updateReservation(reservation: Reservation): void {
         const newReservation = this.reservations.map(item => (
             item.id == reservation.id ? reservation : item

@@ -59,4 +59,8 @@ export class UtilisateurService {
   updateUserPassword(passwordSaveRequest: ChangePasswordSaveRequest, userId: number): Observable<number> {
     return this.http.put<number>(`${environment.BACKEND_BASE_URL}/utilisateurs/${userId}/password`, passwordSaveRequest)
   }
+
+  findById(userId: number): Observable<User> {
+    return this.http.get<User>(`${environment.BACKEND_BASE_URL}/utilisateurs/${userId}`)
+  }
 }

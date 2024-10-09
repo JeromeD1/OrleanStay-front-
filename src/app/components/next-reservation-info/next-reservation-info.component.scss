@@ -52,7 +52,7 @@ article {
             gap: 16px;
 
             button {
-                width: 170px;
+                width: 190px;
             }
         }
 
@@ -101,6 +101,18 @@ article {
         .info {
             @include flex-column-center-center;
             gap: 24px;
+        }
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    article {
+        .info {
+            .div-button {
+                button {
+                  width: 170px;  
+                }
+            }
         }
     }
 }

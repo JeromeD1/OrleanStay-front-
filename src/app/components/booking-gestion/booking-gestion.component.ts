@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, WritableSignal, signal, effect } from '@angular/core'
+import { Component, OnInit, OnDestroy, WritableSignal, signal, effect, computed } from '@angular/core'
 import { Traveller } from '../../models/Traveller.model'
 import { AppartmentsService } from '../../shared/appartments.service'
 import { Appartment } from '../../models/Appartment.model'
@@ -26,7 +26,10 @@ export class BookingGestionComponent implements OnInit, OnDestroy{
 
   constructor(private appartmentService: AppartmentsService, private appstore: AppstoreService) {
     effect(() => {
-      this.filteredAppartments = this.appartments()
+      
+      this.filteredAppartments = this.appartmentsWithAcceptedReservations()
+      console.log("this.filteredAppartments", this.filteredAppartments);
+      
     })
   }
 
@@ -37,6 +40,17 @@ export class BookingGestionComponent implements OnInit, OnDestroy{
   appartments: WritableSignal<Appartment[]> = this.appstore.getActiveAppartments()
   filteredAppartments :Appartment[] = []
   destroy$: Subject<void> = new Subject()
+
+  appartmentsWithAcceptedReservations = computed(() => this.appartments().map(appart => {
+    console.log("before", appart.reservations);
+    appart.reservations.map(resa => {
+      if(!resa.accepted || resa.cancelled) {
+        appart.removeReservation(resa)
+      }
+    })
+    console.log("after", appart.reservations);
+    return appart
+  }))
 
   ngOnInit(): void {
     if(this.appartments().length === 0){

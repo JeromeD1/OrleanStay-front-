@@ -28,7 +28,7 @@ export class UserReservationsComponent implements OnInit, AfterViewInit {
   userReservations = signal<Reservation[]>([])
   currentUser: WritableSignal<User | null> = this.appstore.getCurrentUser()
 
-  sortedResertions = computed(() => this.userReservations().filter(resa => !resa.cancelled).sort((a,b) => b.id! - a.id!))
+  sortedResertions = computed(() => this.userReservations().sort((a,b) => b.id! - a.id!))
 
   constructor(
     private readonly appstore: AppstoreService,
@@ -57,6 +57,17 @@ export class UserReservationsComponent implements OnInit, AfterViewInit {
     const now = new Date()
     const verifiedDate = new Date(checkoutDate)
     return verifiedDate.getTime() < now.getTime()    
+  }
+
+  cancelReservation(formData: Reservation): void {
+    this.reservationService.cancelFromTraveller(formData).pipe(take(1)).subscribe(
+      {
+        next:() => {
+          this.notificationService.success(`Votre reservation a bien été annulée.`)
+        },
+        error: () => this.notificationService.error("Une erreur s'est produite, votre réservation n'a pas pu être annulée.")
+      }
+    )
   }
 
   openMenu(): void {

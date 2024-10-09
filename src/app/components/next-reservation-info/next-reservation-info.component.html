@@ -29,19 +29,23 @@
                     <p>{{reservation().reservationPrice | currency: 'EUR':'symbol':'1.0-2': 'fr'}}</p>
                 </div>
             }
+            <div class="flex-row-start">
+                <b>Statut :</b>
+                <p [class]="statutClass()">{{statut()}} </p>
+            </div>
         </div>
 
-        @if(!isOld()){
+        @if(!isOld() && !reservation().cancelled){
             <div class="div-button">
-                <button type="button" class="button-mid" (click)="openArrivalDetails()">Annuler</button>
-                <button type="button" class="button-light" (click)="openArrivalDetails()">Modifier</button>
+                    <button type="button" class="button-mid" (click)="openCancelModal()">Annuler</button>
+                <!-- <button type="button" class="button-light" (click)="openArrivalDetails()">Modifier</button> -->
                 <button type="button" class="button-brand" (click)="openArrivalDetails()">Détails d'arrivée</button>
             </div>
         }
     </section>
 
     <mat-accordion>
-        @if(!isOld()) {
+        @if(!isOld() || reservation().cancelled) {
             <mat-expansion-panel [expanded]="false">
                 <mat-expansion-panel-header>
                     <mat-panel-title> Poser une question au propriétaire </mat-panel-title>
@@ -92,4 +96,15 @@
     [travelInfos]="travelInfos()"
     (closeEmitter)="closeArrivalDetails()"
     ></app-travel-info-popup>
+}
+
+@if(showCancelModal){
+    <app-cancel-reservation-modal
+    [reservation]="reservation()"
+    [appartmentName]="appartment()?.description!"
+    (closeEmitter)="closeCancelModal()"
+    (validateEmitter)="cancelReservation()"
+    >
+
+    </app-cancel-reservation-modal>
 }

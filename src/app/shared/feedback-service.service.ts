@@ -19,6 +19,10 @@ export class FeedbackServiceService {
     return this.http.get<Feedback[]>(environment.BACKEND_BASE_URL + `/feedback/utilisateur/${userId}/appartment/${appartmentId}`)
   }
 
+  getByReservationId(reservationId: number): Observable<Feedback[]> {
+    return this.http.get<Feedback[]>(environment.BACKEND_BASE_URL + `/feedback/reservation/${reservationId}`)
+  }
+
   delete(feedbackId: number): Observable<Feedback> {
     return this.http.delete<Feedback>(environment.BACKEND_BASE_URL + `/feedback/${feedbackId}`)
   }

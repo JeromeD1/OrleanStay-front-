@@ -46,7 +46,7 @@ export class SimpleCalendarComponent implements OnChanges{
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
 
     if (view === 'month') {
-      const time = cellDate.getTime() + 3600 * 24 * 1000 // ajout de 1 jour car les dates étaient décalées dans le calendrier par rapport aux dates reelles (pourquoi ?)
+      const time = cellDate.getTime() + 3600 * 24 * 1000 // ajout de 1 jour car les dates étaient décalées dans le calendrier car 12h dans la date
 
       for(let reservation of this.reservations()) {
           if(reservation.accepted && time >= reservation.checkinDate!.getTime() && time < reservation.checkoutDate!.getTime()){

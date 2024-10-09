@@ -29,8 +29,8 @@ export class BookingService {
     
     return this.http.put<any>(environment.BACKEND_BASE_URL + '/reservation/' + reservationId, reservationRequest).pipe(
       map((data) => {
-          const checkinDate = data.checkinDate ? this.someFunctions.convertToUTCDate(new Date(data.checkinDate)) : null
-          const checkoutDate = data.checkoutDate ? this.someFunctions.convertToUTCDate(new Date(data.checkoutDate)) : null
+          const checkinDate = data.checkinDate ? this.someFunctions.setLunchTimeToDate(new Date(data.checkinDate)) : null
+          const checkoutDate = data.checkoutDate ? this.someFunctions.setLunchTimeToDate(new Date(data.checkoutDate)) : null
           return {...data, checkinDate: checkinDate, checkoutDate: checkoutDate}
       }),
       tap((response) => {    
@@ -41,12 +41,26 @@ export class BookingService {
       )
   }
 
+  cancelFromTraveller(reservationRequest: Reservation): Observable<Reservation> {    
+    
+    return this.http.put<any>(environment.BACKEND_BASE_URL + `/reservation/${reservationRequest.id}/cancelFromTraveller`, reservationRequest).pipe(
+      map((data) => {
+          const checkinDate = data.checkinDate ? this.someFunctions.setLunchTimeToDate(new Date(data.checkinDate)) : null
+          const checkoutDate = data.checkoutDate ? this.someFunctions.setLunchTimeToDate(new Date(data.checkoutDate)) : null
+          return {...data, checkinDate: checkinDate, checkoutDate: checkoutDate}
+      }),
+      tap((response) => {                
+        this.appstore.updateReservationIntoAppartment(response)
+      })
+      )
+  }
+
   getAllReservationRequests(): Observable<Reservation[]> {
     return this.http.get<Reservation[]>(environment.BACKEND_BASE_URL + '/reservation/requests/all').pipe(
       map((data) => {
         const newData = data.map((resa) => {
-          const checkinDate = resa.checkinDate ? this.someFunctions.convertToUTCDate(new Date(resa.checkinDate)) : null
-          const checkoutDate = resa.checkoutDate ? this.someFunctions.convertToUTCDate(new Date(resa.checkoutDate)) : null
+          const checkinDate = resa.checkinDate ? this.someFunctions.setLunchTimeToDate(new Date(resa.checkinDate)) : null
+          const checkoutDate = resa.checkoutDate ? this.someFunctions.setLunchTimeToDate(new Date(resa.checkoutDate)) : null
           // const checkinDate = resa.checkinDate ? new Date(resa.checkinDate) : null
           // const checkoutDate = resa.checkoutDate ? new Date(resa.checkoutDate) : null
           return {...resa, checkinDate: checkinDate, checkoutDate: checkoutDate}
@@ -61,8 +75,8 @@ export class BookingService {
     return this.http.get<Reservation[]>(environment.BACKEND_BASE_URL + `/reservation/requests/owner/${ownerId}`).pipe(
       map((data) => {
         const newData = data.map((resa) => {
-          const checkinDate = resa.checkinDate ? this.someFunctions.convertToUTCDate(new Date(resa.checkinDate)) : null
-          const checkoutDate = resa.checkoutDate ? this.someFunctions.convertToUTCDate(new Date(resa.checkoutDate)) : null
+          const checkinDate = resa.checkinDate ? this.someFunctions.setLunchTimeToDate(new Date(resa.checkinDate)) : null
+          const checkoutDate = resa.checkoutDate ? this.someFunctions.setLunchTimeToDate(new Date(resa.checkoutDate)) : null
           return {...resa, checkinDate: checkinDate, checkoutDate: checkoutDate}
         })
         return newData

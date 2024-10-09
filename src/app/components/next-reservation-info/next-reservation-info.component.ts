@@ -1,4 +1,4 @@
-import { Component, computed, input, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, computed, input, OnInit, output, signal, WritableSignal } from '@angular/core';
 import { Reservation } from '../../models/Reservation.model';
 import { ReservationChat } from '../../models/ReservationChat.model';
 import { ReservationChatService } from '../../shared/reservation-chat.service';
@@ -12,23 +12,24 @@ import { NotificationService } from '../../shared/notification.service';
 import { FormsModule } from '@angular/forms';
 import { AppstoreService } from '../../shared/appstore.service';
 import { User } from '../../models/User.model';
-import { TravelInfoOverviewComponent } from '../travel-info-overview/travel-info-overview.component';
 import { TravelInfo } from '../../models/TravelInfo.model';
 import { TravelInfoService } from '../../shared/travel-info.service';
 import { TravelInfoPopupComponent } from '../travel-info-popup/travel-info-popup.component';
 import { Feedback } from '../../models/Feedback.model';
 import { FeedbackServiceService } from '../../shared/feedback-service.service';
+import { CancelReservationModalComponent } from '../cancel-reservation-modal/cancel-reservation-modal.component';
 
 @Component({
   selector: 'app-next-reservation-info',
   standalone: true,
-  imports: [CommonModule, MatExpansionModule, FormsModule, TravelInfoPopupComponent],
+  imports: [CommonModule, MatExpansionModule, FormsModule, TravelInfoPopupComponent, CancelReservationModalComponent],
   templateUrl: './next-reservation-info.component.html',
   styleUrl: './next-reservation-info.component.scss'
 })
 export class NextReservationInfoComponent implements OnInit {
   reservation = input.required<Reservation>()
   isOld = input.required<boolean>()
+  cancelEmitter = output<Reservation>()
 
   commentChatList = signal<ReservationChat[]>([])
   sortedCommentChatList = computed(() => this.commentChatList().sort((a,b) => b.id! - a.id!))
@@ -41,8 +42,8 @@ export class NextReservationInfoComponent implements OnInit {
   showArrivalDetails: boolean = false
   travelInfos = signal<TravelInfo[]>([])
 
-
-
+  showCancelModal: boolean = false
+  cancelMessage = signal<string>("")
   newQuestionSignal = signal<string>("")
 
   get newQuestion() {
@@ -53,6 +54,9 @@ export class NextReservationInfoComponent implements OnInit {
     this.newQuestionSignal.set(value)
   }
 
+  statut = signal<string>("")
+  statutClass = signal<string>("")
+
 
   constructor(
     private readonly reservationChatService: ReservationChatService,
@@ -60,14 +64,36 @@ export class NextReservationInfoComponent implements OnInit {
     private readonly notificationService: NotificationService,
     private readonly appstore: AppstoreService,
     private readonly travelInfoService: TravelInfoService,
-    private readonly feedbackService: FeedbackServiceService
+    private readonly feedbackService: FeedbackServiceService,
   ) {
 
   }
 
   ngOnInit(): void {
+    this.initStatut()
       this.getCommentChatList()
       this.getAppartment()
+  }
+
+  initStatut(): void {
+    if(this.reservation().cancelled){
+      this.statut.set("ANNULEE")
+      this.statutClass.set("textGray")
+    } else if(this.reservation().accepted){
+      this.statut.set("ACCEPTEE")
+      this.statutClass.set("textGreen")
+    } else {
+      if(this.reservation().depositReceived) {
+        this.statut.set("EN ATTENTE DE VALIDATION")
+        this.statutClass.set("textOrange")
+      } else if(this.reservation().depositAsked) {
+        this.statut.set("EN ATTENTE DE RECEPTION DES ARRHES")
+        this.statutClass.set("textOrange")
+      } else {
+        this.statut.set("EN ATTENTE DE TRAITEMENT")
+        this.statutClass.set("textOrange")
+      }
+    }
   }
 
   getCommentChatList(): void {
@@ -106,7 +132,7 @@ export class NextReservationInfoComponent implements OnInit {
 
   getFeedBack(appartmentId: number): void {
     if(this.currentUser()){
-      this.feedbackService.getByUserIdAndAppartmentId(this.currentUser()?.id as number, appartmentId).pipe(take(1)).subscribe(
+      this.feedbackService.getByReservationId(this.reservation().id as number).pipe(take(1)).subscribe(
         {
           next: (data) => {
             this.feedbackList.set(data)
@@ -147,7 +173,8 @@ export class NextReservationInfoComponent implements OnInit {
       const formData: Feedback = {
         comment: this.newQuestion,
         utilisateurId: this.reservation().traveller?.utilisateurId as number,
-        appartmentId: this.appartment()!.id as number
+        appartmentId: this.appartment()!.id as number,
+        reservationId: this.reservation().id as number
       }
       this.feedbackService.create(formData).pipe(take(1)).subscribe(
         {
@@ -164,6 +191,25 @@ export class NextReservationInfoComponent implements OnInit {
     }
   }
 
+
+  openCancelModal(): void {
+    this.showCancelModal = true
+  }
+
+  closeCancelModal(): void {
+    this.showCancelModal = false
+  }
+
+  confirmInCancelModal(): void {
+    this.closeCancelModal()
+    this.cancelReservation()
+  }
+
+  cancelReservation(): void {
+    const formData: Reservation = {...this.reservation(), cancelled: true}
+    this.cancelEmitter.emit(formData)
+  }
+
   openArrivalDetails(): void {
     this.showArrivalDetails = true
   }
@@ -171,4 +217,6 @@ export class NextReservationInfoComponent implements OnInit {
   closeArrivalDetails(): void {
     this.showArrivalDetails = false
   }
+
+  
 }

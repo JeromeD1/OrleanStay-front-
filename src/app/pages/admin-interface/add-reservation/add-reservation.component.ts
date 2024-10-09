@@ -431,8 +431,8 @@ saveReservation(): void {
         }
       },
       appartmentId: this.formResa.getRawValue().appartmentId!,
-      checkinDate: this.someFunctions.convertToUTCDate(this.formResa.getRawValue().checkinDate!),
-      checkoutDate: this.someFunctions.convertToUTCDate(this.formResa.getRawValue().checkoutDate!),
+      checkinDate: this.someFunctions.setLunchTimeToDate(this.formResa.getRawValue().checkinDate!),
+      checkoutDate: this.someFunctions.setLunchTimeToDate(this.formResa.getRawValue().checkoutDate!),
       nbAdult: this.formResa.getRawValue().nbAdult!,
       nbChild: this.formResa.getRawValue().nbChild!,
       nbBaby: this.formResa.getRawValue().nbBaby!,

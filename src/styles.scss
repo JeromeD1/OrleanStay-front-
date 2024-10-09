@@ -59,6 +59,21 @@ h2 {
     font-size: var(--mpFontSize) !important;
 }
 
+.textGray {
+    color: gray;
+    font-weight: 600;
+}
+
+.textGreen {
+    color: green;
+    font-weight: 600;
+}
+
+.textOrange {
+    color: rgb(229, 149, 0);
+    font-weight: 600;
+}
+
 .flex-input {
     margin-bottom: 0;
     @include flex-row-between-center;
