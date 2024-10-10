@@ -8,6 +8,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { SomeFunctionsService } from '../../shared/some-functions.service';
 
 @Component({
   selector: 'app-date-picker',
@@ -49,6 +50,8 @@ private _minCheckinDate: Date = new Date();
 private _maxCheckinDate: Date | null = null;
 private _minCheckoutDate: Date = new Date();
 private _maxCheckoutDate: Date | null = null;
+
+constructor(private readonly someFunctions: SomeFunctionsService){}
 
 
 ngOnInit(): void {

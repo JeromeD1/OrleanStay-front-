@@ -109,4 +109,16 @@ export class SomeFunctionsService {
     return Math.round((1 - value) * 100) + "%"
   }
 
+  setLunchTimeToDate(date: Date): Date {
+    date.setHours(12,0,0)
+    return date;
+  }
+
+  createDateWith24HoursLess(originalDate: Date) {
+    let newDate = new Date(originalDate); 
+    newDate.setHours(newDate.getHours() - 24); 
+  
+    return newDate; 
+  }
+
 }

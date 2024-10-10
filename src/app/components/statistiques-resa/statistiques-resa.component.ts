@@ -111,12 +111,6 @@ export class StatistiquesResaComponent implements OnInit {
     this.selectedYear.set(Number(year))
   }
 
-  clickMe(): void {
-    console.log("yearOptions", this.yearOptions());
-    console.log("ownerAppartStatistics", this.ownerAppartStatistics());
-    
-    
-  }
 
   closeStatistics(): void {
     this.closeEmitter.emit()
@@ -132,7 +126,7 @@ export class StatistiquesResaComponent implements OnInit {
         if(!resa.cancelled) {
           const event: MyCalendarEvent = {
             start: resa.checkinDate!,
-            end: resa.checkoutDate!,
+            end: this.someFunctions.createDateWith24HoursLess(resa.checkoutDate!),
             title: resa.traveller?.personalInformations.lastname!,
             color: CALENDAR_COLORS[index],
             border: !resa.accepted

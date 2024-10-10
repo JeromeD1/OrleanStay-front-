@@ -1,0 +1,45 @@
+<main>
+    <section #formContainerElement class="page-container">
+        <div class="img-container">
+            <img #imgCathedraleElement [src]="imgCathedrale" alt="Photos Orleans">
+        </div>
+
+        <div class="menu">
+                <img [src]="iconMenu" alt="menu" title="Navigation" class="img-menu" (click)="openMenu()">
+                <app-menu
+                *ngIf="showMenu"
+                (mouseleave)="closeMenu()"
+                ></app-menu>
+        </div>
+
+        <div class="form-container">
+
+            <h1>Mes réservations</h1>
+            <h2>Réservations à venir</h2>
+
+                @for (item of sortedResertions(); track item.id) {
+                    @if(!verifyIfOld(item.checkoutDate!)){
+                        <app-next-reservation-info
+                        [reservation]="item"
+                        [isOld]="false"
+                        (cancelEmitter)="cancelReservation($event)"
+                        ></app-next-reservation-info>
+                    }
+                }
+
+            <br><br>
+            <h2>Réservations passées</h2>
+
+            @for (item of sortedResertions(); track item.id) {
+                @if(verifyIfOld(item.checkoutDate!)){
+                    <app-next-reservation-info
+                    [reservation]="item"
+                    [isOld]="true"
+                    ></app-next-reservation-info>
+                }
+            }
+        </div>
+
+
+    </section>
+</main>

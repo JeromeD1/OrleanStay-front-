@@ -27,7 +27,7 @@ export class AppartmentsService {
         //conversion de checkinDate et checkoutDate de reservations qui arrivent en string en Date
         const reservations = appartment.reservations.map(resa =>(
           resa.checkinDate && resa.checkoutDate ? 
-          {...resa, checkinDate: this.someFunctions.convertToUTCDate(new Date(resa.checkinDate)), checkoutDate: this.someFunctions.convertToUTCDate(new Date(resa.checkoutDate))}
+          {...resa, checkinDate: this.someFunctions.setLunchTimeToDate(new Date(resa.checkinDate)), checkoutDate: this.someFunctions.setLunchTimeToDate(new Date(resa.checkoutDate))}
           : resa
         ));
 
@@ -74,7 +74,7 @@ export class AppartmentsService {
         //conversion de checkinDate et checkoutDate de reservations qui arrivent en string en Date
         const reservations = appartment.reservations.map(resa =>(
           resa.checkinDate && resa.checkoutDate ? 
-          {...resa, checkinDate: this.someFunctions.convertToUTCDate(new Date(resa.checkinDate)), checkoutDate: this.someFunctions.convertToUTCDate(new Date(resa.checkoutDate))}
+          {...resa, checkinDate: this.someFunctions.setLunchTimeToDate(new Date(resa.checkinDate)), checkoutDate: this.someFunctions.setLunchTimeToDate(new Date(resa.checkoutDate))}
           : resa
         ));
 
@@ -124,7 +124,7 @@ export class AppartmentsService {
         //conversion de checkinDate et checkoutDate de reservations qui arrivent en string en Date
         const reservations = appartment.reservations.map(resa =>(
           resa.checkinDate && resa.checkoutDate ? 
-          {...resa, checkinDate: this.someFunctions.convertToUTCDate(new Date(resa.checkinDate)), checkoutDate: this.someFunctions.convertToUTCDate(new Date(resa.checkoutDate))}
+          {...resa, checkinDate: this.someFunctions.setLunchTimeToDate(new Date(resa.checkinDate)), checkoutDate: this.someFunctions.setLunchTimeToDate(new Date(resa.checkoutDate))}
           : resa
         ));
 
@@ -173,8 +173,8 @@ export class AppartmentsService {
 
         //conversion de checkinDate et checkoutDate de reservations qui arrivent en string en Date
         const reservations: Reservation[] = appartment.reservations.map(resa =>{
-          const checkinDate = resa.checkinDate ? this.someFunctions.convertToUTCDate(new Date(resa.checkinDate)) : null
-          const checkoutDate = resa.checkoutDate ? this.someFunctions.convertToUTCDate(new Date(resa.checkoutDate)) : null
+          const checkinDate = resa.checkinDate ? this.someFunctions.setLunchTimeToDate(new Date(resa.checkinDate)) : null
+          const checkoutDate = resa.checkoutDate ? this.someFunctions.setLunchTimeToDate(new Date(resa.checkoutDate)) : null
           return {...resa, checkinDate: checkinDate, checkoutDate: checkoutDate}
         });
 
@@ -226,8 +226,8 @@ export class AppartmentsService {
     tap((appartment) => {
       //conversion de checkinDate et checkoutDate de reservations qui arrivent en string en Date
       const reservations: Reservation[] = appartment.reservations.map(resa =>{
-        const checkinDate = resa.checkinDate ? this.someFunctions.convertToUTCDate(new Date(resa.checkinDate)) : null
-        const checkoutDate = resa.checkoutDate ? this.someFunctions.convertToUTCDate(new Date(resa.checkoutDate)) : null
+        const checkinDate = resa.checkinDate ? this.someFunctions.setLunchTimeToDate(new Date(resa.checkinDate)) : null
+        const checkoutDate = resa.checkoutDate ? this.someFunctions.setLunchTimeToDate(new Date(resa.checkoutDate)) : null
         return {...resa, checkinDate: checkinDate, checkoutDate: checkoutDate}
       });
 

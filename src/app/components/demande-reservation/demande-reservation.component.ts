@@ -131,8 +131,8 @@ handleChangeCheckinOrCheckout(event: DateFromPicker): void {
         const reservationRequest: ReservationRequest = {
           appartmentId: this.appartment.id as number,
           traveller: this.traveller,
-          checkinDate: this.userReservation.checkinDate,
-          checkoutDate: this.userReservation.checkoutDate,
+          checkinDate: this.someFunctionService.setLunchTimeToDate(this.userReservation.checkinDate),
+          checkoutDate: this.someFunctionService.setLunchTimeToDate(this.userReservation.checkoutDate),
           nbAdult: this.userReservation.nbAdult,
           nbChild: this.userReservation.nbChild,
           nbBaby: this.userReservation.nbBaby,

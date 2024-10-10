@@ -1,0 +1,49 @@
+<main>
+
+    <section>
+        <h2>Voulez vous vraiment annuler votre réservation ?</h2>
+    
+        <div class="ligne-info-container">
+            <div class="flex-row-start">
+                <b>Dates :</b>
+                <p>Du {{reservation().checkinDate | date: "dd/MM/yyyy"}} au {{reservation().checkoutDate | date: "dd/MM/yyyy"}}</p>
+            </div>
+            <div class="flex-row-start">
+                <b>Pour :</b>
+                @if(reservation().nbBaby == 0){
+                    <p>{{reservation().nbAdult + reservation().nbChild}} personnes </p>
+                } 
+                @else {
+                    <p>{{reservation().nbAdult + reservation().nbChild}} personnes + {{reservation().nbBaby}} bébé (-2 ans) </p>
+                }
+            </div>
+            <br>
+            
+            <div class="flex-row-start">
+                <b>Logement :</b>
+                <p>{{appartmentName()}}</p>
+            </div>
+            <div class="flex-row-start">
+                <b>Prix :</b>
+                <p>{{reservation().reservationPrice | currency: 'EUR':'symbol':'1.0-2': 'fr'}}</p>
+            </div>
+            
+        </div>
+    
+        @if(isDateOutOfLimit()){
+            <div>
+                <p>Nous rappelons que les réservations sont annulables gratuitement jusqu'à 48h avant le séjour.</p>
+                <span>{{cancelMessage()}} </span>
+            </div>
+        } 
+        @else {
+            <p>{{cancelMessage()}} </p>
+        }
+    
+        <div class="button-container" >
+            <button type="button" (click)="close()" class="button-mid">Annuler</button>
+            <button type="button" (click)="validate()" class="button-red">Confirmer</button>
+        </div>
+    
+    </section>
+</main>

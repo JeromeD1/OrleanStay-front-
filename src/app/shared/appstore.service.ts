@@ -124,7 +124,7 @@ export class AppstoreService {
   }
 
   addReservationIntoAppartment(reservation: any): void {
-    const newReservation: Reservation = {...reservation, checkinDate: this.someFunctions.convertToUTCDate(new Date(reservation.checkinDate)), checkoutDate: this.someFunctions.convertToUTCDate(new Date(reservation.checkoutDate))}
+    const newReservation: Reservation = {...reservation, checkinDate: this.someFunctions.setLunchTimeToDate(new Date(reservation.checkinDate)), checkoutDate: this.someFunctions.setLunchTimeToDate(new Date(reservation.checkoutDate))}
     //Ajout dans activeAppartments dans l'appartment de bon id
     this._activeAppartments.update(value => 
       value.map(appartment => {
@@ -149,7 +149,7 @@ export class AppstoreService {
   }
 
   updateReservationIntoAppartment(reservation: any) {
-    const updatedReservation: Reservation = {...reservation, checkinDate: this.someFunctions.convertToUTCDate(new Date(reservation.checkinDate)), checkoutDate: this.someFunctions.convertToUTCDate(new Date(reservation.checkoutDate))}
+    const updatedReservation: Reservation = {...reservation, checkinDate: this.someFunctions.setLunchTimeToDate(new Date(reservation.checkinDate)), checkoutDate: this.someFunctions.setLunchTimeToDate(new Date(reservation.checkoutDate))}
     //Ajout dans activeAppartments dans l'appartment de bon id
     this._activeAppartments.update(value => 
       value.map(appartment => {

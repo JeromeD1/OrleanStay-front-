@@ -9,6 +9,9 @@ import { TravelInfoEditionComponent } from './pages/travel-info-edition/travel-i
 import { GestionUtilisateursComponent } from './pages/admin-interface/gestion-utilisateurs/gestion-utilisateurs.component';
 import { EditReservationAdminComponent } from './pages/admin-interface/edit-reservation-admin/edit-reservation-admin.component';
 import { UserProfileComponent } from './pages/user-interface/user-profile/user-profile.component';
+import { UserReservationsComponent } from './pages/user-interface/user-reservations/user-reservations.component';
+import { AdminReservationChatComponent } from './pages/admin-reservation-chat/admin-reservation-chat.component';
+import { GestionAvisComponent } from './pages/admin-interface/gestion-avis/gestion-avis.component';
 
 export const routes: Routes = 
 [
@@ -23,7 +26,10 @@ export const routes: Routes =
             {path: "appartGestion", component: AppartmentGestionComponent},
             {path: "travelInfo/edit/:appartmentId", component: TravelInfoEditionComponent},
             {path: "gestionUtilisateurs", component: GestionUtilisateursComponent},
+            {path: "reservationChat", component: AdminReservationChatComponent},
+            {path: "gestionCommentaires", component: GestionAvisComponent}
         ]
     },
-    {path: "userProfile", component: UserProfileComponent}
+    {path: "userProfile", component: UserProfileComponent},
+    {path: "userReservation", component: UserReservationsComponent}
 ];

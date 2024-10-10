@@ -255,8 +255,8 @@ checkForm(): boolean {
   }
 
   this.selectedAppartment()?.reservations.forEach(resa => {
-    const checkin = this.someFunctions.convertToUTCDate(this.formResa.get("checkinDate")?.value).getTime()!
-    const checkout = this.someFunctions.convertToUTCDate(this.formResa.get("checkoutDate")?.value).getTime()!
+    const checkin = this.someFunctions.setLunchTimeToDate(this.formResa.get("checkinDate")?.value).getTime()!
+    const checkout = this.someFunctions.setLunchTimeToDate(this.formResa.get("checkoutDate")?.value).getTime()!
     const isCheckinInTwoDates: boolean = checkin >= resa.checkinDate!.getTime() && checkin < resa.checkoutDate!.getTime()
     const isCheckoutInTwoDates: boolean = checkout > resa.checkinDate!.getTime() && checkout <= resa.checkoutDate!.getTime()
     if((isCheckinInTwoDates || isCheckoutInTwoDates) && !resa.cancelled){
@@ -407,8 +407,8 @@ saveReservation(): void {
         }
       },
       appartmentId: this.formResa.getRawValue().appartmentId!,
-      checkinDate: this.someFunctions.convertToUTCDate(this.formResa.getRawValue().checkinDate!),
-      checkoutDate: this.someFunctions.convertToUTCDate(this.formResa.getRawValue().checkoutDate!),
+      checkinDate: this.someFunctions.setLunchTimeToDate(this.formResa.getRawValue().checkinDate!),
+      checkoutDate: this.someFunctions.setLunchTimeToDate(this.formResa.getRawValue().checkoutDate!),
       nbAdult: this.formResa.getRawValue().nbAdult!,
       nbChild: this.formResa.getRawValue().nbChild!,
       nbBaby: this.formResa.getRawValue().nbBaby!,
