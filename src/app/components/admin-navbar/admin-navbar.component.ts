@@ -19,13 +19,15 @@ export class AdminNavbarComponent implements AfterViewInit, OnDestroy{
 
   showMenuBurger: boolean = false
   showMenuReservation: boolean = false
+  showMenuCommunication: boolean = false
   isOnPageReservation = signal<boolean>(false)
+  isOnPageCommunication = signal<boolean>(false)
 
   showStatComponent: boolean = false
 
   destroy$: Subject<void> = new Subject()
 
-  currentPage = signal<"reservationRequest" | "reservationRegistoring" | "reservationEdition" | "globalGestion" | "gestionUtilisateurs">("reservationRequest")
+  currentPage = signal<"reservationRequest" | "reservationRegistoring" | "reservationEdition" | "globalGestion" | "gestionUtilisateurs" | "reservationChat" | "gestionCommentaires">("reservationRequest")
   reservationCurrentPageText = computed(() => {
     switch (this.currentPage()){
       case "reservationRequest":
@@ -43,13 +45,26 @@ export class AdminNavbarComponent implements AfterViewInit, OnDestroy{
     }
   })
 
+  communicationCurrentPageText = computed(() => {
+    switch (this.currentPage()){
+      case "reservationChat":
+        return "Questions voyageurs"
+        break
+        case "gestionCommentaires":
+          return "Gestion des avis"
+          break
+          default:
+            return null
+            break
+    }
+  })
+
   ngAfterViewInit(): void {
       this.getCurrentPage()
   }
 
   getCurrentPage():void {
     const adminPage = this.router.url.split("/").slice(-1)[0].trim()
-    console.log("adminPage", adminPage);
     
     switch (adminPage){
       case "acceptReservation":
@@ -67,6 +82,14 @@ export class AdminNavbarComponent implements AfterViewInit, OnDestroy{
         case "gestionUtilisateurs":
         this.setCurrentPageToGestionUtilisateurs()
         break
+        case "reservationChat":
+        this.setCurrentPageToReservationChat()
+        break
+        case "gestionCommentaires":
+        this.setCurrentPageToGestionCommentaires()
+        break
+        default:
+        break
     }
   }
 
@@ -80,6 +103,14 @@ export class AdminNavbarComponent implements AfterViewInit, OnDestroy{
 
   closeMenuReservation(): void {
     this.showMenuReservation = false
+  }
+
+  openMenuCommunication(): void {
+    this.showMenuCommunication = true
+  }
+
+  closeMenuCommunication(): void {
+    this.showMenuCommunication = false
   }
 
   openStatComponent(): void {
@@ -110,28 +141,43 @@ export class AdminNavbarComponent implements AfterViewInit, OnDestroy{
   setCurrentPageToReservationRequest(): void {
     this.currentPage.set("reservationRequest")
     this.isOnPageReservation.set(true)
-    console.log("test");
-    
+    this.isOnPageCommunication.set(false)
   }
 
   setCurrentPageToReservationRegistoring(): void {
     this.currentPage.set("reservationRegistoring")
-    this.isOnPageReservation.set(true)  
+    this.isOnPageReservation.set(true) 
+    this.isOnPageCommunication.set(false) 
   }
 
   setCurrentPageToReservationEdition(): void {
     this.currentPage.set("reservationEdition")
     this.isOnPageReservation.set(true)
+    this.isOnPageCommunication.set(false)
   }
 
   setCurrentPageToGlobalGestion(): void {
     this.currentPage.set("globalGestion")
     this.isOnPageReservation.set(false)
+    this.isOnPageCommunication.set(false)
   }
 
   setCurrentPageToGestionUtilisateurs(): void {
     this.currentPage.set("gestionUtilisateurs")
     this.isOnPageReservation.set(false)
+    this.isOnPageCommunication.set(false)
+  }
+
+  setCurrentPageToReservationChat(): void {
+    this.currentPage.set("reservationChat")
+    this.isOnPageReservation.set(false)
+    this.isOnPageCommunication.set(true)
+  }
+
+  setCurrentPageToGestionCommentaires(): void {
+    this.currentPage.set("gestionCommentaires")
+    this.isOnPageReservation.set(false)
+    this.isOnPageCommunication.set(true)
   }
 
   ngOnDestroy(): void {
