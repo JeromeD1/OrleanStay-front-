@@ -22,6 +22,7 @@
                         <app-next-reservation-info
                         [reservation]="item"
                         [isOld]="false"
+                        [isAdminMode]="false"
                         (cancelEmitter)="cancelReservation($event)"
                         ></app-next-reservation-info>
                     }
@@ -35,6 +36,7 @@
                     <app-next-reservation-info
                     [reservation]="item"
                     [isOld]="true"
+                    [isAdminMode]="false"
                     ></app-next-reservation-info>
                 }
             }

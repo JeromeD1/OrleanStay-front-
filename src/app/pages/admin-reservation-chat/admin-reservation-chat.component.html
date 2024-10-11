@@ -1,1 +1,18 @@
-<p>admin-reservation-chat works!</p>
+<main>
+    <section class="page-container">
+
+        <div class="form-container">
+
+            <h1>Réservations avec questions en attente de réponse</h1>
+
+                @for (item of sortedResertions(); track item.id) {
+                        <app-next-reservation-info
+                        [reservation]="item"
+                        [isOld]="false"
+                        [isAdminMode]="true"
+                        (isAnsweredEmitter)="removeReservationFromList($event)"
+                        ></app-next-reservation-info>
+                }
+        </div>
+    </section>
+</main>
