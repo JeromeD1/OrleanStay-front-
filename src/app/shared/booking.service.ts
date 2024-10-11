@@ -127,4 +127,7 @@ export class BookingService {
     return this.http.get<Reservation[]>(environment.BACKEND_BASE_URL + `/reservation/withWaitingReservationChat/notFromUser/${userId}`)
   }
 
+  findwithCheckoutDateLaterThanOneMonthAgo() : Observable<Reservation[]> {
+    return this.http.get<Reservation[]>(environment.BACKEND_BASE_URL + `/reservation/withCheckoutDateLaterThanOneMonthAgo`)
+  }
 }
