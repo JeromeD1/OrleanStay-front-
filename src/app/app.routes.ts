@@ -12,6 +12,9 @@ import { UserProfileComponent } from './pages/user-interface/user-profile/user-p
 import { UserReservationsComponent } from './pages/user-interface/user-reservations/user-reservations.component';
 import { AdminReservationChatComponent } from './pages/admin-reservation-chat/admin-reservation-chat.component';
 import { GestionAvisComponent } from './pages/admin-interface/gestion-avis/gestion-avis.component';
+import { InfoResaComponent } from './pages/user-interface/info-resa/info-resa.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { infoResaResolver } from './pages/user-interface/info-resa/info-resa.resolver';
 
 export const routes: Routes = 
 [
@@ -31,5 +34,8 @@ export const routes: Routes =
         ]
     },
     {path: "userProfile", component: UserProfileComponent},
-    {path: "userReservation", component: UserReservationsComponent}
+    {path: "userReservation", component: UserReservationsComponent},
+    {path:"infoReservation/:reservationId/:travellerId", component: InfoResaComponent, resolve: {travelInfos: infoResaResolver}},
+    {path: "notFound", component: NotFoundComponent}, 
+    {path: "**", redirectTo: "notFound", pathMatch: 'full'}
 ];
