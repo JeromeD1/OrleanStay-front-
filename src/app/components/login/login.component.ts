@@ -1,8 +1,10 @@
 import { Component, OnDestroy, output, signal} from '@angular/core';
 import { LoginService } from '../../shared/login.service';
-import { Subject } from 'rxjs';
+import { Subject, take } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { NotificationService } from '../../shared/notification.service';
 
 @Component({
   selector: 'app-login',
@@ -10,13 +12,14 @@ import { CommonModule } from '@angular/common';
   imports: [
     FormsModule,
     CommonModule,
+    MatCheckboxModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnDestroy {
 
-  constructor(private readonly loginService: LoginService) {}
+  constructor(private readonly loginService: LoginService, private readonly notificationService: NotificationService) {}
 
   destroy$: Subject<void> = new Subject()
 
@@ -25,6 +28,7 @@ export class LoginComponent implements OnDestroy {
 
   login: string = ""
   password: string = ""
+  isPasswordForgotten = signal<boolean>(false)
   wrongUserMessage = signal<string>("")
 
   closeLogin(): void {
@@ -37,17 +41,38 @@ export class LoginComponent implements OnDestroy {
       password: this.password
     }
 
-    this.loginService.login(formData).subscribe(
-      {
-        next: () => {          
-          this.closeLogin()
-        },
-
-        error: () => {
-          this.wrongUserMessage.set("Votre email ou votre mot de passe n'est pas correct !")
+    if(this.isPasswordForgotten()){
+      this.loginService.askForReinitializingPassword(this.login).pipe(take(1)).subscribe(
+        {
+          next:(data) => {
+            if(data === true) {
+              this.notificationService.success("Un email de réinitialisation vient de vous être envoyé à votre adresse mail.")
+              this.closeLogin()
+            } else {
+              this.notificationService.error("L'email fourni ne correspond à aucun utilisateur enregistré.")
+            }
+          },
+          error: () => this.notificationService.error("Une erreur est survenue, veuillez réessayer plus tard.")
         }
-      } 
-    )
+      )
+    } else {
+      this.loginService.login(formData).pipe(take(1)).subscribe(
+        {
+          next: () => {          
+            this.closeLogin()
+          },
+  
+          error: () => {
+            this.wrongUserMessage.set("Votre email ou votre mot de passe n'est pas correct !")
+          }
+        } 
+      )
+    }
+  }
+
+  setForgottenPassword(): void {
+    this.isPasswordForgotten.set(!this.isPasswordForgotten())
+    this.login = ""
   }
 
   openSignup(): void {

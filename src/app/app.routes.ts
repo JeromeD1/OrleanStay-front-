@@ -15,6 +15,7 @@ import { GestionAvisComponent } from './pages/admin-interface/gestion-avis/gesti
 import { InfoResaComponent } from './pages/user-interface/info-resa/info-resa.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { infoResaResolver } from './pages/user-interface/info-resa/info-resa.resolver';
+import { PasswordReinitialisationComponent } from './pages/password-reinitialisation/password-reinitialisation.component';
 
 export const routes: Routes = 
 [
@@ -36,6 +37,7 @@ export const routes: Routes =
     {path: "userProfile", component: UserProfileComponent},
     {path: "userReservation", component: UserReservationsComponent},
     {path:"infoReservation/:reservationId/:travellerId", component: InfoResaComponent, resolve: {travelInfos: infoResaResolver}},
+    {path: "passwordReinitialisation/:token", component: PasswordReinitialisationComponent},
     {path: "notFound", component: NotFoundComponent}, 
     {path: "**", redirectTo: "notFound", pathMatch: 'full'}
 ];
