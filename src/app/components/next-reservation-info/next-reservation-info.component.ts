@@ -29,7 +29,9 @@ import { CancelReservationModalComponent } from '../cancel-reservation-modal/can
 export class NextReservationInfoComponent implements OnInit {
   reservation = input.required<Reservation>()
   isOld = input.required<boolean>()
+  isAdminMode = input.required<boolean>()
   cancelEmitter = output<Reservation>()
+  isAnsweredEmitter = output<number>()
 
   commentChatList = signal<ReservationChat[]>([])
   sortedCommentChatList = computed(() => this.commentChatList().sort((a,b) => b.id! - a.id!))
@@ -69,7 +71,7 @@ export class NextReservationInfoComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {    
     this.initStatut()
       this.getCommentChatList()
       this.getAppartment()
@@ -97,7 +99,9 @@ export class NextReservationInfoComponent implements OnInit {
   }
 
   getCommentChatList(): void {
-    if(this.reservation().id && !this.isOld) {
+    if(this.reservation().id && !this.isOld()) {
+      console.log("test");
+      
       this.reservationChatService.getAllByReservationId(this.reservation().id as number).pipe(take(1)).subscribe(
         {
           next: (data) => this.commentChatList.set(data)
@@ -111,7 +115,7 @@ export class NextReservationInfoComponent implements OnInit {
       {
         next: (data) => {
           this.appartment.set(data)
-          if(!this.isOld){
+          if(!this.isOld()){
             this.getTravelInfos(data.id)
           } else {
             this.getFeedBack(data.id)
@@ -150,15 +154,17 @@ export class NextReservationInfoComponent implements OnInit {
     if(this.newQuestion.length >= 10) {
       const formData: ReservationChatSaveRequest = {
         comment: this.newQuestion,
-        utilisateurId: this.reservation().traveller?.utilisateurId as number,
+        utilisateurId: this.isAdminMode() ? this.currentUser()?.id as number : this.reservation().traveller?.utilisateurId as number,
         reservationId: this.reservation().id as number
       }
       this.reservationChatService.addNewComment(formData).pipe(take(1)).subscribe(
         {
           next: (data) => {
-            console.log("data", data);
             this.commentChatList.update(value => [...value, data])
             this.newQuestion = ""
+            if(this.isAdminMode()){
+              this.isAnsweredEmitter.emit(this.reservation().id as number)
+            }
           },
           error: () => this.notificationService.error("Une erreur s'est produite lors de l'envoi de votre question.")
         }

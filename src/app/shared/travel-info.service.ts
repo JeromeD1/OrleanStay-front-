@@ -16,6 +16,10 @@ export class TravelInfoService {
     return this.http.get<TravelInfo[]>(`${environment.BACKEND_BASE_URL}/travelInfo/appartment/${appartmentId}`)
   }
 
+  getByReservationAndTravellerIds(reservationId: number, travellerId: number): Observable<TravelInfo[]> {
+    return this.http.get<TravelInfo[]>(`${environment.BACKEND_BASE_URL}/travelInfo/reservation/${reservationId}/traveller/${travellerId}`)
+  }
+
   create(travelInfo: TravelInfo): Observable<TravelInfo> {
     return this.http.post<TravelInfo>(`${environment.BACKEND_BASE_URL}/travelInfo`, travelInfo)
   }

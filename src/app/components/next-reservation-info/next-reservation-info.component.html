@@ -35,7 +35,7 @@
             </div>
         </div>
 
-        @if(!isOld() && !reservation().cancelled){
+        @if(!isOld() && !reservation().cancelled && !isAdminMode()){
             <div class="div-button">
                     <button type="button" class="button-mid" (click)="openCancelModal()">Annuler</button>
                 <!-- <button type="button" class="button-light" (click)="openArrivalDetails()">Modifier</button> -->
@@ -48,7 +48,7 @@
         @if(!isOld() || reservation().cancelled) {
             <mat-expansion-panel [expanded]="false">
                 <mat-expansion-panel-header>
-                    <mat-panel-title> Poser une question au propriétaire </mat-panel-title>
+                    <mat-panel-title> {{isAdminMode() ? "Répondre au voyageur" : "Poser une question au propriétaire"}} </mat-panel-title>
                 </mat-expansion-panel-header>
                 <section class="question-container"> 
                     <textarea [(ngModel)]="newQuestion"  placeholder="Votre question..."></textarea>
@@ -56,7 +56,14 @@
     
                     @for (item of sortedCommentChatList(); track item.id) {
                         <div [class]="item.utilisateur.id == currentUser()?.id ? 'div-left' : 'div-right'">
-                            <p class="chat-header">{{item.utilisateur.id == currentUser()?.id ? "Vous" : "Réponse"}} - le {{item.creationDate | date: "dd/MM/yyyy"}} </p>
+                            @if(item.utilisateur.id == currentUser()?.id){
+                                <p class="chat-header">Vous - le {{item.creationDate | date: "dd/MM/yyyy"}} </p>
+                            } @else if (isAdminMode()) {
+                                <p class="chat-header">Voyageur - le {{item.creationDate | date: "dd/MM/yyyy"}} </p>
+                            } @else {
+                                <p class="chat-header">Réponse - le {{item.creationDate | date: "dd/MM/yyyy"}} </p>
+                            }
+                            <!-- <p class="chat-header">{{item.utilisateur.id == currentUser()?.id ? "Vous" : "Réponse"}} - le {{item.creationDate | date: "dd/MM/yyyy"}} </p> -->
                             <p>{{item.comment}} </p>
                         </div>
                     }

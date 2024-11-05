@@ -1,0 +1,42 @@
+@import "../../styles/mixins";
+
+main {
+    @include flex-column-center-center;
+    background-color: var(--colorLightest);
+
+    .page-container {
+        @include flex-column-center-center;
+        padding-top: 24px;
+        position: relative;
+        width: 95vw;
+        max-width: 1800px;
+        background-color: rgba(0,0,0,0);
+
+        .form-container {
+            width: 95vw;
+            max-width: 1600px;
+            gap: 16px;
+
+        .toggle-container {
+            @include flex-row-center-center;
+            gap: 24px;
+            margin: 36px;
+
+            p{
+                display: block;
+                max-width: 40vw;
+                margin: 0;
+                text-align: center;
+            }
+
+            ::ng-deep .mdc-switch {
+                transform: scale(1.5);
+            }
+              
+        }
+
+
+        }
+    }
+}
+

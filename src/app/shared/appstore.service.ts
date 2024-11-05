@@ -8,6 +8,7 @@ import { Discount } from '../models/Discount.model'
 import { Owner } from '../models/Owner.model'
 import { Photo } from '../models/Photo.model'
 import { SomeFunctionsService } from './some-functions.service'
+import { Feedback } from '../models/Feedback.model'
 
 @Injectable({
   providedIn: 'root'
@@ -51,6 +52,8 @@ export class AppstoreService {
   private _discounts = signal<Discount[]>([])
   private _owners = signal<Owner[]>([])
   private _allUsers = signal<User[]>([])
+
+  private _allFeedbacks = signal<Feedback[]>([])
 
 
   /*************Functions related to token **********************/
@@ -542,6 +545,35 @@ export class AppstoreService {
       this._allUsers.update(value => value.map(item => (
         item.id === user.id ? {...user} : item
       )))
+    }
+
+    /********Functions related to feedbacks *************/
+    getAllFeedbacks(): WritableSignal<Feedback[]> {
+      return this._allFeedbacks
+    }
+
+    setAllFeedbacks(feedbacks: Feedback[]): void {
+      this._allFeedbacks.set(feedbacks)
+    }
+
+    addFeedback(feedback: Feedback): void {
+      this._allFeedbacks.update(value => [...value, feedback])
+    }
+
+    updateFeedback(feedback: Feedback): void {
+      this._allFeedbacks.update(value => value.map(item => (
+        item.id === feedback.id ? {...feedback} : item
+      )))
+    }
+
+    removeFeedback(feedbackId: number) {
+      this._allFeedbacks.update(value => value.filter(item => item.id != feedbackId))
+    }
+
+    removeAnswerInFeedback(answerId: number): void {
+      this._allFeedbacks.update(value => value.map(item => (
+        item.answer && item.answer.id === answerId ? {...item, answer: undefined} : {...item}
+      ) ))
     }
 
     /****Reset des signaux réservés à la session lors du logout ******/

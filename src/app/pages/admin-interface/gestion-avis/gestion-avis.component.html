@@ -1,1 +1,29 @@
-<p>gestion-avis works!</p>
+<main>
+    <h1>Vérifiez et répondez aux avis</h1>
+    <section class="choix-appart">
+        <div class="appart-select">
+            <h2>Choisissez un appartement :</h2>
+
+                <mat-form-field>
+                    <mat-label>Choisissez un appartement</mat-label>
+                        <mat-select #matSelectAppartment [value]="selectedAppartment()" (selectionChange)="handleChangeAppartment($event.value)" >
+                        <mat-option *ngFor="let appartment of allAppartments()" [value]="appartment">
+                        {{appartment.name}} 
+                        </mat-option>
+                    </mat-select>
+                    </mat-form-field>
+        </div>
+    </section>
+
+    <section class="feedback-container">
+        @for (item of appartmentFeedbacks(); track item.id) {
+            <app-feedback-gestion
+            [feedback]="item"
+            (answerEmitter)="addFeedbackAnswer($event)"
+            (answerModificationEmitter)="updateFeedbackAnswer($event)"
+            (deleteEmitter)="deleteFeedback($event)"
+            (deleteAnswerEmitter)="deleteAnswer($event)"
+            ></app-feedback-gestion>
+        }
+    </section>
+</main>

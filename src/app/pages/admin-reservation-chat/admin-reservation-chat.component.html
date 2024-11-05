@@ -1,1 +1,31 @@
-<p>admin-reservation-chat works!</p>
+<main>
+    <section class="page-container">
+
+        <div class="form-container">
+
+            <h1>Communiquer ou répondre aux questions en attente de réponse</h1>
+
+            <div class="toggle-container">
+                <p>Afficher uniquement les réservations avec nouvelle question</p>
+                <mat-slide-toggle
+                    class="custom-toggle"
+                    [checked]="displayAllReservations()"
+                    [disabled]="!allReservationsAvailable()"
+                    (toggleChange)="setDisplayAllReservation()"
+                    color="primary"
+                    >
+                    </mat-slide-toggle>
+                <p>Afficher toutes les réservations (date de sortie < aujourd'hui + 1 mois)</p>
+            </div>
+
+                @for (item of sortedResertions(); track item.id) {
+                        <app-next-reservation-info
+                        [reservation]="item"
+                        [isOld]="false"
+                        [isAdminMode]="true"
+                        (isAnsweredEmitter)="removeReservationFromList($event)"
+                        ></app-next-reservation-info>
+                }
+        </div>
+    </section>
+</main>
