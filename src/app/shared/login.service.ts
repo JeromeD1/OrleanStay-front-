@@ -87,5 +87,13 @@ export class LoginService {
       )
   }
 
+  askForReinitializingPassword(email: string): Observable<boolean> {
+    return this.http.post<boolean>(environment.BACKEND_BASE_URL + '/askForReinitializingPassword', email)
+  }
+
+  reinitialisePassword(data: any): Observable<boolean> {
+    return this.http.post<boolean>(environment.BACKEND_BASE_URL + '/reinitialisePassword', data)
+  }
+  
   
 }

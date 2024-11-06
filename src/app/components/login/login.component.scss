@@ -29,10 +29,7 @@ main {
         min-height: 30dvh;
 
         div {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
+            @include flex-row-between-center;
             gap: 16px;
             width: 100%;
 
@@ -43,6 +40,15 @@ main {
                 padding: 8px;
             }
 
+        }
+
+        .div-checkMDP {
+            @include flex-row-start-center;
+            gap: 24px;
+
+            label {
+                margin-top: 20px;
+            }
         }
 
         .div-button {
