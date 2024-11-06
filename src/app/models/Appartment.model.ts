@@ -2,9 +2,6 @@ import { Photo } from "./Photo.model";
 import { Reservation } from "./Reservation.model";
 import { Info } from "./Info.model";
 import { Discount } from "./Discount.model";
-import { Owner } from "./Owner.model";
-import { SomeFunctionsService } from "../shared/some-functions.service";
-import { inject } from "@angular/core";
 import { AppartmentBusinessStat } from "./AppartmentBusinessStat.model";
 import { YearBusinessStat } from "./YearBusinessStat.model";
 import { Feedback } from "./Feedback.model";
@@ -28,6 +25,7 @@ export class Appartment {
         public googleMapUrl: string,
         public nightPrice: number,
         public caution: number,
+        public prixPersonneSupplementaire: number,
         public menageCourtSejour: number,
         public menageLongSejour: number,
         public menageLongueDuree: number,
@@ -51,7 +49,7 @@ export class Appartment {
         let cleaningPrice: number = 0;
     
         if(numberOfTravellers > 2) {
-            updateNightPrice = this.nightPrice + 10 * (numberOfTravellers - 2);
+            updateNightPrice = this.nightPrice + this.prixPersonneSupplementaire * (numberOfTravellers - 2);
         }
     
         if(numberOfDays < 3) {
@@ -145,6 +143,7 @@ export class Appartment {
             appart.googleMapUrl,
             appart.nightPrice,
             appart.caution,
+            appart.prixPersonneSupplementaire,
             appart.menageCourtSejour,
             appart.menageLongSejour,
             appart.menageLongueDuree,

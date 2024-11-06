@@ -40,7 +40,7 @@ export class AppComponent implements OnInit {
   }
 
   verifySessionActivity(): void {
-    this.utilisateurService.findById(this.currentUser()?.id as number).pipe(take(1)).subscribe(
+    this.loginService.verifySessionActivity().pipe(take(1)).subscribe(
       {
         error: () => {
           this.loginService.logout().pipe(take(1)).subscribe()

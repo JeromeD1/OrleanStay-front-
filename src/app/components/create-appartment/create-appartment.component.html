@@ -125,6 +125,16 @@
             </div>
             <input type="number" placeholder="ex : 300" formControlName="caution" name="appartCaution" id="appartCaution"  min="0">
         </div>
+
+        <div class="flex-input">
+            <div class="label-span">
+                <label for="prixSup">Prix pour personnes supplémentaires (> 2) :</label>
+                @if(updateForm.submitted && appartmentForm.get("prixPersonneSupplementaire")?.hasError('required')){
+                    <span>Le champ ne peut pas être nul.</span>
+                }
+            </div>
+            <input type="number" placeholder="ex : 15" formControlName="prixPersonneSupplementaire" name="prixSup" id="prixSup"  min="0">
+        </div>
     
         <div class="flex-input">
             <div class="label-span">
