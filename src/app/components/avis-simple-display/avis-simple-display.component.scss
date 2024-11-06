@@ -1,0 +1,60 @@
+@import "../../styles/mixins";
+
+article {
+    @include flex-column-center-center;
+    gap: 24px;
+    width: 100%;
+    max-width: 85vw;
+    margin: 16px;
+    background-color: var(--colorLightestTransparent);
+    box-sizing: border-box;
+
+    p {
+    text-align: justify;
+    }
+
+    .container {
+        @include flex-column-center-center;
+        gap: 16px;
+        background-color: var(--colorLightestTransparent);
+        width: 95%;
+        box-sizing: border-box;
+
+        .chat-header {
+            color: var(--colorDark)
+        }
+
+        .feedback {
+            @include fieldset-style;
+            background-color: var(--colorLight);
+            width: 85%;
+            align-self: flex-start;
+            box-sizing: border-box;
+        }
+
+        .answer {
+            @include fieldset-style;
+            background-color: var(--colorLightest);
+            width: 85%;
+            align-self: flex-end;
+            box-sizing: border-box;
+        }
+    }
+}
+
+@media screen and (max-width: 700px) {
+    article {
+        margin: 4px;
+        .container {
+            @include flex-column-center-center;
+
+            .answer, .feedback, textarea {
+                width: 100%;
+            }
+
+            .button-container {
+                @include flex-row-around-center;
+            }
+        }
+    }
+}

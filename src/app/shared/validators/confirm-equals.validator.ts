@@ -10,8 +10,6 @@ export class ConfirmEqualValidatorDirective implements Validator {
   @Input('confirmEqual') controlNameToCompare: string = '';
 
   validate(control: AbstractControl): ValidationErrors | null {
-    console.log(this.controlNameToCompare);
-    
     const controlToCompare = control.parent?.get(this.controlNameToCompare);
     if (control.value !== controlToCompare?.value) {
       return { confirmEqual: true };

@@ -25,8 +25,6 @@ export class ReactiveSelectComponent implements ControlValueAccessor, OnInit {
     ngOnInit(): void {
         this.addOptionLabelInOptions()
         this.addOptionValueInOptions()
-        console.log(this.options);
-        
     }
 
     ngOnChanges(changes: SimpleChanges): void {

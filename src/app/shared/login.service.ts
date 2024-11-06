@@ -58,8 +58,6 @@ export class LoginService {
   signup(newUser: UserSaveRequest): Observable<{token: string, utilisateur:User}> {
     return this.http.post<{token: string, utilisateur:User}>(environment.BACKEND_BASE_URL + '/signup', newUser).pipe(
       tap(data => {
-        console.log("data signup", data);
-        
         const newUser:User = {...data.utilisateur, creationDate: new Date(data.utilisateur.creationDate)}
         this.appstore.setCurrentUser(newUser)
         

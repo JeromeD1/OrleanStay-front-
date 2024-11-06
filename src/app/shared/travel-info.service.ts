@@ -26,11 +26,7 @@ export class TravelInfoService {
 
   update(travelInfo: TravelInfo, oldImgUrl?: string): Observable<TravelInfo> {
     let params = new HttpParams();
-    console.log("travelInfo", travelInfo);
-    
     if(oldImgUrl){
-      console.log("dans condition");
-      
       const oldImgId = this.someFunctions.convertImgId(this.someFunctions.extractIdFromUrl(oldImgUrl))
       params = params.set('oldImgId', oldImgId)
     }

@@ -28,8 +28,6 @@ export class CancelReservationModalComponent implements OnInit {
     const checkinDate = new Date(this.reservation().checkinDate as Date)
     const timeBeforeCheckin: number = checkinDate.getTime() - now.getTime()
     const isRefoundable: boolean = timeBeforeCheckin > 1000 * 3600 * 48
-
-    console.log("timeBeforeCheckin", timeBeforeCheckin, "isRefoundable", isRefoundable);
     
     if(this.reservation().depositReceived && this.reservation().depositValue && this.reservation().depositValue! > 0) {
       if(isRefoundable) {

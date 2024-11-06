@@ -158,8 +158,6 @@ initEvents(): void {
   })
 
   this.formResa.get("accepted")?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-    console.log(value);
-    
   })
 
   this.formResa.get("platform")?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
@@ -440,7 +438,6 @@ saveReservation(): void {
       accepted: this.formResa.getRawValue().accepted!
     }
 
-    console.log("formData", formData);
     this.reservationService.postTravellerReservation(formData).pipe(take(1)).subscribe({
       next: () => {
         this.notificationService.success("Votre réservation a bien été ajoutée.")
