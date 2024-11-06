@@ -13,6 +13,7 @@ export interface AppartmentSaveRequest {
     googleMapUrl: string,
     nightPrice: number,
     caution: number,
+    prixPersonneSupplementaire: number,
     menageCourtSejour: number,
     menageLongSejour: number,
     menageLongueDuree: number,

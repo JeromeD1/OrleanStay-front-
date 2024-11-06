@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, computed, input, output } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, computed, input, output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { Owner } from '../../models/Owner.model';
@@ -43,6 +43,7 @@ export class CreateAppartmentComponent implements OnInit{
       distanceTram: ["", Validators.required],
       nightPrice: [50, Validators.required],
       caution: [300, Validators.required],
+      prixPersonneSupplementaire: [15, Validators.required],
       menageCourtSejour: [30, Validators.required],
       menageLongSejour: [50, Validators.required],
       menageLongueDuree: [90, Validators.required],
@@ -102,6 +103,7 @@ export class CreateAppartmentComponent implements OnInit{
         googleMapUrl: this.appartmentForm.value.googleMapUrl!,
         nightPrice: this.appartmentForm.value.nightPrice!,
         caution: this.appartmentForm.value.caution!,
+        prixPersonneSupplementaire: this.appartmentForm.value.prixPersonneSupplementaire!,
         menageCourtSejour: this.appartmentForm.value.menageCourtSejour!,
         menageLongSejour: this.appartmentForm.value.menageLongSejour!,
         menageLongueDuree: this.appartmentForm.value.menageLongueDuree!,

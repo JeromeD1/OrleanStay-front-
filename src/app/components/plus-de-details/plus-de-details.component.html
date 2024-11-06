@@ -8,9 +8,9 @@
             <div class="info-container">
                 <h1>{{appartment().description}}</h1>
                 <h2>Tarification</h2>
-                <p>Prix / nuit : {{appartment().nightPrice}}€ + 10€ / personne supplémentaire</p>
+                <p>Prix / nuit : {{appartment().nightPrice}}€ + {{appartment().prixPersonneSupplementaire}}€ / personne supplémentaire</p>
                 <p>(Gratuit pour les enfants de moins de 2 ans)</p>
-                <p>Ménage : 50€ (30€ pour les séjours inférieurs à 3 jours) </p>
+                <p>Ménage : {{appartment().menageLongSejour}}€ ({{appartment().menageCourtSejour}}€ pour les séjours inférieurs à 3 jours) </p>
                 <p>Caution : {{appartment().caution}}€ par chèque (non encaissé) ou liquide</p>
                 <br>
                 <h2>Localisation</h2>

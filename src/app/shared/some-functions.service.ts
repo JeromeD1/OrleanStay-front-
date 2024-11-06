@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Traveller } from "../models/Traveller.model";
 import { Appartment } from "../models/Appartment.model";
 import { Discount } from '../models/Discount.model';
 import { Reservation } from '../models/Reservation.model';
@@ -29,7 +28,7 @@ export class SomeFunctionsService {
 
     const numberOfTraveller = resa.nbAdult + resa.nbChild;
     if(resa.nbAdult > 0 && numberOfTraveller > 2) {
-        const newNightPrice = appart.nightPrice + 10 * (numberOfTraveller - 2);
+        const newNightPrice = appart.nightPrice + appart.prixPersonneSupplementaire * (numberOfTraveller - 2);
         return newNightPrice;
       }
      else {

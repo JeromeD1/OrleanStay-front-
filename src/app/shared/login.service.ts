@@ -93,5 +93,8 @@ export class LoginService {
     return this.http.post<boolean>(environment.BACKEND_BASE_URL + '/reinitialisePassword', data)
   }
   
+  verifySessionActivity(): Observable<boolean> {
+    return this.http.get<boolean>(environment.BACKEND_BASE_URL + '/verifySessionActivity')
+  }
   
 }

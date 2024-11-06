@@ -76,7 +76,7 @@ export class AppartmentCardComponent {
 
     const numberOfTraveller = this.userReservation.nbAdult + this.userReservation.nbChild;
     if(this.userReservation.nbAdult > 0 && numberOfTraveller > 2) {
-        const newNightPrice = this.appartment.nightPrice + 10 * (numberOfTraveller - 2);
+        const newNightPrice = this.appartment.nightPrice + this.appartment.prixPersonneSupplementaire * (numberOfTraveller - 2);
         return newNightPrice;
       }
      else {
