@@ -21,9 +21,7 @@ export class ToutesLesDispoComponent {
     this.showToutesDispo.emit(false);
   }
 
-  filterBookedDates = (date: Date | null): boolean => {
-    console.log(this.appartment().reservations);
-    
+  filterBookedDates = (date: Date | null): boolean => {    
     let time = date?.getTime() || 0;
     if(time !== 0) {time+=  3600 * 24 * 1000} // ajout de 1 jour car les dates étaient décalées dans le calendrier car set à 12h
 

@@ -17,16 +17,12 @@ export class BookingService {
   postTravellerReservation(reservationRequest: ReservationRequest): Observable<Reservation> {    
     return this.http.post<any>(environment.BACKEND_BASE_URL + '/reservation',reservationRequest).pipe(
       tap((response) => {    
-        console.log("response", response);
-            
         this.appstore.addReservationIntoAppartment(response)
       })
       )
   }
 
-  update(reservationRequest: ReservationRequest, reservationId: number): Observable<Reservation> {    
-    console.log("reservationId", reservationId);
-    
+  update(reservationRequest: ReservationRequest, reservationId: number): Observable<Reservation> {  
     return this.http.put<any>(environment.BACKEND_BASE_URL + '/reservation/' + reservationId, reservationRequest).pipe(
       map((data) => {
           const checkinDate = data.checkinDate ? this.someFunctions.setLunchTimeToDate(new Date(data.checkinDate)) : null
@@ -34,8 +30,6 @@ export class BookingService {
           return {...data, checkinDate: checkinDate, checkoutDate: checkoutDate}
       }),
       tap((response) => {    
-        console.log("response", response);
-            
         this.appstore.updateReservationIntoAppartment(response)
       })
       )

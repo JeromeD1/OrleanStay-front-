@@ -57,7 +57,6 @@ export class StatistiquesResaComponent implements OnInit {
         allYears.push(year.toString())
       })
     })
-    console.log("this.ownerAppartments()", this.ownerAppartments());
     
     return new Set(allYears.sort((a,b) => Number(a) - Number(b)))
   })

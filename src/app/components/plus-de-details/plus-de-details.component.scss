@@ -12,17 +12,30 @@
     backdrop-filter: blur(10px);
 
     .moreDetails-container {
-        @include flex-row-between-center;
+        @include flex-column-center-center;
         position: relative;
         width: 1600px;
         max-width: 95vw;
         box-shadow: 0 1px 0 2px var(--colorMid);
         min-height: 50vh;
+        max-height: 100vh;
         background-color: #fafafa9e;
         backdrop-filter: blur(40px);
         gap: 64px;
         padding: 16px 64px;
         border-radius: 24px;
+        overflow-y: auto;
+
+        .flex-row {
+            @include flex-row-between-center;
+            position: relative;
+            width: 1600px;
+            max-width: 95vw;
+            min-height: 50vh;
+            gap: 64px;
+            padding: 16px 64px;
+            border-radius: 24px;
+        }
         
         .info-container {
             max-width: 45%;
@@ -66,6 +79,19 @@
                 border: 1px solid var(--colorMid);
             }
         }
+
+        .paginator-container{
+            max-width: 95vw;
+            box-sizing: border-box;
+
+            .feedback-container {
+                width: 1000px;
+                max-width: 90vw;
+                padding: 16px;
+                margin-bottom: 16px;
+                box-sizing: border-box;
+            }
+        }
     }
 }
 
@@ -73,39 +99,63 @@
 
     .main-plusDeDetails {    
         .moreDetails-container {
-            @include flex-column-start-start;
+            display: block;
             width: 100%;
-            height: 100%;      
-            gap: 64px;
-            padding: 16px;
+            height: 100vh;      
+            // gap: 64px;
+            padding: 8px;
+            margin: 0;
             border-radius: 0;
-            overflow-y: auto;            
+            overflow-y: auto;
+            box-sizing: border-box;     
             
-            .info-container {
-                max-width: 100%;
-            }
-    
-            
-    
-            .localisation-container {
-                
-                width: 100vw;
-                height: auto;
-                margin: 0;
-                padding: 0;
-    
-                .address {
-                    width: 90vw;
-                    max-width: 90vw;
+            .flex-row {
+                @include flex-column-start-start;
+            width: 100%;      
+            gap: 64px;
+            padding: 0;
+            border-radius: 0; 
+            box-sizing: border-box;
+
+                .info-container {
+                    max-width: 100%;
+                    box-sizing: border-box;
                 }
 
-                iframe {
-                    width: 90vw;
-                    max-width: 90vw;
-                    height: 400px;
+                .localisation-container {
+                    
+                    width: 95vw;
+                    height: auto;
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+        
+                    .address {
+                        width: 90vw;
+                        max-width: 90vw;
+                        box-sizing: border-box;
+                    }
+    
+                    iframe {
+                        width: 90vw;
+                        max-width: 90vw;
+                        height: 400px;
+                        box-sizing: border-box;
+                    }
+                    
                 }
-                
             }
+            
+            .paginator-container {
+                margin-top: 24px;
+
+                .feedback-container {
+                    padding: 0;
+                }
+            }
+    
+            
+    
         }
     }
     

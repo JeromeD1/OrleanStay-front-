@@ -99,9 +99,7 @@ export class NextReservationInfoComponent implements OnInit {
   }
 
   getCommentChatList(): void {
-    if(this.reservation().id && !this.isOld()) {
-      console.log("test");
-      
+    if(this.reservation().id && !this.isOld()) {      
       this.reservationChatService.getAllByReservationId(this.reservation().id as number).pipe(take(1)).subscribe(
         {
           next: (data) => this.commentChatList.set(data)
@@ -131,7 +129,6 @@ export class NextReservationInfoComponent implements OnInit {
         next: (data) => this.travelInfos.set(data)
       }
     )
-    
   }
 
   getFeedBack(appartmentId: number): void {
@@ -140,8 +137,6 @@ export class NextReservationInfoComponent implements OnInit {
         {
           next: (data) => {
             this.feedbackList.set(data)
-          console.log("feedbacks", data);
-          
           }
         }
       )
@@ -185,7 +180,6 @@ export class NextReservationInfoComponent implements OnInit {
       this.feedbackService.create(formData).pipe(take(1)).subscribe(
         {
           next: (data) => {
-            console.log("data", data);
             this.feedbackList.update(value => [...value, data])
             this.newQuestion = ""
           },

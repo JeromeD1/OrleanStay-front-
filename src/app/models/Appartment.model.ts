@@ -7,6 +7,7 @@ import { SomeFunctionsService } from "../shared/some-functions.service";
 import { inject } from "@angular/core";
 import { AppartmentBusinessStat } from "./AppartmentBusinessStat.model";
 import { YearBusinessStat } from "./YearBusinessStat.model";
+import { Feedback } from "./Feedback.model";
 
 
 export class Appartment {
@@ -35,7 +36,7 @@ export class Appartment {
         public infos: Info[],
         public photos: Photo[],
         public reservations: Reservation[],
-        public comments: Comment[]
+        public comments: Feedback[]
     ) {
     }
 
@@ -94,8 +95,6 @@ export class Appartment {
         ))
 
         this.reservations = newReservation
-        console.log("reservations dans Appartment", this.reservations);
-        
     }
 
     calculateBusinessStatistics(): AppartmentBusinessStat {

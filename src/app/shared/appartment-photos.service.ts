@@ -28,14 +28,11 @@ export class AppartmentPhotosService {
     )
   }
 
-  updateOrder(photos: Photo[]): Observable<Photo[]> {
-    console.log("photos in updateOrder", photos);
+  updateOrder(photos: Photo[]): Observable<Photo[]> { 
     const objectToSend = {photos: photos}
     
     return this.http.put<Photo[]>(environment.BACKEND_BASE_URL + '/photo/updateOrder/' + photos[0].appartmentId, objectToSend).pipe(
       tap((data) => {
-        console.log("in pipe, tap", data);
-        
         //on met à jour les appartments via addPhotoInAppartment de l'appstore car cette méthode remplace tout le tableau photo... donc ok
         this.appstore.addPhotoInAppartment(data)
       })
@@ -45,8 +42,6 @@ export class AppartmentPhotosService {
   delete(photo: Photo, imgId: string): Observable<Photo[]> {
     return this.http.delete<Photo[]>(environment.BACKEND_BASE_URL + '/photo/' + photo.id + "/imgId/" + imgId).pipe(
       tap((data) => {
-        console.log("data after delete photo :", data);
-        
         this.appstore.addPhotoInAppartment(data)
       })
     )

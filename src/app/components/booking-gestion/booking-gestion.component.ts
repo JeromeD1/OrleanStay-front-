@@ -27,9 +27,7 @@ export class BookingGestionComponent implements OnInit, OnDestroy{
   constructor(private appartmentService: AppartmentsService, private appstore: AppstoreService) {
     effect(() => {
       
-      this.filteredAppartments = this.appartmentsWithAcceptedReservations()
-      console.log("this.filteredAppartments", this.filteredAppartments);
-      
+      this.filteredAppartments = this.appartmentsWithAcceptedReservations()      
     })
   }
 
@@ -42,13 +40,11 @@ export class BookingGestionComponent implements OnInit, OnDestroy{
   destroy$: Subject<void> = new Subject()
 
   appartmentsWithAcceptedReservations = computed(() => this.appartments().map(appart => {
-    console.log("before", appart.reservations);
     appart.reservations.map(resa => {
       if(!resa.accepted || resa.cancelled) {
         appart.removeReservation(resa)
       }
     })
-    console.log("after", appart.reservations);
     return appart
   }))
 

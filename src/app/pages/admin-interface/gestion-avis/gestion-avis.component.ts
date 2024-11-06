@@ -61,16 +61,7 @@ export class GestionAvisComponent implements OnInit {
 
     getAllFeedbacks(): void {
       if(this.allFeedbacks().length === 0){
-        this.feedbackService.getAll().pipe(take(1)).subscribe(
-          {
-            next: (data) => {
-              console.log("data", data);
-              console.log("this.allFeedbacks()", this.allFeedbacks());
-              
-              
-            }
-          }
-        )
+        this.feedbackService.getAll().pipe(take(1)).subscribe()
       }
     }
 

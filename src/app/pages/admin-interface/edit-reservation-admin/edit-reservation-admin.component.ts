@@ -419,13 +419,11 @@ saveReservation(): void {
       depositReceived: this.selectedReservation()?.depositReceived
     }
 
-    console.log("formData", formData);
     this.reservationService.update(formData, this.selectedReservation()!.id!).pipe(take(1)).subscribe({
       next: () => {
         this.notificationService.success("Votre réservation a bien été modifiée.")
         this.selectedReservation.set(null)
-        this.resetForm()
-        // this.cdr.detectChanges()        
+        this.resetForm()       
       },
       error: () => {
         this.notificationService.error("Une erreur s'est produite lors de l'enregistrement de votre réservation.")

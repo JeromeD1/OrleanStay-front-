@@ -76,8 +76,6 @@ export class TravelInfoEditionComponent implements OnInit, OnDestroy {
         next:(data) => {
           this.travelInfos.set(data)
           this.initForm()
-          // this.initPositionOrder()
-          console.log("travelInfos",this.travelInfos());
           this.cdr.detectChanges()
         },
         error: () => {
