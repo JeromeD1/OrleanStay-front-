@@ -5,11 +5,12 @@ import { NotificationService } from '../../shared/notification.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ConfirmEqualValidatorDirective } from '../../shared/validators/confirm-equals.validator';
 
 @Component({
   selector: 'app-password-reinitialisation',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, ConfirmEqualValidatorDirective],
   templateUrl: './password-reinitialisation.component.html',
   styleUrl: '../../components/login/login.component.scss'
 })
