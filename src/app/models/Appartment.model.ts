@@ -43,7 +43,7 @@ export class Appartment {
     calculateReservationPrice(nbAdult: number, nbChild:number, checkinDate: Date, checkoutDate: Date) : number {
     
         const numberOfDays: number = Math.round((checkoutDate.getTime() - checkinDate.getTime()) / (1000 * 3600 * 24));        
-        const numberOfTravellers = nbAdult + nbChild;
+        const numberOfTravellers = Number(nbAdult) + Number(nbChild); //number ajouté car il y avait un problème non compris dans le calcul de numberOfTravellers
         let updateNightPrice = this.nightPrice;
         let reservationPrice: number = 0;
         let cleaningPrice: number = 0;
@@ -52,6 +52,8 @@ export class Appartment {
             updateNightPrice = this.nightPrice + this.prixPersonneSupplementaire * (numberOfTravellers - 2);
         }
     
+        console.log("this.nightPrice", this.nightPrice, "nbAdult", nbAdult, "nbChild", nbChild, "numberOfTravellers", numberOfTravellers, "updateNightPrice", updateNightPrice);
+        
         if(numberOfDays < 3) {
             cleaningPrice = this.menageCourtSejour;
         } else if(numberOfDays < 190) {
