@@ -16,6 +16,7 @@ import { InfoResaComponent } from './pages/user-interface/info-resa/info-resa.co
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { infoResaResolver } from './pages/user-interface/info-resa/info-resa.resolver';
 import { PasswordReinitialisationComponent } from './pages/password-reinitialisation/password-reinitialisation.component';
+import { SyntheseResaComponent } from './pages/admin-interface/synthese-resa/synthese-resa.component';
 
 export const routes: Routes = 
 [
@@ -27,6 +28,7 @@ export const routes: Routes =
             {path:"", redirectTo:"acceptReservation", pathMatch: 'full'},
             {path: "addReservation", component: AddReservationComponent},
             {path: "editReservation", component: EditReservationAdminComponent},
+            {path: "syntheseReservation", component: SyntheseResaComponent},
             {path: "appartGestion", component: AppartmentGestionComponent},
             {path: "travelInfo/edit/:appartmentId", component: TravelInfoEditionComponent},
             {path: "gestionUtilisateurs", component: GestionUtilisateursComponent},

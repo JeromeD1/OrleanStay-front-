@@ -16,6 +16,9 @@
                     <li>
                         <a [routerLink]="['/admin/editReservation']" (click)="setCurrentPageToReservationEdition()" [class.highlighted]="currentPage() === 'reservationEdition'"><p>Modifier une réservation</p></a>
                     </li>
+                    <li>
+                        <a [routerLink]="['/admin/syntheseReservation']" (click)="setCurrentPageToSyntheseReservation()" [class.highlighted]="currentPage() === 'syntheseReservation'"><p>Historique des réservations</p></a>
+                    </li>
                 </ul>
             }
         </div>
@@ -55,6 +58,7 @@
         <a [routerLink]="['/admin/acceptReservation']" (click)="setShowMenuBurger()"><p>Demandes de réservation</p></a>
         <a [routerLink]="['/admin/addReservation']" (click)="setShowMenuBurger()"><p>Enregistrement de réservations</p></a>
         <a [routerLink]="['/admin/editReservation']" (click)="setShowMenuBurger()"><p>Modifier une réservation</p></a>
+        <a [routerLink]="['/admin/syntheseReservation']" (click)="setShowMenuBurger()"><p>Historique des réservations</p></a>
 
         <a [routerLink]="['/admin/appartGestion']" (click)="setShowMenuBurger()"><p>Gestion des appartements</p></a>
         <a [routerLink]="['/admin/gestionUtilisateurs']" (click)="setShowMenuBurger()"><p>Gestion des utilisateurs</p></a>

@@ -27,21 +27,24 @@ export class AdminNavbarComponent implements AfterViewInit, OnDestroy{
 
   destroy$: Subject<void> = new Subject()
 
-  currentPage = signal<"reservationRequest" | "reservationRegistoring" | "reservationEdition" | "globalGestion" | "gestionUtilisateurs" | "reservationChat" | "gestionCommentaires">("reservationRequest")
+  currentPage = signal<"reservationRequest" | "reservationRegistoring" | "reservationEdition" | "syntheseReservation" | "globalGestion" | "gestionUtilisateurs" | "reservationChat" | "gestionCommentaires">("reservationRequest")
   reservationCurrentPageText = computed(() => {
     switch (this.currentPage()){
       case "reservationRequest":
         return "Demandes de réservation"
         break
-        case "reservationEdition":
-          return "Modifier une réservation"
-          break
-          case "reservationRegistoring":
-            return "Enregistrer une réservation"
-            break
-            default:
-              return null
-              break
+      case "reservationEdition":
+        return "Modifier une réservation"
+        break
+      case "reservationRegistoring":
+        return "Enregistrer une réservation"
+        break
+      case "syntheseReservation":
+        return "Historique des réservations"
+        break
+      default:
+        return null
+        break
     }
   })
 
@@ -75,6 +78,9 @@ export class AdminNavbarComponent implements AfterViewInit, OnDestroy{
         break
         case "editReservation":
         this.setCurrentPageToReservationEdition()
+        break
+        case "syntheseReservation":
+          this.setCurrentPageToSyntheseReservation()
         break
         case "appartGestion":
         this.setCurrentPageToGlobalGestion()
@@ -152,6 +158,12 @@ export class AdminNavbarComponent implements AfterViewInit, OnDestroy{
 
   setCurrentPageToReservationEdition(): void {
     this.currentPage.set("reservationEdition")
+    this.isOnPageReservation.set(true)
+    this.isOnPageCommunication.set(false)
+  }
+
+  setCurrentPageToSyntheseReservation(): void {
+    this.currentPage.set("syntheseReservation")
     this.isOnPageReservation.set(true)
     this.isOnPageCommunication.set(false)
   }
