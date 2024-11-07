@@ -1,4 +1,15 @@
-<app-form-recherche-reservation
-[appartments]="allAppartments()"
-[owners]="currentUser()?.role === 'ADMIN' ? owners() : null"
-></app-form-recherche-reservation>
+<main>
+    <mat-accordion>
+        <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+                <mat-panel-title> Afficher les filtres </mat-panel-title>
+            </mat-expansion-panel-header>
+            <app-form-recherche-reservation
+            [appartments]="allAppartments()"
+            [owners]="currentUser()?.role === 'ADMIN' ? owners() : null"
+            (researchEmitter)="updateReservations($event)"
+            ></app-form-recherche-reservation>
+        </mat-expansion-panel>
+    </mat-accordion>
+</main>
+

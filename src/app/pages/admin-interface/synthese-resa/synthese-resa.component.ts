@@ -9,11 +9,15 @@ import { Appartment } from '../../../models/Appartment.model';
 import { Owner } from '../../../models/Owner.model';
 import { take } from 'rxjs';
 import { FormRechercheReservationComponent } from '../../../components/form-recherche-reservation/form-recherche-reservation.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { ReservationResearchRequest } from '../../../models/Request/ReservationResearchRequest.model';
+import { Reservation } from '../../../models/Reservation.model';
+import { LoginService } from '../../../shared/login.service';
 
 @Component({
   selector: 'app-synthese-resa',
   standalone: true,
-  imports: [FormRechercheReservationComponent],
+  imports: [FormRechercheReservationComponent, MatExpansionModule],
   templateUrl: './synthese-resa.component.html',
   styleUrl: './synthese-resa.component.scss'
 })
@@ -24,11 +28,11 @@ export class SyntheseResaComponent implements OnInit {
     private readonly appartmentService: AppartmentsService, 
     private readonly notificationService: NotificationService, 
     private readonly utilisateurService: UtilisateurService,
-    private readonly router: Router){}
+    private readonly loginService: LoginService){}
 
     currentUser: WritableSignal<User | null> = this.appstore.getCurrentUser()
     allAppartments: WritableSignal<Appartment[]> = this.appstore.getAllAppartments()
-    selectedAppartment = signal<Appartment>(this.allAppartments()[0])
+    reservations = signal<Reservation[]>([])
     owners: WritableSignal<Owner[]> = this.appstore.getOwners()
 
 
@@ -42,17 +46,13 @@ export class SyntheseResaComponent implements OnInit {
       if(this.currentUser()?.role === "ADMIN") {
         this.appartmentService.getAllAppartments().pipe(take(1)).subscribe(
           {
-            next: () => {
-              this.selectedAppartment.set(this.allAppartments()[0])
-            },
-            error: (error) => this.notificationService.error(error)
+            error: () => this.loginService.logout().pipe(take(1)).subscribe()
           }
         )
       } else if (this.currentUser()?.role === "OWNER") {
         this.appartmentService.getAppartmentsByOwnerId(this.currentUser()?.id!).pipe(take(1)).subscribe(
           {
-            next: () => {this.selectedAppartment.set(this.allAppartments()[0])},
-            error: (error) => this.notificationService.error(error)
+            error: () => this.loginService.logout().pipe(take(1)).subscribe()
           }
         )
       }
@@ -63,6 +63,11 @@ export class SyntheseResaComponent implements OnInit {
     if(this.currentUser()?.role === "ADMIN") {
       this.utilisateurService.getAllOwners().pipe(take(1)).subscribe()
     }
+  }
+
+  updateReservations(data: ReservationResearchRequest): void {
+    console.log("data", data);
+    
   }
 
 }

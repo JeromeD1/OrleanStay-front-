@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input, OnDestroy, OnInit, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, OnDestroy, OnInit, output, signal } from '@angular/core';
 import { Appartment } from '../../models/Appartment.model';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -24,6 +24,8 @@ export class FormRechercheReservationComponent implements OnInit, OnDestroy {
   owners = input<Owner[] | null>()
   appartments = input.required<Appartment[]>()
 
+  selectedOwnerId = signal<number | null>(null)
+
   ownersOptions = computed(() => {
     if(this.owners()){
       const options: {value: number | null, label: string}[] = []
@@ -39,10 +41,17 @@ export class FormRechercheReservationComponent implements OnInit, OnDestroy {
   appartmentsOptions = computed(() => {
     const options: {value: number | null, label: string}[] = []
     options.push({value: null, label: "---"})
-    this.appartments()!.forEach(item => {
-      options.push({value: item.id, label: `${item.name}`
+    if(this.selectedOwnerId()){
+      this.appartments()!.filter(appart => appart.ownerId == this.selectedOwnerId()).forEach(item => {
+        options.push({value: item.id, label: `${item.name}`
+        })
       })
-    })
+    } else {
+      this.appartments()!.forEach(item => {
+        options.push({value: item.id, label: `${item.name}`
+        })
+      })
+    }
     return options
   })
 
@@ -94,6 +103,11 @@ export class FormRechercheReservationComponent implements OnInit, OnDestroy {
         this.formResearch.get("month")?.setValue(null)
         this.formResearch.get("month")?.disable()
       }
+    })
+
+    this.formResearch.get("ownerId")?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if(value === "null") {value = null}
+      this.selectedOwnerId.set(value)
     })
   }
   

@@ -4,6 +4,9 @@ form {
     @include flex-row-between-center-wrap;
     max-width: 1000px;
     margin: auto;
+    background-color: var(--colorLightTransparent);
+    padding: 16px;
+    border-radius: 20px;
 
     .input-container {
         width: 450px;

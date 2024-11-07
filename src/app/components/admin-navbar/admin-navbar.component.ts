@@ -132,7 +132,6 @@ export class AdminNavbarComponent implements AfterViewInit, OnDestroy{
     {
       next: () => {       
         this.appstore.resetAutenticatedSignals() 
-        this.router.navigate(['/'])
         this.notificationService.success("Vous avez bien été déconnecté.")
       },
       error: (error) => {
