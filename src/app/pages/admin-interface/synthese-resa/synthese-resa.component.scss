@@ -9,7 +9,13 @@ main {
         @include flex-column-center-center;
         gap: 16px;
         margin: 16px;
+        margin-left: 0;
         width: 1600px;
         max-width: 95vw;
+
+        .resa-container {
+            width: 1400px;
+            max-width: 90vw;
+        }
     }
 }
