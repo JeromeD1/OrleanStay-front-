@@ -1,0 +1,22 @@
+@import "../../styles/mixins";
+
+form {
+    @include flex-row-between-center-wrap;
+    max-width: 1000px;
+    margin: auto;
+
+    .input-container {
+        width: 450px;
+        max-width: 90vw;
+    }
+
+    .button-container {
+        @include flex-column-center-center;
+        width: 100%;
+        padding: 16px;
+
+        button {
+            @include button-colorBrand;
+        }
+    }
+}

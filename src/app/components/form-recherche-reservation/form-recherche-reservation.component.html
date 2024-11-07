@@ -1,0 +1,41 @@
+<form [formGroup]="formResearch" (ngSubmit)="onSubmit()">
+    @if (owners()) {
+        <div class="input-container">
+            <app-reactive-select label="Propriétaire" formControlName="ownerId" [options]="ownersOptions()" [optionValue]="'value'" [optionLabelParts]="['label']" ></app-reactive-select>
+        </div>
+    }
+    <div class="input-container">
+        <app-reactive-select label="Appartement" formControlName="appartmentId" [options]="appartmentsOptions()" optionValue="value" [optionLabelParts]="['label']" ></app-reactive-select>
+    </div>
+
+    <div class="input-container">
+        <app-reactive-select label="Année" formControlName="year" [options]="yearsOptions" optionValue="value" [optionLabelParts]="['label']" ></app-reactive-select>
+    </div>
+
+    <div class="input-container">
+        <app-reactive-select label="Mois" formControlName="month" [options]="monthOptions" optionValue="value" [optionLabelParts]="['label']" ></app-reactive-select>
+    </div>
+
+    <div class="input-container">
+        <app-reactive-select label="Etat" formControlName="state" [options]="stateOptions" optionValue="value" [optionLabelParts]="['label']" ></app-reactive-select>
+    </div>
+
+    <div class="input-container">
+        <app-reactive-select label="Non finies seulement" formControlName="notClosed" [options]="notClosedOptions" optionValue="value" [optionLabelParts]="['label']" ></app-reactive-select>
+    </div>
+
+    <div class="button-container">
+        <button type="submit" (click)="onSubmit()">Rechercher</button>
+    </div>
+    
+</form>
+
+<!-- <app-reactive-select
+            formControlName="appartmentId"
+            [options]="ownerAppartments()" 
+            [optionLabelParts]="['description']" 
+            [optionValue]="'id'" 
+            [error]="appartmentIdError"
+            label="Logement" 
+            placeholder="Choisissez un logement"
+            ></app-reactive-select> -->

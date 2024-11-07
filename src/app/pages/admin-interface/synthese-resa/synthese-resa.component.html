@@ -1,1 +1,4 @@
-<p>synthese-resa works!</p>
+<app-form-recherche-reservation
+[appartments]="allAppartments()"
+[owners]="currentUser()?.role === 'ADMIN' ? owners() : null"
+></app-form-recherche-reservation>
