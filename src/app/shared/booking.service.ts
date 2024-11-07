@@ -6,6 +6,7 @@ import { environment } from '../../environment/environment';
 import { Observable, map, tap } from 'rxjs';
 import { ReservationRequest } from '../models/Request/ReservationRequest.model';
 import { SomeFunctionsService } from './some-functions.service';
+import { ReservationResearchRequest } from '../models/Request/ReservationResearchRequest.model';
 
 @Injectable({
   providedIn: 'root'
@@ -55,8 +56,6 @@ export class BookingService {
         const newData = data.map((resa) => {
           const checkinDate = resa.checkinDate ? this.someFunctions.setLunchTimeToDate(new Date(resa.checkinDate)) : null
           const checkoutDate = resa.checkoutDate ? this.someFunctions.setLunchTimeToDate(new Date(resa.checkoutDate)) : null
-          // const checkinDate = resa.checkinDate ? new Date(resa.checkinDate) : null
-          // const checkoutDate = resa.checkoutDate ? new Date(resa.checkoutDate) : null
           return {...resa, checkinDate: checkinDate, checkoutDate: checkoutDate}
         })
         return newData
@@ -76,6 +75,19 @@ export class BookingService {
         return newData
       }),
       tap((data) => {this.appstore.setReservationRequests(data)})
+    )
+  }
+
+  getReservationRequestsWithCriteria(data: ReservationResearchRequest): Observable<Reservation[]> {
+    return this.http.post<Reservation[]>(environment.BACKEND_BASE_URL + `/reservation/findWithCriteria`, data).pipe(
+      map((data) => {
+        const newData = data.map((resa) => {
+          const checkinDate = resa.checkinDate ? this.someFunctions.setLunchTimeToDate(new Date(resa.checkinDate)) : null
+          const checkoutDate = resa.checkoutDate ? this.someFunctions.setLunchTimeToDate(new Date(resa.checkoutDate)) : null
+          return {...resa, checkinDate: checkinDate, checkoutDate: checkoutDate}
+        })
+        return newData
+      })
     )
   }
 

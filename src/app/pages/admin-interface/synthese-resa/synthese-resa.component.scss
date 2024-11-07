@@ -1,5 +1,15 @@
+@import "../../../styles/mixins";
+
 main {
     width: 1800px;
     max-width: 95vw;
     margin: auto;
+
+    .paginator-container {
+        @include flex-column-center-center;
+        gap: 16px;
+        margin: 16px;
+        width: 1600px;
+        max-width: 95vw;
+    }
 }

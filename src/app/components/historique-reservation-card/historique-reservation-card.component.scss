@@ -1,0 +1,77 @@
+@import "../../styles/mixins";
+
+article {
+    @include fieldset-style;
+    @include flex-row-between-center-wrap;
+    background-color: var(--colorLightestTransparent);
+    width: 100%;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+
+    .button-brand {
+        @include button-colorBrand;
+    }
+
+    .button-mid {
+        @include button-colorMid;
+    }
+
+    .button-light {
+        @include button-colorLight;
+    }
+    
+
+    .info {
+        @include flex-row-between-center-wrap;
+        column-gap: 48px;
+        row-gap: 16px;
+        margin-bottom: 24px;
+
+        .ligne-info-container {
+            @include flex-column-start-start;
+            gap: 8px;
+        
+            .flex-row-start {
+                @include flex-row-start-center;
+                gap: 16px;
+    
+                b {
+                    display: block;
+                    min-width: 100px;
+                    font-weight: 500;
+                }
+    
+                p {
+                    margin: 0;
+                }
+            }
+        }
+    }
+
+    button {
+        @include button-colorBrand;
+    }
+
+}
+
+@media screen and (max-width: 700px) {
+    article {
+        .info {
+            @include flex-column-center-center;
+            gap: 24px;
+        }
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    article {
+        .info {
+            .div-button {
+                button {
+                  width: 170px;  
+                }
+            }
+        }
+    }
+}

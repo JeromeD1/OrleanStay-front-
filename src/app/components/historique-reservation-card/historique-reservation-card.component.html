@@ -1,0 +1,45 @@
+<article>
+    <section class="info">
+        <div class="ligne-info-container">
+            <div class="flex-row-start">
+                <b>Dates :</b>
+                <p>Du {{reservation().checkinDate | date: "dd/MM/yyyy"}} au {{reservation().checkoutDate | date: "dd/MM/yyyy"}}</p>
+            </div>
+            <div class="flex-row-start">
+                <b>Pour :</b>
+                @if(reservation().nbBaby == 0){
+                    <p>{{reservation().nbAdult + reservation().nbChild}} personnes </p>
+                } 
+                @else {
+                    <p>{{reservation().nbAdult + reservation().nbChild}} personnes + {{reservation().nbBaby}} bébé (-2 ans) </p>
+                }
+            </div>
+            <div class="flex-row-start">
+                <b>Contact :</b>
+                <p>{{reservation().traveller?.personalInformations?.firstname}} {{reservation().traveller?.personalInformations?.lastname}} - {{reservation().traveller?.personalInformations?.email}} - {{reservation().traveller?.personalInformations?.phone}} </p>
+            </div>
+            <br>
+            @if(appartment()){
+                <div class="flex-row-start">
+                    <b>Logement :</b>
+                    <p>{{appartment().name}} {{appartment().description}}</p>
+                </div>
+                
+                <div class="flex-row-start">
+                    <b>Prix :</b>
+                    <p>{{reservation().reservationPrice | currency: 'EUR':'symbol':'1.0-2': 'fr'}}</p>
+                </div>
+            }
+            <div class="flex-row-start">
+                <b>Statut :</b>
+                <p [class]="statutClass()">{{statut()}} </p>
+            </div>
+        </div>
+
+    </section>
+
+    @if (!isSolded()) {
+        <button type="button">Envoi info voyage</button>
+    }
+
+</article>
