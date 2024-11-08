@@ -42,7 +42,7 @@ export class EditReservationAdminComponent {
     // this.ownerAppartments().forEach(appart => {
       this.appstore.getAllAppartments()().forEach(appart => {
       appart.reservations.forEach(resa => {
-        if(resa.checkoutDate!.getTime() + threeDaysInMilliseconds > now.getTime() && !resa.cancelled && resa.accepted){
+        if(resa.checkoutDate!.getTime() + threeDaysInMilliseconds > now.getTime() && !resa.cancelled){
           reservations.push(resa)
         }
       })
@@ -268,7 +268,7 @@ checkForm(): boolean {
     const checkout = this.someFunctions.setLunchTimeToDate(this.formResa.get("checkoutDate")?.value).getTime()!
     const isCheckinInTwoDates: boolean = checkin >= resa.checkinDate!.getTime() && checkin < resa.checkoutDate!.getTime()
     const isCheckoutInTwoDates: boolean = checkout > resa.checkinDate!.getTime() && checkout <= resa.checkoutDate!.getTime()
-    if((isCheckinInTwoDates || isCheckoutInTwoDates) && !resa.cancelled){
+    if((isCheckinInTwoDates || isCheckoutInTwoDates) && !resa.cancelled && resa.id !== this.selectedReservation()!.id){
       isValid = false
       this.checkinDateError = "Les dates actuelles chevauchent une autre réservation."
       this.checkoutDateError = "Les dates actuelles chevauchent une autre réservation."      
