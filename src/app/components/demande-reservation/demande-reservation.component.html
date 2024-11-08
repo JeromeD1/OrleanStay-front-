@@ -1,4 +1,4 @@
-<main>
+<main *ngIf="!showPopup">
 
     
 
@@ -191,11 +191,13 @@
     
     </section>
 
-    <section class="popupDemandeTransmise" *ngIf="showPopup">
-        <h2>Votre demande de réservation a bien été transmise</h2>
-        <p>Vous serez contactés bientôt contacté par mail ou par téléphone par le propriétaire.</p>
-
-        <button type="button" (click)="closeDemandeResa()">Revenir à l'accueil</button>
-    </section>
-
 </main>
+
+@if (showPopup) {
+    <app-information-modal
+    title="Votre demande de réservation a bien été transmise."
+    [messages]="['Un email récapitulatif de votre demande vous a été envoyé.']"
+    confirmButtonText="Revenir à l'accueil"
+    (confirmEmitter)="closeDemandeResa()"
+    ></app-information-modal>
+}

@@ -16,11 +16,12 @@ import { SomeFunctionsService } from '../../../shared/some-functions.service';
 import { NotificationService } from '../../../shared/notification.service';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { SimpleCalendarComponent } from '../../../components/simple-calendar/simple-calendar.component';
+import { InformationModalComponent } from '../../../components/information-modal/information-modal.component';
 
 @Component({
   selector: 'app-accept-reservation',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatSelectModule, MatFormFieldModule, MatOptionModule, MatSnackBarModule, SimpleCalendarComponent],
+  imports: [CommonModule, FormsModule, MatSelectModule, MatFormFieldModule, MatOptionModule, MatSnackBarModule, SimpleCalendarComponent, InformationModalComponent],
   templateUrl: './accept-reservation.component.html',
   styleUrl: './accept-reservation.component.scss'
 })
@@ -35,6 +36,8 @@ export class AcceptReservationComponent implements OnInit, OnDestroy {
   appartmentOfReservation: WritableSignal<Appartment | null> = this.appStore.getCurrentUsedAppartment()
   reservationRequests: WritableSignal<Reservation[]> = this.appStore.getReservationRequests()
   filter = signal<"all" | "new" | "waitingForDeposit" | "waitingForValidation">("all")
+
+  showInfoModal = signal<boolean>(false)
   
   filteredReservationRequests = computed(() => {
     if(this.filter() === "all"){
@@ -140,11 +143,10 @@ export class AcceptReservationComponent implements OnInit, OnDestroy {
         next: (data) => {
           //message acceptation
           this.selectedReservation.set(this.filteredReservationRequests()[0])
-          this.notificationService.success("Votre demande de paiement d'ahrres a bien été envoyé")
+          this.notificationService.success("Votre demande de paiement d'arrhes a bien été envoyé.")
         },
-        error: (error) => {
-          //message error
-          this.notificationService.error(error)
+        error: () => {
+          this.notificationService.error("Une erreur s'est produite lors de l'enregistrement. Veuillez réessayer ultérieurement.")
         }
       }
     )
@@ -158,32 +160,52 @@ export class AcceptReservationComponent implements OnInit, OnDestroy {
         next: () => {
           //message acceptation
           this.selectedReservation.set(this.filteredReservationRequests()[0])
-          this.notificationService.success("La demande de réservation a bien été rejetée (statut annulé)")
+          this.notificationService.success("La demande de réservation a bien été rejetée (statut annulé).")
         },
-        error: (error) => {
-          //message error
-          this.notificationService.error(error)
+        error: () => {
+          this.notificationService.error("Une erreur s'est produite lors de l'enregistrement. Veuillez réessayer ultérieurement.")
         }
       }
     )
   }
 
+  handleCheckDepositStatus(): void {
+    if(this.selectedReservation().depositReceived) {
+      this.handleAcceptReservation()
+    } else {
+      this.openInfoModal()
+    }
+  }
+
   handleAcceptReservation(): void {
     this.selectedReservation.update(value => ({...value, accepted: true}))
 
-    this.bookingService.rejectReservation(this.selectedReservation()).subscribe(
+    this.bookingService.acceptReservation(this.selectedReservation()).subscribe(
       {
         next: () => {
           //message acceptation
           this.selectedReservation.set(this.filteredReservationRequests()[0])
           this.notificationService.success("La demande de réservation a bien été acceptée.")
         },
-        error: (error) => {
-          //message error
-          this.notificationService.error(error)
+        error: () => {
+          this.notificationService.error("Une erreur s'est produite lors de l'enregistrement. Veuillez réessayer ultérieurement.")
         }
       }
     )
+  }
+
+  openInfoModal(): void {
+    this.showInfoModal.set(true)
+  }
+
+  closeInfoModal(): void {
+    this.showInfoModal.set(false)
+  }
+
+  confirmValidateReservationWithoutDeposit(): void {
+    this.selectedReservation.update(value => ({...value, depositReceived: true, depositValue: 0}))
+    this.closeInfoModal()
+    this.handleAcceptReservation()
   }
 
   onError() {

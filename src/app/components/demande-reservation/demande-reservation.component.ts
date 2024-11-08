@@ -13,6 +13,7 @@ import { BookingService } from '../../shared/booking.service';
 import { Subject, takeUntil } from 'rxjs';
 import { ReservationRequest } from '../../models/Request/ReservationRequest.model';
 import { NotificationService } from '../../shared/notification.service';
+import { InformationModalComponent } from '../information-modal/information-modal.component';
 // import { TravellerHasReservation } from '../../../../../models/travellerHasReservation.model';
 // import { BookingDataService
 
@@ -20,7 +21,7 @@ import { NotificationService } from '../../shared/notification.service';
 @Component({
   selector: 'app-demande-reservation',
   standalone: true,
-  imports: [CommonModule, FormsModule, DatePickerComponent, RouterModule],
+  imports: [CommonModule, FormsModule, DatePickerComponent, RouterModule, InformationModalComponent],
   templateUrl: './demande-reservation.component.html',
   styleUrl: './demande-reservation.component.scss'
 })

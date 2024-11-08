@@ -136,4 +136,8 @@ export class BookingService {
   findwithCheckoutDateLaterThanOneMonthAgo() : Observable<Reservation[]> {
     return this.http.get<Reservation[]>(environment.BACKEND_BASE_URL + `/reservation/withCheckoutDateLaterThanOneMonthAgo`)
   }
+
+  sendInfoTravelEmail(reservationId: number): Observable<number> {
+    return this.http.get<number>(environment.BACKEND_BASE_URL + `/reservation/sendInfoTravelEmail/${reservationId}`)
+  }
 }

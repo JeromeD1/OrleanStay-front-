@@ -2,6 +2,9 @@ import { ChangeDetectorRef, Component, effect, input, OnInit, signal } from '@an
 import { Reservation } from '../../models/Reservation.model';
 import { CommonModule } from '@angular/common';
 import { Appartment } from '../../models/Appartment.model';
+import { BookingService } from '../../shared/booking.service';
+import { NotificationService } from '../../shared/notification.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-historique-reservation-card',
@@ -18,6 +21,8 @@ export class HistoriqueReservationCardComponent implements OnInit {
   statutClass = signal<string>("")
 
   isSolded = signal<boolean>(false)
+
+  constructor(private readonly reservationServive: BookingService, private readonly notificationService: NotificationService){}
 
   ngOnInit(): void {    
     this.initStatut()
@@ -52,5 +57,14 @@ export class HistoriqueReservationCardComponent implements OnInit {
     if(this.reservation().checkoutDate!.getTime() < now.getTime()){
       this.isSolded.set(true)
     }
+  }
+
+  sendInfoTravelEmail(): void {
+    this.reservationServive.sendInfoTravelEmail(this.reservation().id as number).pipe(take(1)).subscribe(
+      {
+        next:() => this.notificationService.success("L'email a bien été envoyé."),
+        error: () => this.notificationService.error("Une erreur est survenue. L'email n'a pas pu être envoyé.")
+      }
+    )
   }
 }

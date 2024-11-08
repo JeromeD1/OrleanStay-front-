@@ -42,7 +42,7 @@ export class EditReservationAdminComponent {
     // this.ownerAppartments().forEach(appart => {
       this.appstore.getAllAppartments()().forEach(appart => {
       appart.reservations.forEach(resa => {
-        if(resa.checkoutDate!.getTime() + threeDaysInMilliseconds > now.getTime()){
+        if(resa.checkoutDate!.getTime() + threeDaysInMilliseconds > now.getTime() && !resa.cancelled && resa.accepted){
           reservations.push(resa)
         }
       })
@@ -86,6 +86,7 @@ export class EditReservationAdminComponent {
   zipcodeError: string | null = null
   cityError: string | null = null
   countryError: string | null = null
+  depositValueError: string | null = null
 
 
 
@@ -126,6 +127,8 @@ initForm():void {
     nbChild: [0, Validators.required],
     nbBaby: [0, Validators.required],
     reservationPrice: [0, Validators.required],
+    depositReceived: [false, Validators.required],
+    depositValue: [0, Validators.required],
     cancelled:[false, Validators.required],
     firstname: ["", Validators.required],
     lastname: ["", Validators.required],
@@ -183,6 +186,12 @@ initEvents(): void {
   this.formResa.get("reservationPrice")?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
     if(value && value >= 0){
       this.reservationPriceError = null
+    }
+  })
+
+  this.formResa.get("depositValue")?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+    if(value && value >= 0){
+      this.depositValueError = null
     }
   })
 
@@ -296,6 +305,11 @@ checkForm(): boolean {
     this.reservationPriceError = "Le champ est requis."
   }
 
+  if(this.formResa.get("depositValue")?.hasError("required")){
+    isValid = false
+    this.depositValueError = "Le champ est requis."
+  }
+
   if(this.formResa.get("firstname")?.hasError("required")){
     isValid = false
     this.firstnameError = "Le champ est requis."
@@ -355,6 +369,8 @@ resetForm():void {
       nbChild: this.selectedReservation()?.nbChild,
       nbBaby: this.selectedReservation()?.nbBaby,
       reservationPrice: this.selectedReservation()?.reservationPrice,
+      depositReceived: this.selectedReservation()?.depositReceived,
+      depositValue: this.selectedReservation()?.depositValue,
       cancelled: this.selectedReservation()?.cancelled,
       firstname: this.selectedReservation()?.traveller?.personalInformations.firstname,
       lastname: this.selectedReservation()?.traveller?.personalInformations.lastname,
@@ -374,6 +390,8 @@ resetForm():void {
       nbChild: 0,
       nbBaby: 0,
       reservationPrice: 0,
+      depositReceived: false,
+      depositValue: 0,
       cancelled: false,
       firstname: "",
       lastname: "",
@@ -416,7 +434,8 @@ saveReservation(): void {
       cancelled: this.formResa.getRawValue().cancelled!,
       accepted: this.selectedReservation()?.accepted,
       depositAsked: this.selectedReservation()?.depositAsked,
-      depositReceived: this.selectedReservation()?.depositReceived
+      depositReceived: this.formResa.getRawValue().depositReceived,
+      depositValue: this.formResa.getRawValue().depositValue
     }
 
     this.reservationService.update(formData, this.selectedReservation()!.id!).pipe(take(1)).subscribe({

@@ -28,7 +28,7 @@ export const infoResaResolver: ResolveFn<TravelInfo[]> = (route, state): Observa
           }) 
         )
   } else {
-    inject(Router).navigate(['notFound'])
+    router.navigate(['notFound'])
     return of()
   }
 

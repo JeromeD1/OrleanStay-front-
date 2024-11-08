@@ -75,6 +75,10 @@
 
             <app-reactive-input [error]="reservationPriceError" formControlName="reservationPrice" label="Cout de la réservation" type="number"></app-reactive-input>
 
+            <app-reactive-input type="checkbox" [error]="null" formControlName="depositReceived" label="Arrhes reçus ?"></app-reactive-input>
+
+            <app-reactive-input [error]="depositValueError" formControlName="depositValue" label="Montant des arrhes" type="number"></app-reactive-input>
+
             <app-reactive-input type="checkbox" [error]="null" formControlName="cancelled" label="Réservation annulée ?"></app-reactive-input>
 
 

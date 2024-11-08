@@ -16,25 +16,6 @@ main {
         padding: 16px;
     }
 
-    .popupDemandeTransmise{
-        @include flex-column-center-center;
-        margin: auto;
-        width: 700px;
-        max-width: 95vw;
-        height: 50vh;
-        margin-top: 25vh;
-        background-color: #fafafa9e;
-        backdrop-filter: blur(40px);
-        gap: 10%;
-        border-radius: 24px;
-        border: 1px solid var(--colorDark);
-
-        h2, p {
-            text-align: center;
-        }
-
-    }
-
     .reservation-container {
         @include flex-column-center-center;
         margin: auto;

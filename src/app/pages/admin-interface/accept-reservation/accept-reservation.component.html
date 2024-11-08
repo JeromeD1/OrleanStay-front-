@@ -5,7 +5,7 @@
     <section class="request-and-validation">
         <button type="button" class="button-filter" (click)="setFilterToAll()">Toutes</button>
         <button type="button" class="button-filter" class="button-filter" (click)="setFilterToNew()">Nouvelles</button>
-        <button type="button" class="button-filter" (click)="setFilterToWaitingForDeposit()">En attente d'ahrres</button>
+        <button type="button" class="button-filter" (click)="setFilterToWaitingForDeposit()">En attente d'arrhes</button>
         <button type="button" class="button-filter" (click)="setFilterToWaitingForValidation()">En attente de validation</button>
     </section>
 
@@ -95,12 +95,28 @@
 
         <section class="request-and-validation">
             <button type="button" class="accept-button" (click)="handleRejectReservation()">Refuser</button>
-            <button type="button" class="accept-button" *ngIf="!selectedReservation().depositReceived" (click)="handleAskForDeposit()">Demander les ahrres</button>
-            <button type="button" class="accept-button" (click)="handleAcceptReservation()">Valider</button>
+            <button type="button" class="accept-button" *ngIf="!selectedReservation().depositReceived" (click)="handleAskForDeposit()">Demander les arrhes</button>
+            <button type="button" class="accept-button" (click)="handleCheckDepositStatus()">Valider</button>
         </section>
     }
 
-    
-
-
 </main>
+
+@if(showInfoModal()) {
+    <app-information-modal
+    title="ATTENTION : Ahrres non reçus ou non enregistrés"
+    [messages]="
+    [
+    'La réservation est enregistrée avec aucun arrhes perçu à ce jour.', 
+    'Vous pouvez les enregistrer dans la section - Modifier réservation -', 
+    'Souhaitez vous toujours valider cette réservation ?', 
+    'Les arrhes seront enregistrés comme ayant été déposés avec une valeur de 0€.'
+    ]"
+    confirmButtonText="Oui"
+    cancelButtonText="Non"
+    (cancelEmitter)="closeInfoModal()"
+    (confirmEmitter)="confirmValidateReservationWithoutDeposit()"
+    ></app-information-modal>
+}
+
+

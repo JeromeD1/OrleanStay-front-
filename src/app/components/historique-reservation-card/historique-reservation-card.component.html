@@ -19,17 +19,23 @@
                 <p>{{reservation().traveller?.personalInformations?.firstname}} {{reservation().traveller?.personalInformations?.lastname}} - {{reservation().traveller?.personalInformations?.email}} - {{reservation().traveller?.personalInformations?.phone}} </p>
             </div>
             <br>
-            @if(appartment()){
                 <div class="flex-row-start">
                     <b>Logement :</b>
                     <p>{{appartment().name}} {{appartment().description}}</p>
                 </div>
                 
                 <div class="flex-row-start">
-                    <b>Prix :</b>
-                    <p>{{reservation().reservationPrice | currency: 'EUR':'symbol':'1.0-2': 'fr'}}</p>
+                    <div class="flex-row-start">
+                        <b>Prix :</b>
+                        <p>{{reservation().reservationPrice | currency: 'EUR':'symbol':'1.0-2': 'fr'}}</p>
+                    </div>
+                    <div class="flex-row-start">
+                        <b>Ahrres reçus :</b>
+                        <p>{{!reservation().depositReceived ? "Non" : reservation().depositValue | currency: 'EUR':'symbol':'1.0-2': 'fr'}}</p>
+                    </div>
+
                 </div>
-            }
+            
             <div class="flex-row-start">
                 <b>Statut :</b>
                 <p [class]="statutClass()">{{statut()}} </p>
@@ -38,8 +44,8 @@
 
     </section>
 
-    @if (!isSolded()) {
-        <button type="button">Envoi info voyage</button>
+    @if (!isSolded() && reservation().accepted && ! reservation().cancelled) {
+        <button type="button" (click)="sendInfoTravelEmail()">Envoi info voyage</button>
     }
 
 </article>

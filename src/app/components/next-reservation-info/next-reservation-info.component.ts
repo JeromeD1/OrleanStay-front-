@@ -208,6 +208,7 @@ export class NextReservationInfoComponent implements OnInit {
   cancelReservation(): void {
     const formData: Reservation = {...this.reservation(), cancelled: true}
     this.cancelEmitter.emit(formData)
+    this.closeCancelModal()
   }
 
   openArrivalDetails(): void {
