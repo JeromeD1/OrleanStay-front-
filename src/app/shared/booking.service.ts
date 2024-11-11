@@ -91,36 +91,39 @@ export class BookingService {
     )
   }
 
-  askForDeposit(reservationToUpdate: Reservation) {
+  askForDeposit(reservationToUpdate: Reservation): Observable<Reservation> {
     return this.http.put<Reservation>(environment.BACKEND_BASE_URL + `/reservation/${reservationToUpdate.id!}/askForDeposit`, reservationToUpdate).pipe(
       tap((resa) => {
         const checkinDate = resa.checkinDate ? new Date(resa.checkinDate) : null
           const checkoutDate = resa.checkoutDate ? new Date(resa.checkoutDate) : null
           const updatedReservation: Reservation = {...resa, checkinDate: checkinDate, checkoutDate: checkoutDate}
           this.appstore.updateReservationRequestsByReservation(updatedReservation) 
+          this.appstore.updateReservationIntoAppartment(updatedReservation)
           return updatedReservation
       })
     )
   }
 
-  rejectReservation(reservationToUpdate: Reservation) {
+  rejectReservation(reservationToUpdate: Reservation): Observable<Reservation> {
     return this.http.put<Reservation>(environment.BACKEND_BASE_URL + `/reservation/${reservationToUpdate.id!}/reject`, reservationToUpdate).pipe(
       tap((resa) => {
         const checkinDate = resa.checkinDate ? new Date(resa.checkinDate) : null
           const checkoutDate = resa.checkoutDate ? new Date(resa.checkoutDate) : null
           const updatedReservation: Reservation = {...resa, checkinDate: checkinDate, checkoutDate: checkoutDate}
           this.appstore.removeReservationInReservationRequests(updatedReservation) 
+          this.appstore.updateReservationIntoAppartment(updatedReservation)
       })
     )
   }
 
-  acceptReservation(reservationToUpdate: Reservation) {
+  acceptReservation(reservationToUpdate: Reservation): Observable<Reservation> {
     return this.http.put<Reservation>(environment.BACKEND_BASE_URL + `/reservation/${reservationToUpdate.id!}/accept`, reservationToUpdate).pipe(
       tap((resa) => {
         const checkinDate = resa.checkinDate ? new Date(resa.checkinDate) : null
           const checkoutDate = resa.checkoutDate ? new Date(resa.checkoutDate) : null
           const updatedReservation: Reservation = {...resa, checkinDate: checkinDate, checkoutDate: checkoutDate}
           this.appstore.removeReservationInReservationRequests(updatedReservation) 
+          this.appstore.updateReservationIntoAppartment(updatedReservation)
       })
     )
   }

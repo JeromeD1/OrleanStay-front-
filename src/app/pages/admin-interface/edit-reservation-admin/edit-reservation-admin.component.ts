@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, computed, Signal, signal, WritableSignal } from '@angular/core';
+import { Component, computed, signal, WritableSignal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DatePickerComponent } from '../../../components/date-picker/date-picker.component';
 import { ReactiveInputComponent } from '../../../shared/library/reactive-input/reactive-input.component';
@@ -98,8 +98,10 @@ ngOnInit(): void {
 
 getOwnerAppartments(): void {
   if(this.ownerAppartments().length === 0){
-    if(this.currentUser && this.currentUser.role !== "USER") {   
+    if(this.currentUser && this.currentUser.role === "OWNER") {   
       this.appartmentService.getAppartmentsByOwnerId(this.currentUser?.id).pipe(take(1)).subscribe()
+    } else if(this.currentUser && this.currentUser.role === "ADMIN") {   
+      this.appartmentService.getAllAppartments().pipe(take(1)).subscribe()
     } else {
       this.router.navigate(["/"])
     }
@@ -129,6 +131,7 @@ initForm():void {
     reservationPrice: [0, Validators.required],
     depositReceived: [false, Validators.required],
     depositValue: [0, Validators.required],
+    accepted:[false],
     cancelled:[false, Validators.required],
     firstname: ["", Validators.required],
     lastname: ["", Validators.required],
@@ -139,6 +142,8 @@ initForm():void {
     city: ["", Validators.required],
     country: ["", Validators.required],
   })
+
+  this.formResa.get("accepted")?.disable()
 }
 
 initEvents(): void {
@@ -371,6 +376,7 @@ resetForm():void {
       reservationPrice: this.selectedReservation()?.reservationPrice,
       depositReceived: this.selectedReservation()?.depositReceived,
       depositValue: this.selectedReservation()?.depositValue,
+      accepted: this.selectedReservation()?.accepted,
       cancelled: this.selectedReservation()?.cancelled,
       firstname: this.selectedReservation()?.traveller?.personalInformations.firstname,
       lastname: this.selectedReservation()?.traveller?.personalInformations.lastname,
@@ -392,6 +398,7 @@ resetForm():void {
       reservationPrice: 0,
       depositReceived: false,
       depositValue: 0,
+      accepted: false,
       cancelled: false,
       firstname: "",
       lastname: "",
