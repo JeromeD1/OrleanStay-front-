@@ -1,4 +1,4 @@
-import { Component, OnDestroy, output, signal} from '@angular/core';
+import { Component, output, signal} from '@angular/core';
 import { LoginService } from '../../shared/login.service';
 import { Subject, take } from 'rxjs';
 import { FormsModule } from '@angular/forms';
@@ -17,11 +17,9 @@ import { NotificationService } from '../../shared/notification.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent implements OnDestroy {
+export class LoginComponent {
 
   constructor(private readonly loginService: LoginService, private readonly notificationService: NotificationService) {}
-
-  destroy$: Subject<void> = new Subject()
 
   closeEmitter = output<void>()
   createAccountEmitter = output<void>()
@@ -79,8 +77,4 @@ export class LoginComponent implements OnDestroy {
     this.createAccountEmitter.emit()
   }
 
-  ngOnDestroy(): void {
-      this.destroy$.next()
-      this.destroy$.complete()
-  }
 }

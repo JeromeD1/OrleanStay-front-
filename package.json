@@ -26,6 +26,7 @@
     "cloudinary": "^2.2.0",
     "cloudinary-core": "^2.13.1",
     "date-fns": "^3.6.0",
+    "orlean-stay": "file:",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"

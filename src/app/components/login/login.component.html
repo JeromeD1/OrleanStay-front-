@@ -3,7 +3,8 @@
         <h1>Connexion</h1>
         <div>
             <label>Login : </label>
-            <input type="text" placeholder="Votre email" #inputLogin="ngModel" [(ngModel)]="login" name="inputLogin" required (keypress.enter)="loginForm.valid && onSubmit()">
+            <input type="text" placeholder="Votre email" #inputLogin="ngModel" [(ngModel)]="login" name="inputLogin" 
+            required (keypress.enter)="loginForm.valid && onSubmit()">
         </div>
 
         <ng-container *ngIf="inputLogin.errors && loginForm.submitted">
@@ -13,7 +14,8 @@
         <ng-container *ngIf="!isPasswordForgotten()">
             <div>
                 <label>Mot de passe : </label>
-                <input type="password" placeholder="Votre mot de passe" #inputPassword="ngModel" [(ngModel)]="password" name="inputPassword" required (keypress.enter)="loginForm.valid && onSubmit()">
+                <input type="password" placeholder="Votre mot de passe" #inputPassword="ngModel" [(ngModel)]="password" name="inputPassword" 
+                required (keypress.enter)="loginForm.valid && onSubmit()">
             </div>
     
             <ng-container *ngIf="inputPassword.errors && loginForm.submitted">
@@ -25,7 +27,8 @@
 
         <div class="div-checkMDP">
             <label for="isPasswordForgotten">Mot de passe oublié ?</label>
-            <mat-checkbox id="isPasswordForgotten" name="isPasswordForgotten" [ngModel]="isPasswordForgotten()" [checked]="isPasswordForgotten()" (change)="setForgottenPassword()"></mat-checkbox>
+            <mat-checkbox id="isPasswordForgotten" name="isPasswordForgotten" [ngModel]="isPasswordForgotten()" 
+            [checked]="isPasswordForgotten()" (change)="setForgottenPassword()"></mat-checkbox>
         </div>
 
         <div class="div-button">
