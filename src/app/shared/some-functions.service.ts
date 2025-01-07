@@ -120,4 +120,28 @@ export class SomeFunctionsService {
     return newDate; 
   }
 
+  getYearsSelectOptions(): {value: number | null, label: string}[] {
+    const options: {value: number | null, label: string}[] = []
+    options.push({value: null, label: "---"})
+    const now = new Date()
+    const thisYear = now.getFullYear()
+    for(let year = thisYear - 5; year <= thisYear + 5; year++) {
+      options.push({value: year, label: year.toString()})
+    }
+
+    return options
+  }
+
+  getMonthSelectOptions(): {value: number | null, label: string}[] {
+    const moisEnFrancais: string[] = [ "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
+
+    const options: {value: number | null, label: string}[] = []
+    options.push({value: null, label: "---"})
+    for(let month = 0; month < 12; month++) {
+      options.push({value: month, label: moisEnFrancais[month]})
+    }
+
+    return options
+  }
+
 }

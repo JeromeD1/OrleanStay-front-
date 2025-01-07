@@ -5,6 +5,7 @@ import { Observable, tap } from 'rxjs';
 import { User } from '../models/User.model';
 import { AppstoreService } from './appstore.service';
 import { UserSaveRequest } from '../models/Request/UserSaveRequest.model';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -12,7 +13,7 @@ import { UserSaveRequest } from '../models/Request/UserSaveRequest.model';
 })
 export class LoginService {
 
-  constructor(private http: HttpClient, private appstore: AppstoreService) { }
+  constructor(private readonly http: HttpClient, private readonly appstore: AppstoreService, private readonly router: Router) { }
 
   login(data: any): Observable<{token: string, utilisateur:User}> {
     return this.http.post<{token: string, utilisateur:User}>(environment.BACKEND_BASE_URL + '/login', data).pipe(
@@ -51,6 +52,9 @@ export class LoginService {
         this.appstore.resetTraveller();
         this.appstore.setCurrentUser(null)
         localStorage.setItem("currentUser", JSON.stringify(null))
+        console.log("test");
+        
+        this.router.navigate(["/"])
       })
       )
   }

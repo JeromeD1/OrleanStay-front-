@@ -178,6 +178,9 @@ export class AppstoreService {
         return Appartment.createFromOtherAppartment(appartment)
       })
     )
+
+    console.log("this._allAppartments()",this._allAppartments(), "this._activeAppartments()", this._activeAppartments());
+    
   }
 
   updateAppartment(appartment: Appartment): void {

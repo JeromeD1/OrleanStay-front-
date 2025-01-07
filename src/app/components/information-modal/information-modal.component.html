@@ -1,0 +1,18 @@
+<main>
+    <section>
+        <h2>{{title()}} </h2>
+
+        <div class="messages">
+            @for (item of messages(); track $index) {
+                <p>{{item}} </p>
+            }
+        </div>
+    
+        <div class="buttons">
+            @if(cancelButtonText()){
+                <button type="button" class="cancel" (click)="cancel()">{{cancelButtonText()}} </button>
+            }
+            <button type="button" class="confirm" (click)="confirm()">{{confirmButtonText()}} </button>
+        </div>
+    </section>
+</main>

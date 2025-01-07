@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmEqualValidatorDirective } from '../../shared/validators/confirm-equals.validator';
+import { regexConstants } from '../../shared/constantes/regex';
 
 @Component({
   selector: 'app-password-reinitialisation',
@@ -22,7 +23,6 @@ export class PasswordReinitialisationComponent implements OnInit {
     private readonly router: Router,
     private readonly route: ActivatedRoute
   ) {}
-
 
   password: string = ""
   confirmationPassword: string = ""
@@ -59,7 +59,6 @@ export class PasswordReinitialisationComponent implements OnInit {
           }
         } 
       )
-    
   }
 
 }

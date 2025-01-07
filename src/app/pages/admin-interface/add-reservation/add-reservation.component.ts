@@ -78,8 +78,10 @@ ngOnInit(): void {
 
 getOwnerAppartments(): void {
   if(this.ownerAppartments().length === 0){
-    if(this.currentUser && this.currentUser.role !== "USER") {   
+    if(this.currentUser && this.currentUser.role === "OWNER") {   
       this.appartmentService.getAppartmentsByOwnerId(this.currentUser?.id).pipe(take(1)).subscribe()
+    } else if(this.currentUser && this.currentUser.role === "ADMIN") {   
+      this.appartmentService.getAllAppartments().pipe(take(1)).subscribe()
     } else {
       this.router.navigate(["/"])
     }

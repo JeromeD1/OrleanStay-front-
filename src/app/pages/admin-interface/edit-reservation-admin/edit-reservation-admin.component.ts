@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, computed, Signal, signal, WritableSignal } from '@angular/core';
+import { Component, computed, signal, WritableSignal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DatePickerComponent } from '../../../components/date-picker/date-picker.component';
 import { ReactiveInputComponent } from '../../../shared/library/reactive-input/reactive-input.component';
@@ -42,7 +42,7 @@ export class EditReservationAdminComponent {
     // this.ownerAppartments().forEach(appart => {
       this.appstore.getAllAppartments()().forEach(appart => {
       appart.reservations.forEach(resa => {
-        if(resa.checkoutDate!.getTime() + threeDaysInMilliseconds > now.getTime()){
+        if(resa.checkoutDate!.getTime() + threeDaysInMilliseconds > now.getTime() && !resa.cancelled){
           reservations.push(resa)
         }
       })
@@ -86,6 +86,7 @@ export class EditReservationAdminComponent {
   zipcodeError: string | null = null
   cityError: string | null = null
   countryError: string | null = null
+  depositValueError: string | null = null
 
 
 
@@ -97,8 +98,10 @@ ngOnInit(): void {
 
 getOwnerAppartments(): void {
   if(this.ownerAppartments().length === 0){
-    if(this.currentUser && this.currentUser.role !== "USER") {   
+    if(this.currentUser && this.currentUser.role === "OWNER") {   
       this.appartmentService.getAppartmentsByOwnerId(this.currentUser?.id).pipe(take(1)).subscribe()
+    } else if(this.currentUser && this.currentUser.role === "ADMIN") {   
+      this.appartmentService.getAllAppartments().pipe(take(1)).subscribe()
     } else {
       this.router.navigate(["/"])
     }
@@ -126,6 +129,9 @@ initForm():void {
     nbChild: [0, Validators.required],
     nbBaby: [0, Validators.required],
     reservationPrice: [0, Validators.required],
+    depositReceived: [false, Validators.required],
+    depositValue: [0, Validators.required],
+    accepted:[false],
     cancelled:[false, Validators.required],
     firstname: ["", Validators.required],
     lastname: ["", Validators.required],
@@ -136,6 +142,8 @@ initForm():void {
     city: ["", Validators.required],
     country: ["", Validators.required],
   })
+
+  this.formResa.get("accepted")?.disable()
 }
 
 initEvents(): void {
@@ -183,6 +191,12 @@ initEvents(): void {
   this.formResa.get("reservationPrice")?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
     if(value && value >= 0){
       this.reservationPriceError = null
+    }
+  })
+
+  this.formResa.get("depositValue")?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+    if(value && value >= 0){
+      this.depositValueError = null
     }
   })
 
@@ -259,7 +273,7 @@ checkForm(): boolean {
     const checkout = this.someFunctions.setLunchTimeToDate(this.formResa.get("checkoutDate")?.value).getTime()!
     const isCheckinInTwoDates: boolean = checkin >= resa.checkinDate!.getTime() && checkin < resa.checkoutDate!.getTime()
     const isCheckoutInTwoDates: boolean = checkout > resa.checkinDate!.getTime() && checkout <= resa.checkoutDate!.getTime()
-    if((isCheckinInTwoDates || isCheckoutInTwoDates) && !resa.cancelled){
+    if((isCheckinInTwoDates || isCheckoutInTwoDates) && !resa.cancelled && resa.id !== this.selectedReservation()!.id){
       isValid = false
       this.checkinDateError = "Les dates actuelles chevauchent une autre réservation."
       this.checkoutDateError = "Les dates actuelles chevauchent une autre réservation."      
@@ -294,6 +308,11 @@ checkForm(): boolean {
   if(this.formResa.get("reservationPrice")?.hasError("required")){
     isValid = false
     this.reservationPriceError = "Le champ est requis."
+  }
+
+  if(this.formResa.get("depositValue")?.hasError("required")){
+    isValid = false
+    this.depositValueError = "Le champ est requis."
   }
 
   if(this.formResa.get("firstname")?.hasError("required")){
@@ -355,6 +374,9 @@ resetForm():void {
       nbChild: this.selectedReservation()?.nbChild,
       nbBaby: this.selectedReservation()?.nbBaby,
       reservationPrice: this.selectedReservation()?.reservationPrice,
+      depositReceived: this.selectedReservation()?.depositReceived,
+      depositValue: this.selectedReservation()?.depositValue,
+      accepted: this.selectedReservation()?.accepted,
       cancelled: this.selectedReservation()?.cancelled,
       firstname: this.selectedReservation()?.traveller?.personalInformations.firstname,
       lastname: this.selectedReservation()?.traveller?.personalInformations.lastname,
@@ -374,6 +396,9 @@ resetForm():void {
       nbChild: 0,
       nbBaby: 0,
       reservationPrice: 0,
+      depositReceived: false,
+      depositValue: 0,
+      accepted: false,
       cancelled: false,
       firstname: "",
       lastname: "",
@@ -416,7 +441,8 @@ saveReservation(): void {
       cancelled: this.formResa.getRawValue().cancelled!,
       accepted: this.selectedReservation()?.accepted,
       depositAsked: this.selectedReservation()?.depositAsked,
-      depositReceived: this.selectedReservation()?.depositReceived
+      depositReceived: this.formResa.getRawValue().depositReceived,
+      depositValue: this.formResa.getRawValue().depositValue
     }
 
     this.reservationService.update(formData, this.selectedReservation()!.id!).pipe(take(1)).subscribe({

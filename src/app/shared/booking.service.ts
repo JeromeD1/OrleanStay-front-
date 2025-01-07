@@ -6,6 +6,7 @@ import { environment } from '../../environment/environment';
 import { Observable, map, tap } from 'rxjs';
 import { ReservationRequest } from '../models/Request/ReservationRequest.model';
 import { SomeFunctionsService } from './some-functions.service';
+import { ReservationResearchRequest } from '../models/Request/ReservationResearchRequest.model';
 
 @Injectable({
   providedIn: 'root'
@@ -55,8 +56,6 @@ export class BookingService {
         const newData = data.map((resa) => {
           const checkinDate = resa.checkinDate ? this.someFunctions.setLunchTimeToDate(new Date(resa.checkinDate)) : null
           const checkoutDate = resa.checkoutDate ? this.someFunctions.setLunchTimeToDate(new Date(resa.checkoutDate)) : null
-          // const checkinDate = resa.checkinDate ? new Date(resa.checkinDate) : null
-          // const checkoutDate = resa.checkoutDate ? new Date(resa.checkoutDate) : null
           return {...resa, checkinDate: checkinDate, checkoutDate: checkoutDate}
         })
         return newData
@@ -79,36 +78,52 @@ export class BookingService {
     )
   }
 
-  askForDeposit(reservationToUpdate: Reservation) {
+  getReservationRequestsWithCriteria(data: ReservationResearchRequest): Observable<Reservation[]> {
+    return this.http.post<Reservation[]>(environment.BACKEND_BASE_URL + `/reservation/findWithCriteria`, data).pipe(
+      map((data) => {
+        const newData = data.map((resa) => {
+          const checkinDate = resa.checkinDate ? this.someFunctions.setLunchTimeToDate(new Date(resa.checkinDate)) : null
+          const checkoutDate = resa.checkoutDate ? this.someFunctions.setLunchTimeToDate(new Date(resa.checkoutDate)) : null
+          return {...resa, checkinDate: checkinDate, checkoutDate: checkoutDate}
+        })
+        return newData
+      })
+    )
+  }
+
+  askForDeposit(reservationToUpdate: Reservation): Observable<Reservation> {
     return this.http.put<Reservation>(environment.BACKEND_BASE_URL + `/reservation/${reservationToUpdate.id!}/askForDeposit`, reservationToUpdate).pipe(
       tap((resa) => {
         const checkinDate = resa.checkinDate ? new Date(resa.checkinDate) : null
           const checkoutDate = resa.checkoutDate ? new Date(resa.checkoutDate) : null
           const updatedReservation: Reservation = {...resa, checkinDate: checkinDate, checkoutDate: checkoutDate}
           this.appstore.updateReservationRequestsByReservation(updatedReservation) 
+          this.appstore.updateReservationIntoAppartment(updatedReservation)
           return updatedReservation
       })
     )
   }
 
-  rejectReservation(reservationToUpdate: Reservation) {
+  rejectReservation(reservationToUpdate: Reservation): Observable<Reservation> {
     return this.http.put<Reservation>(environment.BACKEND_BASE_URL + `/reservation/${reservationToUpdate.id!}/reject`, reservationToUpdate).pipe(
       tap((resa) => {
         const checkinDate = resa.checkinDate ? new Date(resa.checkinDate) : null
           const checkoutDate = resa.checkoutDate ? new Date(resa.checkoutDate) : null
           const updatedReservation: Reservation = {...resa, checkinDate: checkinDate, checkoutDate: checkoutDate}
           this.appstore.removeReservationInReservationRequests(updatedReservation) 
+          this.appstore.updateReservationIntoAppartment(updatedReservation)
       })
     )
   }
 
-  acceptReservation(reservationToUpdate: Reservation) {
+  acceptReservation(reservationToUpdate: Reservation): Observable<Reservation> {
     return this.http.put<Reservation>(environment.BACKEND_BASE_URL + `/reservation/${reservationToUpdate.id!}/accept`, reservationToUpdate).pipe(
       tap((resa) => {
         const checkinDate = resa.checkinDate ? new Date(resa.checkinDate) : null
           const checkoutDate = resa.checkoutDate ? new Date(resa.checkoutDate) : null
           const updatedReservation: Reservation = {...resa, checkinDate: checkinDate, checkoutDate: checkoutDate}
           this.appstore.removeReservationInReservationRequests(updatedReservation) 
+          this.appstore.updateReservationIntoAppartment(updatedReservation)
       })
     )
   }
@@ -123,5 +138,9 @@ export class BookingService {
 
   findwithCheckoutDateLaterThanOneMonthAgo() : Observable<Reservation[]> {
     return this.http.get<Reservation[]>(environment.BACKEND_BASE_URL + `/reservation/withCheckoutDateLaterThanOneMonthAgo`)
+  }
+
+  sendInfoTravelEmail(reservationId: number): Observable<number> {
+    return this.http.get<number>(environment.BACKEND_BASE_URL + `/reservation/sendInfoTravelEmail/${reservationId}`)
   }
 }
