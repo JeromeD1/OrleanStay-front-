@@ -55,10 +55,12 @@ export class CreateAppartmentComponent implements OnInit{
   )
 
   ngOnInit(): void {
+    console.log(this.owners(), this.discounts());
+    
       this.appartmentForm.patchValue(
         {
-          ownerId: this.owners()[0].id,
-          discountId: this.discounts()[0].id
+          ownerId: this.owners()[0]?.id ?? null,
+          discountId: this.discounts()[0]?.id ?? null
         }
       )
   }

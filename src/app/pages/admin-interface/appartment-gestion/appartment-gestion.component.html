@@ -32,7 +32,7 @@
             <mat-expansion-panel-header>
                 <mat-panel-title> Informations générales </mat-panel-title>
             </mat-expansion-panel-header>
-            <section class="appart-gestion-container"> 
+            <section class="appart-gestion-container" style="min-width: 50vw;"> 
                 @if(isAllDataCollected() && isInCreationAppartmentMode) {
                     <app-create-appartment
                     [owners]="owners()"
@@ -55,27 +55,32 @@
             </section>
         </mat-expansion-panel>
 
-        <mat-expansion-panel>
-            <mat-expansion-panel-header>
-                <mat-panel-title> Gestion des photos </mat-panel-title>
-            </mat-expansion-panel-header>
-            <section>
-                <app-update-appartment-photos
-                [photos]="selectedAppartment().photos"
-                (updateOrderEmitter)="updateSelectedAppartmentWhileChangingPhotoOrder($event)"
-                (warningChangeOrderEmitter)="setWarningOnPhotoOrderToSave($event)"
-                ></app-update-appartment-photos>
-            </section>
-        </mat-expansion-panel>
+        @if(selectedAppartment()) {
 
-        <mat-expansion-panel>
-            <mat-expansion-panel-header>
-                <mat-panel-title> Gestion des informations voyageur </mat-panel-title>
-            </mat-expansion-panel-header>
-            <section class="appart-gestion-container">
-                <button (click)="goToTravelInfoEdition()">Gérer les infos voyageur</button>
-            </section>
-        </mat-expansion-panel>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title> Gestion des photos </mat-panel-title>
+                </mat-expansion-panel-header>
+                <section>
+                    <app-update-appartment-photos
+                    [photos]="selectedAppartment().photos"
+                    [appartmentId]="selectedAppartment().id"
+                    (updateOrderEmitter)="updateSelectedAppartmentWhileChangingPhotoOrder($event)"
+                    (warningChangeOrderEmitter)="setWarningOnPhotoOrderToSave($event)"
+                    ></app-update-appartment-photos>
+                </section>
+            </mat-expansion-panel>
+            
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title> Gestion des informations voyageur </mat-panel-title>
+                </mat-expansion-panel-header>
+                <section class="appart-gestion-container">
+                    <button (click)="goToTravelInfoEdition()">Gérer les infos voyageur</button>
+                </section>
+            </mat-expansion-panel>
+        }
+
 
     </mat-accordion>
 

@@ -23,6 +23,8 @@ export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges, OnDes
 
   photos = input.required<Photo[]>()
 
+  appartmentId = input.required<number>()
+
   updateOrderEmitter = output<number>() //sert à envoyer l'id de l'appartement mis à jour pour mettre à jour selectedAppartment dans le parent
   warningChangeOrderEmitter = output<boolean>()
 
@@ -157,7 +159,7 @@ export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges, OnDes
         next: () => {
           this.notificationService.success("L'ordre des photos a bien été sauvegardé.")
           this.isOrderModified.set(false)
-          this.updateOrderEmitter.emit(this.photos()[0].appartmentId)
+          this.updateOrderEmitter.emit(this.appartmentId())
           this.warningChangeOrderEmitter.emit(false)
         },
         error: () => {
@@ -217,14 +219,14 @@ export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges, OnDes
 
       //création d'une nouvelle photo
       const newPhoto: Photo = {
-        appartmentId: this.photos()[0].appartmentId,
+        appartmentId: this.appartmentId(),
         positionOrder: this.photos().length + 1,
         imgUrl: previewUrl
       }
       this.appartmentPhotosService.create(newPhoto).pipe(take(1)).subscribe(
         {
           next: () => {
-            this.updateOrderEmitter.emit(this.photos()[0].appartmentId) //pour la mise à jour de l'appartement dans le parent
+            this.updateOrderEmitter.emit(this.appartmentId()) //pour la mise à jour de l'appartement dans le parent
           },
           error: () => {
             this.notificationService.error("Une erreur s'est produite lors de l'enregistrement de la photo.")
@@ -260,7 +262,7 @@ export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges, OnDes
       //TODO : Appel de la fonction update du back
       this.appartmentPhotosService.update(newPhoto, convertedOldImgId).pipe(take(1)).subscribe({
         next: () => {
-          this.updateOrderEmitter.emit(this.photos()[0].appartmentId)
+          this.updateOrderEmitter.emit(this.appartmentId())
         },
         error: () => {
           this.notificationService.error("Une erreur s'est produite lors de l'enregistrement de l'image.")
@@ -283,7 +285,7 @@ export class UpdateAppartmentPhotosComponent implements OnInit, OnChanges, OnDes
       {
         next: () => {
           this.positionOrderOptions.pop()
-          this.updateOrderEmitter.emit(this.photos()[0].appartmentId)
+          this.updateOrderEmitter.emit(this.appartmentId())
         },
         error: () => {
           this.notificationService.error("Une erreur s'est produite lors de la suppression de l'image.")

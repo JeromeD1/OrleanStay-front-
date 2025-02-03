@@ -46,6 +46,10 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
   discounts: WritableSignal<Discount[]> = this.appstore.getDiscounts()
   owners: WritableSignal<Owner[]> = this.appstore.getOwners()
 
+  isAllAppartmentsLoaded = signal<boolean>(false); 
+  isDiscountsLoaded = signal<boolean>(false); 
+  isOwnersLoaded = signal<boolean>(false)
+
   isAppartmentUpdating: boolean = false
   detectClickOnSelectAppartment = signal<number>(0)
   currentUpdatedAppartmentFormData = signal<AppartmentSaveRequest | null>(null)
@@ -57,7 +61,7 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
 
   //signal permettant de vérifier que toutes les données sont collectées avant d'afficher des elements necessitant ces données
   isAllDataCollected = computed(() => {    
-    return this.allAppartments().length > 0 && this.discounts().length > 0 && this.owners().length > 0 && this.selectedAppartment().id > 0
+    return this.isAllAppartmentsLoaded() && this.isDiscountsLoaded() && this.isOwnersLoaded()
   })
 
   @ViewChild("matSelectAppartment") matSelectAppartment!: MatSelect
@@ -72,8 +76,11 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
     if(this.discounts().length === 0) {
       this.discountService.getDiscounts().pipe(takeUntil(this.destroy$)).subscribe(
         {
+          next:() => this.isDiscountsLoaded.set(true),
           error: (error) => this.notificationService.error(error)
         })
+    } else {
+      this.isDiscountsLoaded.set(true)
     }
   }
 
@@ -81,6 +88,7 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
     if(this.owners().length === 0){
       this.utilisateurService.getAllOwners().pipe(takeUntil(this.destroy$)).subscribe(
         {
+          next:() => this.isOwnersLoaded.set(true),
           error: () => {
             const meAsOwner: Owner = {
               id: this.appstore.getCurrentUser()()!.id,
@@ -90,9 +98,12 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
             const newOwners: Owner[] = []
             newOwners.push(meAsOwner)
             this.appstore.setOwners(newOwners)
+            this.isOwnersLoaded.set(true)
           }
         }
       )
+    } else {
+      this.isOwnersLoaded.set(true)
     }
   }
 
@@ -103,6 +114,7 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
           {
             next: () => {
               this.selectedAppartment.set(this.allAppartments()[0])
+              this.isAllAppartmentsLoaded.set(true)
             },
             error: (error) => this.notificationService.error(error)
           }
@@ -110,11 +122,16 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
       } else if (this.currentUser()?.role === "OWNER") {
         this.appartmentService.getAppartmentsByOwnerId(this.currentUser()?.id!).pipe(takeUntil(this.destroy$)).subscribe(
           {
-            next: () => {this.selectedAppartment.set(this.allAppartments()[0])},
+            next: () => {
+              this.selectedAppartment.set(this.allAppartments()[0])
+              this.isAllAppartmentsLoaded.set(true)
+            },
             error: (error) => this.notificationService.error(error)
           }
         )
       }
+    } else {
+      this.isAllAppartmentsLoaded.set(true)
     }
   }
 

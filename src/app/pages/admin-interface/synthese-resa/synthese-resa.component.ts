@@ -89,7 +89,6 @@ export class SyntheseResaComponent implements OnInit {
   updateReservations(data: ReservationResearchRequest): void {
     this.reservationService.getReservationRequestsWithCriteria(data).pipe(take(1)).subscribe({
       next: (data) => {
-        console.log("data", data);
         this.reservations.set(data)
         this.initDataSource()
       },

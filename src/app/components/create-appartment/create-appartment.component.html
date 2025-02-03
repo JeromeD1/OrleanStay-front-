@@ -1,4 +1,4 @@
-@if(discounts().length > 0 && owners().length > 0){
+@if(owners().length > 0){
 
     <form [formGroup]="appartmentForm" (ngSubmit)="updateForm.valid && onSubmit()" #updateForm="ngForm">
         <h2>Informations générales</h2> 
@@ -20,7 +20,7 @@
                     <span>Le champ ne peut pas être nul.</span>
                 }
             </div>
-            <select id="ownerSelect" name="ownerSelect" #selectedOwner formControlName="ownerId" [value]="selectedOwner.id"> <!-- (change)="handleChangeDiscount(selectedDiscount.value)" -->
+            <select id="ownerSelect" name="ownerSelect" #selectedOwner formControlName="ownerId" [value]="selectedOwner.id">
                 <option *ngFor="let owner of owners()" [value]="owner.id">{{getOwnerNameById(owner.id!)}} </option>
             </select>
         </div>
@@ -173,7 +173,7 @@
                     <span>Le champ ne peut pas être nul.</span>
                 }
             </div>
-            <select id="discountSelect" name="discountSelect" #selectedDiscount formControlName="discountId" > <!-- (change)="handleChangeDiscount(selectedDiscount.value)" -->
+            <select id="discountSelect" name="discountSelect" #selectedDiscount formControlName="discountId" > 
                 <option *ngFor="let discount of discounts()"  [value]="discount.id">{{getInfoDiscountById(discount.id!)}} </option>
             </select>
         </div>
@@ -185,7 +185,7 @@
                     <span>Le champ ne peut pas être nul.</span>
                 }
             </div>
-            <select id="typeSelect" name="typeSelect" #selectedType formControlName="type" > <!-- (change)="handleChangeDiscount(selectedDiscount.value)" -->
+            <select id="typeSelect" name="typeSelect" #selectedType formControlName="type" >
                 <option *ngFor="let type of appartmentTypes" >{{type}} </option>
             </select>
         </div>
