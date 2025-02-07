@@ -1,0 +1,45 @@
+@import "../../../styles/mixins";
+main{
+    @include flex-column-center-center;
+    margin-top: 48px;
+
+    form {
+        @include flex-column-center-center;
+        width: 1000px;
+        max-width: 95vw;
+        gap: 24px;
+
+        button {
+            @include button-colorBrand;
+        }
+
+        fieldset {
+            width: 100%;
+
+            .bold {
+                font-weight: 700;
+                padding-left: 8px;
+            }
+
+            h2 {
+                font-weight: 600;
+                padding-left: 8px;
+            }
+
+        }
+
+        .div-button {
+            @include flex-row-between-center;
+            gap: 48px;
+            max-width: 400px;
+            button {
+                width: 150px;
+            }
+        }
+    }
+}
+
+::ng-deep .mat-mdc-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-mdc-text-field-wrapper {
+    width: 800px !important;
+    max-width: 90vw !important;
+  }

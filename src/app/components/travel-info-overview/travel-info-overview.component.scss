@@ -1,0 +1,19 @@
+@import "../../styles/mixins";
+
+section {
+    @include flex-row-around-center-wrap;
+    gap: 24px;
+    width: 100%;
+
+    p{
+        display: block;
+        width: 100%;
+        white-space: pre-line;
+        text-align: justify;
+    }
+
+    img {
+        max-width: 400px;
+        max-height: 300px;
+    }
+}

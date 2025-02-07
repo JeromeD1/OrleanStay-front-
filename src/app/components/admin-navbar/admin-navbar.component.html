@@ -1,0 +1,84 @@
+<nav>
+    <div class="navPage">
+        <div class="section-menu" [class.highlighted]="isOnPageReservation()" (click)="openMenuReservation()" (mouseleave)="closeMenuReservation()">
+            <p>Gestion des réservations</p>
+            @if(reservationCurrentPageText()){
+                <p class="pSmall"><small>{{reservationCurrentPageText()}}</small></p>
+            }
+            @if(showMenuReservation){
+                <ul>
+                    <li>
+                        <a [routerLink]="['/admin/acceptReservation']" (click)="setCurrentPageToReservationRequest()" [class.highlighted]="currentPage() === 'reservationRequest'"><p>Demandes de réservation</p></a>
+                    </li>
+                    <li>
+                        <a [routerLink]="['/admin/addReservation']" (click)="setCurrentPageToReservationRegistoring()" [class.highlighted]="currentPage() === 'reservationRegistoring'"><p>Enregistrer une réservation</p></a>
+                    </li>
+                    <li>
+                        <a [routerLink]="['/admin/editReservation']" (click)="setCurrentPageToReservationEdition()" [class.highlighted]="currentPage() === 'reservationEdition'"><p>Modifier une réservation</p></a>
+                    </li>
+                    <li>
+                        <a [routerLink]="['/admin/syntheseReservation']" (click)="setCurrentPageToSyntheseReservation()" [class.highlighted]="currentPage() === 'syntheseReservation'"><p>Historique des réservations</p></a>
+                    </li>
+                </ul>
+            }
+        </div>
+        <a [routerLink]="['/admin/appartGestion']" (click)="setCurrentPageToGlobalGestion()" [class.highlighted]="currentPage() === 'globalGestion'"><p>Gestion des appartements</p></a>
+        
+        <div class="section-menu" [class.highlighted]="isOnPageCommunication()" (click)="openMenuCommunication()" (mouseleave)="closeMenuCommunication()">
+            <p>Communications</p>
+            @if(communicationCurrentPageText()){
+                <p class="pSmall"><small>{{communicationCurrentPageText()}}</small></p>
+            }
+            @if(showMenuCommunication){
+                <ul>
+                    <li>
+                        <a [routerLink]="['/admin/reservationChat']" (click)="setCurrentPageToReservationChat()" [class.highlighted]="currentPage() === 'reservationChat'"><p>Questions voyageurs</p></a>
+                    </li>
+                    <li>
+                        <a [routerLink]="['/admin/gestionCommentaires']" (click)="setCurrentPageToGestionCommentaires()" [class.highlighted]="currentPage() === 'gestionCommentaires'"><p>Gestion des avis</p></a>
+                    </li>
+                </ul>
+            }
+        </div>
+        
+        <a [routerLink]="['/admin/gestionUtilisateurs']" (click)="setCurrentPageToGestionUtilisateurs()" [class.highlighted]="currentPage() === 'gestionUtilisateurs'"><p>Gestion des utilisateurs</p></a>
+        <a class="leaveAdmin" (click)="logout()"><p>Quitter le mode admin</p></a>
+    </div>
+
+    <img src="../../../../../assets/icons/icons-menu.png" 
+    alt="menu-burger" 
+    *ngIf="!showMenuBurger" 
+    (click)="setShowMenuBurger()" 
+    class="navBurger"
+    >
+
+
+    <div class="navBurger" *ngIf="showMenuBurger">
+        
+        <a [routerLink]="['/admin/acceptReservation']" (click)="setShowMenuBurger()"><p>Demandes de réservation</p></a>
+        <a [routerLink]="['/admin/addReservation']" (click)="setShowMenuBurger()"><p>Enregistrement de réservations</p></a>
+        <a [routerLink]="['/admin/editReservation']" (click)="setShowMenuBurger()"><p>Modifier une réservation</p></a>
+        <a [routerLink]="['/admin/syntheseReservation']" (click)="setShowMenuBurger()"><p>Historique des réservations</p></a>
+
+        <a [routerLink]="['/admin/appartGestion']" (click)="setShowMenuBurger()"><p>Gestion des appartements</p></a>
+        <a [routerLink]="['/admin/gestionUtilisateurs']" (click)="setShowMenuBurger()"><p>Gestion des utilisateurs</p></a>
+        
+        <a [routerLink]="['/admin/reservationChat']" (click)="setShowMenuBurger()"><p>Questions voyageurs</p></a>
+        <a [routerLink]="['/admin/gestionCommentaires']" (click)="setShowMenuBurger()"><p>Gestion des avis</p></a>      
+        
+        <a [routerLink]="['/']" class="leaveAdmin" (click)="logout()"><p>Quitter le mode admin</p></a>
+    </div>
+
+    <img src="../../../../../assets/icons/icon-calendrier.png" 
+    alt="open-calendar"
+    [class.keepOnRight]="showMenuBurger"
+    (click)="openStatComponent()"
+    >
+
+</nav>
+
+@if (showStatComponent) {
+    <app-statistiques-resa
+    (closeEmitter)="closeStatComponent()"
+    ></app-statistiques-resa>
+}

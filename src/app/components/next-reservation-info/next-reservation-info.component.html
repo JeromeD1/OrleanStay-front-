@@ -1,0 +1,117 @@
+<article>
+    <section class="info">
+        <div class="ligne-info-container">
+            <div class="flex-row-start">
+                <b>Dates :</b>
+                <p>Du {{reservation().checkinDate | date: "dd/MM/yyyy"}} au {{reservation().checkoutDate | date: "dd/MM/yyyy"}}</p>
+            </div>
+            <div class="flex-row-start">
+                <b>Pour :</b>
+                @if(reservation().nbBaby == 0){
+                    <p>{{reservation().nbAdult + reservation().nbChild}} personnes </p>
+                } 
+                @else {
+                    <p>{{reservation().nbAdult + reservation().nbChild}} personnes + {{reservation().nbBaby}} bébé (-2 ans) </p>
+                }
+            </div>
+            <br>
+            @if(appartment()){
+                <div class="flex-row-start">
+                    <b>Logement :</b>
+                    <p>{{appartment()?.description}}</p>
+                </div>
+                <div class="flex-row-start">
+                    <b>Adresse :</b>
+                    <p>{{appartment()?.address}}, {{appartment()?.zipcode}} {{appartment()?.city}} </p>
+                </div>
+                <div class="flex-row-start">
+                    <b>Prix :</b>
+                    <p>{{reservation().reservationPrice | currency: 'EUR':'symbol':'1.0-2': 'fr'}}</p>
+                </div>
+            }
+            <div class="flex-row-start">
+                <b>Statut :</b>
+                <p [class]="statutClass()">{{statut()}} </p>
+            </div>
+        </div>
+
+        @if(!isOld() && !reservation().cancelled && !isAdminMode()){
+            <div class="div-button">
+                    <button type="button" class="button-mid" (click)="openCancelModal()">Annuler</button>
+                <!-- <button type="button" class="button-light" (click)="openArrivalDetails()">Modifier</button> -->
+                <button type="button" class="button-brand" (click)="openArrivalDetails()">Détails d'arrivée</button>
+            </div>
+        }
+    </section>
+
+    <mat-accordion>
+        @if(!isOld() || reservation().cancelled) {
+            <mat-expansion-panel [expanded]="false">
+                <mat-expansion-panel-header>
+                    <mat-panel-title> {{isAdminMode() ? "Répondre au voyageur" : "Poser une question au propriétaire"}} </mat-panel-title>
+                </mat-expansion-panel-header>
+                <section class="question-container"> 
+                    <textarea [(ngModel)]="newQuestion"  placeholder="Votre question..."></textarea>
+                    <button type="button" class="button-brand" (click)="sendQuestion()">Envoyer</button>
+    
+                    @for (item of sortedCommentChatList(); track item.id) {
+                        <div [class]="item.utilisateur.id == currentUser()?.id ? 'div-left' : 'div-right'">
+                            @if(item.utilisateur.id == currentUser()?.id){
+                                <p class="chat-header">Vous - le {{item.creationDate | date: "dd/MM/yyyy"}} </p>
+                            } @else if (isAdminMode()) {
+                                <p class="chat-header">Voyageur - le {{item.creationDate | date: "dd/MM/yyyy"}} </p>
+                            } @else {
+                                <p class="chat-header">Réponse - le {{item.creationDate | date: "dd/MM/yyyy"}} </p>
+                            }
+                            <!-- <p class="chat-header">{{item.utilisateur.id == currentUser()?.id ? "Vous" : "Réponse"}} - le {{item.creationDate | date: "dd/MM/yyyy"}} </p> -->
+                            <p>{{item.comment}} </p>
+                        </div>
+                    }
+                </section>
+            </mat-expansion-panel>
+            }
+            @else {
+                <mat-expansion-panel [expanded]="false">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title> Déposer un avis sur le logement</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <section class="question-container"> 
+                        <textarea [(ngModel)]="newQuestion"  placeholder="Votre question..."></textarea>
+                        <button type="button" class="button-brand" (click)="sendFeedBack()">Envoyer</button>
+        
+                        @for (item of sortedFeedbackList(); track item.id) {
+                            <div class="div-left">
+                                <p class="chat-header">Vous - le {{item.creationDate | date: "dd/MM/yyyy"}} </p>
+                                <p>{{item.comment}} </p>
+                            </div>
+                            @if(item.answer){
+                                <div class="div-right">
+                                    <p class="chat-header">Réponse - le {{item.answer.creationDate| date: "dd/MM/yyyy"}} </p>
+                                    <p>{{item.answer.commentAnswer}} </p>
+                                </div>
+                            }
+                        }
+                    </section>
+                </mat-expansion-panel>
+            }
+            
+    </mat-accordion>
+</article>
+
+@if(showArrivalDetails) {
+    <app-travel-info-popup
+    [travelInfos]="travelInfos()"
+    (closeEmitter)="closeArrivalDetails()"
+    ></app-travel-info-popup>
+}
+
+@if(showCancelModal){
+    <app-cancel-reservation-modal
+    [reservation]="reservation()"
+    [appartmentName]="appartment()?.description!"
+    (closeEmitter)="closeCancelModal()"
+    (validateEmitter)="cancelReservation()"
+    >
+
+    </app-cancel-reservation-modal>
+}

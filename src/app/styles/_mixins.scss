@@ -28,6 +28,34 @@
     align-items: center;
 }
 
+@mixin flex-column-center-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin flex-column-start-start {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+@mixin flex-column-center-start {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+@mixin flex-column-center-end {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+}
+
 //----------flex row-------------------
 
 
@@ -74,4 +102,195 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
+}
+
+@mixin flex-row-center-center {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin flex-row-center-center-wrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+@mixin flex-row-start-center {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+@mixin flex-row-start-center-wrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+@mixin flex-row-start-start {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+@mixin flex-row-start-start-wrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+@mixin flex-row-between-start {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+@mixin flex-row-between-start-wrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+@mixin flew-row-between-center-wrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+@mixin flew-row-start-center-wrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+@mixin button-colorMid {
+    padding: 8px 12px;
+    border: 3px outset var(--colorMid);
+    border-radius: 16px;
+    background-color: var(--colorMid);
+    font-weight: bold;
+
+    &:hover {
+        filter: sepia();
+        cursor: pointer;
+    }
+
+    &:active {
+        border: 3px inset var(--colorMid);
+
+    }
+}
+
+@mixin button-colorRed {
+    padding: 8px 12px;
+    border: 3px outset var(--colorMid);
+    border-radius: 16px;
+    background-color: var(--colorRedText);
+    color: var(--colorLightest);
+    font-weight: bold;
+
+    &:hover {
+        background-color: var(--colorMid);
+        filter: sepia();
+        cursor: pointer;
+        color: black;
+    }
+
+    &:active {
+        border: 3px inset var(--colorMid);
+
+    }
+}
+
+@mixin button-colorLight {
+    padding: 8px 12px;
+    border: 3px outset var(--colorMid);
+    border-radius: 16px;
+    background-color: var(--colorLight);
+    font-weight: bold;
+
+    &:hover {
+        filter: sepia();
+        cursor: pointer;
+    }
+
+    &:active {
+        border: 3px inset var(--colorMid);
+
+    }
+}
+
+@mixin button-colorBrand {
+    padding: 8px 12px;
+    border: 3px outset var(--colorMid);
+    border-radius: 16px;
+    background-color: var(--colorBrand);
+    font-weight: bold;
+
+    &:hover {
+        filter: sepia();
+        cursor: pointer;
+    }
+
+    &:active {
+        border: 3px inset var(--colorMid);
+
+    }
+}
+
+@mixin flex-input {
+    margin-left: -8px;
+    padding: 8px;
+    border-radius: 8px;
+
+    &:focus-within {
+        box-shadow: 0px 0px 1px 4px var(--colorBrand);
+        background-color: #e0cdc881;
+    }
+
+    input, select {
+        width: 350px;
+        max-width: 100%;
+        padding: 8px;
+        border-radius: 8px;
+        border: none;
+
+        &:focus {
+            outline: none;
+        }
+    }
+}
+
+@mixin linked {
+    color: rgb(20, 20, 190);
+
+    &:hover {
+        cursor: pointer;
+        filter: sepia();
+    }
+}
+
+@mixin fieldset-style {
+    border-radius: 24px;
+    padding: 8px;
+    background-color: var(--colorLight);
+    box-shadow: 1px 1px 2px 2px var(--colorDark);
+    border: none;
 }

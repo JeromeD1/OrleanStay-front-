@@ -11,16 +11,17 @@
         <div class="formFieldContainer">
             <mat-form-field >
                 <input matInput [matDatepicker]="checkinDate" 
-                [(ngModel)]="checkinDateValue" 
+                [(ngModel)]="userReservation().checkinDate" 
                 placeholder="Quand ?"
                 [min]="minCheckinDate"
                 [max]="maxCheckinDate"
+                (dateChange)="changeCheckin($event.value)"
                 >
 
                 <mat-datepicker-toggle matSuffix [for]="checkinDate"></mat-datepicker-toggle>
                 <mat-datepicker #checkinDate></mat-datepicker>
               </mat-form-field>
-              <img [src]="imgBalai" alt="effacer" *ngIf="checkinDateValue" (click)="deleteCheckinDateValue()" title="Effacer"/>
+              <img [src]="imgBalai" alt="effacer" *ngIf="userReservation().checkinDate" (click)="deleteCheckinDateValue()" title="Effacer"/>
 
         </div>
        </div>
@@ -30,27 +31,28 @@
         <div class="formFieldContainer">
             <mat-form-field >
                 <input matInput [matDatepicker]="checkoutDate" 
-                [(ngModel)]="checkoutDateValue" 
+                [(ngModel)]="userReservation().checkoutDate" 
                 placeholder="Quand ?"
                 [min]="minCheckoutDate"
                 [max]="maxCheckoutDate"
+                (dateChange)="changeCheckout($event.value)"
                 >
                 <mat-datepicker-toggle matSuffix [for]="checkoutDate"></mat-datepicker-toggle>
                 <mat-datepicker #checkoutDate></mat-datepicker>
               </mat-form-field>
-              <img [src]="imgBalai" alt="effacer" *ngIf="checkoutDateValue" (click)="deleteCheckoutDateValue()" title="Effacer"/>
+              <img [src]="imgBalai" alt="effacer" *ngIf="userReservation().checkoutDate" (click)="deleteCheckoutDateValue()" title="Effacer"/>
         </div>
        </div>
 
        <div class="choiceContainer">
             <h2>Voyageurs</h2>
             <div class="button-container">
-                <button type="button" (click)="changeChooseVoyager()" >{{textTravellerNumber}} </button>
-                <img [src]="imgBalai" alt="effacer" *ngIf="textTravellerNumber !== 'Combien ?'" (click)="deleteTravellers()" title="Effacer"/>
+                <button type="button" (click)="changeChooseVoyager()" >{{textTravellerNumber()}} </button>
+                <img [src]="imgBalai" alt="effacer" *ngIf="textTravellerNumber() != 'Combien ?'" (click)="deleteTravellers()" title="Effacer"/>
             </div>
 
            <div class="voyagerNumber" *ngIf="showChooseVoyager" (mouseleave)="changeChooseVoyager()" >
-            <app-choose-voyagers [travellerNumbers]="travellerNumbers" (travellerUpdate)="updateTravellerNumbers($event)" ></app-choose-voyagers>
+            <app-choose-voyagers [travellerNumbers]="travellerNumbers()" (travellerUpdate)="updateTravellerNumbers($event)" ></app-choose-voyagers>
            </div>
        </div>
        
@@ -59,11 +61,11 @@
         </section>
 
         <section class="validation">
-            <img  [class.disabled]="!checkinDateValue || !checkoutDateValue || travellerNumbers.numberAdult === 0"  
+            <img  [class.disabled]="!isResearchAnimated"  
             [class.animated]="isResearchAnimated"
             src="../../../../../../assets/icons/icons8-loupe.png" 
             alt="rechercher" 
-            [title]="!checkinDateValue || !checkoutDateValue || travellerNumbers.numberAdult === 0 ? 'Veuillez remplir tous les champs pour lancer une recherche' : 'Rechercher les logements disponibles' "
+            [title]="!userReservation().checkinDate || !userReservation().checkoutDate || travellerNumbers().numberAdult === 0 ? 'Veuillez remplir tous les champs pour lancer une recherche' : 'Rechercher les logements disponibles' "
             (click)="onStartResearch()"> 
         </section>
     
@@ -87,6 +89,6 @@
 *ngIf="showTravellingChoiceSmallScreen"
 (showComponentEmitter)="setShowTravellingChoiceSmallScreen()"
 (reservationChangeEmitter)="onReceiveTravellerChangeFromSmallScreenTravellerChoice($event)"
-[userReservation]="userReservation"
+[userReservation]="userReservation()"
 ></app-travelling-choice-small-screen>
 

@@ -1,0 +1,21 @@
+<main>
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+        <h1>Création d'un compte</h1>
+
+        <app-reactive-input [error]="emailError" formControlName="email" label="Email" type="text" placeholder="ex : john.doe@gmail.com"></app-reactive-input>
+        <app-reactive-input [error]="password1Error" formControlName="password1" label="Mot ce passe" type="password" placeholder="Saisissez votre mot de passe"></app-reactive-input>
+        <app-reactive-input [error]="password2Error" formControlName="password2" label="Confirmation mot ce passe" type="password" placeholder="Confirmez votre mot de passe"></app-reactive-input>
+        <app-reactive-input [error]="firstnameError" formControlName="firstname" label="Prénom" type="text" placeholder="Saisissez votre prénom"></app-reactive-input>
+        <app-reactive-input [error]="lastnameError" formControlName="lastname" label="Nom" type="text" placeholder="Saisissez votre nom"></app-reactive-input>
+        <app-reactive-input [error]="addressError" formControlName="address" label="Adresse" type="text" placeholder="Saisissez votre adresse"></app-reactive-input>
+        <app-reactive-input [error]="zipcodeError" formControlName="zipcode" label="Code postal" type="text" placeholder="ex : 27 500"></app-reactive-input>
+        <app-reactive-input [error]="cityError" formControlName="city" label="Ville" type="text" placeholder="ex : Paris"></app-reactive-input>
+        <app-reactive-input [error]="countryError" formControlName="country" label="Pays" type="text" placeholder="ex : France"></app-reactive-input>
+        <app-reactive-input [error]="phoneError" formControlName="phone" label="Téléphone" type="text" placeholder="ex : +33 6 75 75 75 75"></app-reactive-input>
+
+        <div class="div-button">
+            <button type="button" (click)="closeSignup()" >Annuler</button>
+            <button type="submit">Se connecter</button>
+        </div>
+    </form>
+</main>

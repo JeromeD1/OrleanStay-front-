@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/orlean-stay",
+            "outputPath": "dist/OrleanStay",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -38,20 +38,16 @@
           },
           "configurations": {
             "production": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kB",
-                  "maximumError": "4kB"
-                }
-              ],
-              "outputHashing": "all"
-            },
+                "budgets": [
+                  { "type": "initial", "maximumWarning": "2MB", "maximumError": "5MB" },
+                  { "type": "anyComponentStyle", "maximumWarning": "10KB", "maximumError": "20KB" }
+                ],
+                "optimization": true,
+                "outputHashing": "all",
+                "sourceMap": false,
+                "namedChunks": false,
+                "extractLicenses": true
+              },
             "development": {
               "optimization": false,
               "extractLicenses": false,
@@ -61,6 +57,9 @@
           "defaultConfiguration": "production"
         },
         "serve": {
+          "options": {
+            "proxyConfig": "src/proxy.conf.json"
+          },
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {

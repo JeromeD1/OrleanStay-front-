@@ -1,5 +1,6 @@
 export interface Photo {
-    id: number;
-    appartment_id: number;
+    id?: number;
+    appartmentId: number;
+    positionOrder: number;
     imgUrl: string;
 }

@@ -1,0 +1,28 @@
+<article>
+    <div class="container">
+        <div class="feedback">
+            <p class="chat-header">Voyageur - le {{feedback().creationDate | date: "dd/MM/yyyy"}} </p>
+            <p>{{feedback().comment}} </p>
+        </div>
+
+        <button type="button" class="button-red" (click)="deleteFeedback()">Supprimer</button>
+    </div>
+
+    <div class="container">
+        @if(feedback().answer && !isModifyingAnswer){
+            <div class="answer">
+                <p class="chat-header">Réponse - le {{feedback().answer!.creationDate | date: "dd/MM/yyyy"}} </p>
+                <p>{{feedback().answer!.commentAnswer}} </p>
+            </div>
+
+            <div class="button-container">
+                <button type="button" class="button-brand" (click)="setModifyingAnswer()">Modifier</button>
+                <button type="button" class="button-red" (click)="deleteAnswer()">Supprimer</button>
+            </div>
+        }
+        @else {
+            <textarea [(ngModel)]="answerComment"  placeholder="Répondre..."></textarea>
+            <button type="button" class="button-brand" (click)="answer()">Envoyer</button>
+        }
+    </div>
+</article>

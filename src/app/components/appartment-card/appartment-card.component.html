@@ -1,39 +1,37 @@
 <main class="main-appartment-card">
     <h1>{{appartment.description}} </h1>
 
-    <section class="caroussel" #caroussel>
-        <img [src]="appartment.photos[index].imgUrl" alt="photo" class="img-caroussel" #imgCaroussel (load)="setWithAndHeight()">
-        <img src="../../../../../../assets/icons/icons8-flèche-gauche-rose.png" 
-        alt="précédant" 
-        class="fleche-caroussel fleche-gauche"
-        (click)="previousPhoto()"
-        *ngIf="index > 0">
-
-        <img src="../../../../../../assets/icons/icons8-flèche-droite-rose.png" 
-        alt="suivant" 
-        class="fleche-caroussel fleche-droite"
-        (click)="nextPhoto()"
-        *ngIf="index < appartment.photos.length -1">
-
-    </section>
+    @if(appartment.photos.length > 0) {
+        <section class="caroussel" #caroussel>
+            <img [src]="appartment.photos[index].imgUrl" alt="photo" class="img-caroussel" #imgCaroussel (load)="setWithAndHeight()">
+            <img src="../../../../../../assets/icons/icons8-flèche-gauche-rose.png" 
+            alt="précédant" 
+            class="fleche-caroussel fleche-gauche"
+            (click)="previousPhoto()"
+            *ngIf="index > 0">
+    
+            <img src="../../../../../../assets/icons/icons8-flèche-droite-rose.png" 
+            alt="suivant" 
+            class="fleche-caroussel fleche-droite"
+            (click)="nextPhoto()"
+            *ngIf="index < appartment.photos.length -1">
+    
+        </section>
+    }
 
     <section class="infoResa-container">
         <div class="div-info">
             <p>{{appartment.distanceCityCenter}} </p>
             <p>{{appartment.distanceTrain}} </p>
             <p>{{appartment.distanceTram}} </p>
-            <!-- <p>{{getNightPrice()}} €/nuit ({{(traveller.nbAdult > 0) ? (traveller.nbAdult + traveller.nbChild) + " pers." : "2 pers."}}) </p> -->
             <p>{{nightPrice}} €/nuit ({{(userReservation.nbAdult > 0) ? (userReservation.nbAdult + userReservation.nbChild) + " pers." : "2 pers."}}) </p>
 
         </div>
 
         <div class="div-resa">
-            <!-- <p *ngIf="getTravelPrice()" class="infoPrixSejour">{{getTravelPrice()}}€ pour la durée du séjour ({{getNumberOfDays()}} nuits) </p> -->
-            <!-- <p *ngIf="travelPrice" class="infoPrixSejour">{{travelPrice}}€ pour la durée du séjour ({{getNumberOfDays()}} nuits) </p> -->
             <p *ngIf="travelPrice" class="infoPrixSejour">{{travelPrice}}€ pour la durée du séjour ({{numberOfDays}} nuits) </p>
 
             <button type="button" (click)="changeShowDemandeResa()" >Demande de réservation</button>
-
         </div>
     </section>
 
@@ -43,24 +41,24 @@
     </section>
 </main>
 
-<!-- <app-plus-de-details *ngIf="showMoreDetails" 
+<app-plus-de-details *ngIf="showMoreDetails" 
 (showMoreDetails)="changeShowMoreDetails()" 
 [googleMapUrl]="appartment.googleMapUrl" 
 [appartment]="appartment"
 [infos]="appartment.infos" >
-</app-plus-de-details> -->
+</app-plus-de-details>
 
-<!-- <app-toutes-les-dispo *ngIf="showToutesDispo"
+<app-toutes-les-dispo *ngIf="showToutesDispo"
 [appartment]="appartment"
 (showToutesDispo)="changeShowToutesDispo()"
-></app-toutes-les-dispo> -->
+></app-toutes-les-dispo>
 
-<!-- <app-demande-reservation *ngIf="showDemandeResa"
+<app-demande-reservation *ngIf="showDemandeResa"
 [traveller]="traveller"
+[userReservation]="userReservation"
 [travelPrice]="travelPrice"
 (showDemandeResa)="changeShowDemandeResa()"
 [appartments]="appartments"
 [appartment]="appartment"
-[discount]="discount"
-></app-demande-reservation> -->
+></app-demande-reservation>
 

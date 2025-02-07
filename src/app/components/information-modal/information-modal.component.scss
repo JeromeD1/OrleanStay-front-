@@ -1,0 +1,53 @@
+@import "../../styles/mixins";
+
+main {
+    @include flex-column-center-center;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    z-index: 15;
+    top: 0;
+    left: 0;
+    background-color: #fae7e181;
+    backdrop-filter: blur(10px);
+    overflow-y: auto;
+
+    section{
+        @include flex-column-between-center;
+        @include fieldset-style;
+        margin: auto;
+        width: 700px;
+        max-width: 95vw;
+        height: 50vh;
+        padding: 16px;
+        background-color: #fafafa9e;
+        backdrop-filter: blur(40px);
+        gap: 24px;
+        border-radius: 24px;
+        border: 1px solid var(--colorDark);
+
+        h2, p {
+            text-align: center;
+        }
+
+        .messages {
+            @include flex-column-center-center;
+            gap: 16px;
+        }
+
+        .buttons {
+            @include flex-row-around-center-wrap;
+            width: 100%;
+            gap: 24px;
+
+            .cancel {
+                @include button-colorMid;
+            }
+
+            .confirm {
+                @include button-colorBrand;
+            }
+        }
+
+    }
+}

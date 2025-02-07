@@ -1,0 +1,34 @@
+.calendar {
+    width: 100%;
+    max-width: 90%;
+    margin: auto;
+    border: 1px solid var(--colorMid);            
+}
+
+
+
+::ng-deep.highlight-red {
+background-color: var(--colorBrand) !important;
+box-sizing: border-box;
+position: relative;
+
+}
+
+::ng-deep.highlight-yellow {
+    background-color: yellow !important;
+    box-sizing: border-box;
+    position: relative;
+    
+    }
+
+::ng-deep.highlight-blue {
+    background-color: rgb(70, 70, 220) !important;
+    box-sizing: border-box;
+    position: relative;
+    
+    }
+
+
+::ng-deep.mat-calendar-body-disabled > .mat-calendar-body-cell-content {
+background-color: #fcd2cc !important; 
+}

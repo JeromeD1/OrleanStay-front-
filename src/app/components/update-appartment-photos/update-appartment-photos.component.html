@@ -1,0 +1,29 @@
+<section>
+    <h2>Ajouter des photos</h2>
+    <button type="button" (click)="uploadWidget()">Ajouter</button>
+    @if (isOrderModified()) {
+        <button type="button" (click)="saveUpdatedOrder()">Sauvegarder l'ordre des photos</button>
+    }
+</section>
+
+<form [formGroup]="formPhoto">
+    <ng-container formArrayName="photos">
+        <ng-container *ngFor="let photoGroup of photoArray.controls; let i = index">
+            <div [formGroupName]="i" class="container">
+                <img [src]="photoGroup.get('imgUrl')?.value | cacheBuster"> 
+                <div class="actions">
+                    <!-- <input type="number" formControlName="positionOrder" placeholder="Position Order"> -->
+                    <select name="position" #position formControlName="positionOrder">
+                        <option *ngFor="let position of positionOrderOptions" [ngValue]="position" >{{position}} </option>
+                    </select>
+                    
+                    <div class="button-container">
+                        <button type="button" (click)="uploadWidget(photoGroup.get('imgUrl')?.value)"><img src="../../../../../../assets/icons/icons-edit.png" alt="Modifier"></button>
+                        <button type="button" (click)="deleteImage(photoGroup.get('imgUrl')?.value)"><img src="../../../../../../assets/icons/icons-supprimer.png" alt="Supprimer"></button>
+                    </div>
+                </div>
+                
+            </div>
+        </ng-container>
+    </ng-container>
+</form>

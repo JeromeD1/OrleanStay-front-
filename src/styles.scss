@@ -1,12 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 @import "../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
+// @import 'angular-calendar/css/angular-calendar.css';
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
+@import "../src/app/styles/mixins";
 
-@mixin flex-column-start-center {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-}
 
 
 :root {
@@ -21,7 +18,11 @@
 --colorDark: #8F8B90;
 --colorMid: #C1D6D6;
 --colorLight:#FAE7E1;
+--colorLightTransparent:#fae7e14d;
 --colorLightest: #FAFAFA;
+--colorLightestTransparent: #fafafa85;
+--colorRedText: rgb(150,0,0);
+--colorSuccess: rgb(0,175,0);
 }
 
 html, body { height: 100%; }
@@ -30,26 +31,100 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    box-sizing: border-box !important;
+    scrollbar-width: none;
 }
 
-p, label, input, select, textarea, a {
-    font-size: var(--ppFontSize);
+p, label, input, select, textarea, a, b {
+    font-size: var(--ppFontSize) !important;
     text-decoration: none;
+    list-style-type: none;
+    list-style: none;
+    white-space: pre-wrap;
 }
 
 span {
-    font-size: var(--tppFontSize);
-    color: rgb(150,0,0);
+    font-size: var(--tppFontSize) !important;
+    color: var(--colorRedText);
 }
 
 button {
-    font-size: var(--mpFontSize);
+    font-size: var(--mpFontSize) !important;
 }
 
 h1{
-    font-size: var(--h2FontSize);
+    font-size: var(--h2FontSize) !important;
 }
+
+h2 {
+    font-size: var(--mpFontSize) !important;
+}
+
+.textGray {
+    color: gray;
+    font-weight: 600;
+}
+
+.textGreen {
+    color: green;
+    font-weight: 600;
+}
+
+.textOrange {
+    color: rgb(229, 149, 0);
+    font-weight: 600;
+}
+
+.flex-input {
+    margin-bottom: 0;
+    @include flex-row-between-center;
+    gap: 16px;
+    margin-bottom: 8px;
+    padding: 8px;
+    border-radius: 8px;
+
+    &:focus-within {
+        box-shadow: 0px 0px 1px 4px var(--colorBrand);
+        background-color: #e0cdc881;
+    }
+
+    .label-error {
+        @include flex-column-start-start;
+        gap: 4px;
+    }
+
+    input, select {
+        width: 300px;
+        max-width: 100%;
+        padding: 8px;
+        border-radius: 8px;
+        border: none;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    input[type="checkbox"] {
+        width: 150px;
+        max-width: 50%;
+        zoom: 2;
+      }
+}
+
+span.small-screen {
+    display: none;
+}
+
+fieldset {
+    border-radius: 24px;
+    padding: 8px;
+    background-color: var(--colorLight);
+    box-shadow: 1px 1px 2px 2px var(--colorDark);
+    border: none;
+}
+
+
 
 @media screen and (max-width:1000px) {
 
@@ -87,3 +162,25 @@ h1{
 
     }
 }
+
+@media screen and (max-width: 500px) {
+    .flex-input {
+        @include flex-column-start-start;
+        gap: 8px;
+        margin-bottom: 0;
+
+        span.large-screen {
+            display: none;
+        }
+
+        span.small-screen {
+            display: block;
+        }
+
+        input {
+            width: 100%;
+        }
+    }
+}
+
+ 

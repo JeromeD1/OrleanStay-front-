@@ -24,11 +24,15 @@
         @include flex-row-around-start-wrap;
         margin-top: 64px;
         max-width: 1600px;
-        // display: flex;
-        // flex-direction: row;
-        // justify-content: space-around;
-        // align-items: flex-start;
-        // flex-wrap: wrap;
         gap: 96px;
+    }
+}
+
+@media screen and (max-width:800px) {
+    .main-booking-gestion {
+        .section-show-appartments-cards{
+            gap: 24px;
+            margin-top: 24px;
+        }
     }
 }

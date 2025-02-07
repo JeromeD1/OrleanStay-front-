@@ -1,11 +1,10 @@
-import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
+import { Component, output, signal} from '@angular/core';
 import { LoginService } from '../../shared/login.service';
-import { Subject } from 'rxjs';
-import { Router } from '@angular/router';
+import { Subject, take } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
-
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { NotificationService } from '../../shared/notification.service';
 
 @Component({
   selector: 'app-login',
@@ -13,22 +12,22 @@ import { CommonModule } from '@angular/common';
   imports: [
     FormsModule,
     CommonModule,
+    MatCheckboxModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent implements OnDestroy {
+export class LoginComponent {
 
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(private readonly loginService: LoginService, private readonly notificationService: NotificationService) {}
 
-  destroy$: Subject<void> = new Subject()
-
-  @Output()
-  closeEmitter: EventEmitter<void> = new EventEmitter()
+  closeEmitter = output<void>()
+  createAccountEmitter = output<void>()
 
   login: string = ""
   password: string = ""
-  wrongUserMessage!: string
+  isPasswordForgotten = signal<boolean>(false)
+  wrongUserMessage = signal<string>("")
 
   closeLogin(): void {
     this.closeEmitter.emit()
@@ -40,18 +39,42 @@ export class LoginComponent implements OnDestroy {
       password: this.password
     }
 
-    this.loginService.login(formData).subscribe(data => {
-      if(data?.role === "admin"){
-        this.router.navigate(['/admin'])
-      } else {
-        this.wrongUserMessage = "Vous n'avez pas les droits pour vous connecter !"
-      }
-    })
-
+    if(this.isPasswordForgotten()){
+      this.loginService.askForReinitializingPassword(this.login).pipe(take(1)).subscribe(
+        {
+          next:(data) => {
+            if(data === true) {
+              this.notificationService.success("Un email de réinitialisation vient de vous être envoyé à votre adresse mail.")
+              this.closeLogin()
+            } else {
+              this.notificationService.error("L'email fourni ne correspond à aucun utilisateur enregistré.")
+            }
+          },
+          error: () => this.notificationService.error("Une erreur est survenue, veuillez réessayer plus tard.")
+        }
+      )
+    } else {
+      this.loginService.login(formData).pipe(take(1)).subscribe(
+        {
+          next: () => {          
+            this.closeLogin()
+          },
+  
+          error: () => {
+            this.wrongUserMessage.set("Votre email ou votre mot de passe n'est pas correct !")
+          }
+        } 
+      )
+    }
   }
 
-  ngOnDestroy(): void {
-      this.destroy$.next()
-      this.destroy$.complete()
+  setForgottenPassword(): void {
+    this.isPasswordForgotten.set(!this.isPasswordForgotten())
+    this.login = ""
   }
+
+  openSignup(): void {
+    this.createAccountEmitter.emit()
+  }
+
 }

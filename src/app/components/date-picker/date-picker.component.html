@@ -1,0 +1,16 @@
+<div (mouseleave)="leaveWithoutEmitNewDate($event)">
+    <mat-form-field>
+        <input matInput [matDatepicker]="checkDate" 
+        [(ngModel)]="pickerDateValue" 
+        (dateChange)="emitNewDate($event)"
+        placeholder="Quand ?"
+        [min]="dateType === 'checkin' ? minCheckinDate : minCheckoutDate"
+        [max]="dateType === 'checkin' ? maxCheckinDate : maxCheckoutDate"
+        [matDatepickerFilter]="filterBookedDates"
+        >
+        <mat-datepicker-toggle matSuffix [for]="checkDate"></mat-datepicker-toggle>
+        <mat-datepicker #checkDate
+            [dateClass]="dateClass"
+        ></mat-datepicker>
+      </mat-form-field>
+</div>

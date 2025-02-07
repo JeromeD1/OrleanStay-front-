@@ -1,0 +1,122 @@
+<main>
+    <h1>{{reservationRequests().length}} demandes de réservation</h1>
+
+
+    <section class="request-and-validation">
+        <button type="button" class="button-filter" (click)="setFilterToAll()">Toutes</button>
+        <button type="button" class="button-filter" class="button-filter" (click)="setFilterToNew()">Nouvelles</button>
+        <button type="button" class="button-filter" (click)="setFilterToWaitingForDeposit()">En attente d'arrhes</button>
+        <button type="button" class="button-filter" (click)="setFilterToWaitingForValidation()">En attente de validation</button>
+    </section>
+
+
+    <div class="request-choice">
+        <mat-form-field>
+            <mat-label>Choisissez une réservation</mat-label>
+            <!-- <mat-select [value]="filteredReservationRequests()[0]" (selectionChange)="handleChangeReservation($event.value)"> -->
+                <mat-select [value]="selectedReservation()" (selectionChange)="handleChangeReservation($event.value)">
+                <mat-option *ngFor="let reservation of filteredReservationRequests()" [value]="reservation">
+               {{findAppartmentNameById(reservation.appartmentId!)}}  -  Du {{reservation.checkinDate | date:'dd/MM/yyyy' }} au {{reservation.checkoutDate | date:'dd/MM/yyyy'}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+    </div>
+
+    @if(selectedReservation() && selectedReservation().id) {
+        <section class="resa-information">
+            <div class="resa">
+                <div class="info">
+                    <p>Nom : </p>
+                    <b>{{selectedReservation().traveller?.personalInformations?.lastname}}</b>
+                </div>
+                <div class="info">
+                    <p>Prénom : </p>
+                    <b>{{selectedReservation().traveller?.personalInformations?.firstname}}</b>
+                </div>
+                <div class="info">
+                    <p>Email : </p>
+                    <b>{{selectedReservation().traveller?.personalInformations?.email}}</b>
+                </div>
+                <div class="info">
+                    <p>Telephone : </p>
+                    <b>{{selectedReservation().traveller?.personalInformations?.phone}}</b>
+                </div>
+                <div class="info">
+                    <p>Appartement : </p>
+                    <b>{{findAppartmentNameById(selectedReservation().appartmentId!)}}</b>
+                </div>
+                <div class="info">
+                    <p>Nombre d'adultes : </p>
+                    <b>{{selectedReservation().nbAdult}}</b>
+                </div>
+                <div class="info">
+                    <p>Nombre d'enfants : </p>
+                    <b>{{selectedReservation().nbChild}}</b>
+                </div>
+                <div class="info">
+                    <p>Nombre de bébés : </p>
+                    <b>{{selectedReservation().nbBaby}}</b>
+                </div>
+                <div class="info">
+                    <p>Dates : </p>
+                    <b><b>du {{selectedReservation().checkinDate | date:'dd/MM/yyyy'}} au {{selectedReservation().checkoutDate | date:'dd/MM/yyyy'}}</b></b>
+                </div>
+                <div class="info">
+                    <p>Nombre de jours : </p>
+                    <b>{{someFunctions.getNumberOfDays(selectedReservation())}}</b>
+                </div>
+                <div class="info">
+                    <p>Prix du séjour (avec ménage) : </p>
+                    <b>{{selectedReservation().reservationPrice}} €</b>
+                </div>
+                <div class="info">
+                    <p>Arrhes reçus : </p>
+                    <b>{{selectedReservation().depositReceived ? selectedReservation().depositValue : "NON"}}</b>
+                </div>
+    
+                <div class="info-input info">
+                    <p>Arrhes à demander : </p>
+                    <input type="number" [(ngModel)]="selectedReservation().depositValue" name="inputDepositValue" (change)="setDepositValue(selectedReservation().depositValue)">
+                </div>
+            </div>
+
+            @if(appartmentOfReservation()) {
+                <div class="availabilities">
+                    <app-simple-calendar
+                    [reservations]="appartmentOfReservation()?.reservations!"
+                    [selectedReservation]="selectedReservation()"
+                    ></app-simple-calendar>
+                </div>
+            }
+   
+        </section>
+
+       
+
+        <section class="request-and-validation">
+            <button type="button" class="accept-button" (click)="handleRejectReservation()">Refuser</button>
+            <button type="button" class="accept-button" *ngIf="!selectedReservation().depositReceived" (click)="handleAskForDeposit()">Demander les arrhes</button>
+            <button type="button" class="accept-button" (click)="handleCheckDepositStatus()">Valider</button>
+        </section>
+    }
+
+</main>
+
+@if(showInfoModal()) {
+    <app-information-modal
+    title="ATTENTION : Ahrres non reçus ou non enregistrés"
+    [messages]="
+    [
+    'La réservation est enregistrée avec aucun arrhes perçu à ce jour.', 
+    'Vous pouvez les enregistrer dans la section - Modifier réservation -', 
+    'Souhaitez vous toujours valider cette réservation ?', 
+    'Les arrhes seront enregistrés comme ayant été déposés avec une valeur de 0€.'
+    ]"
+    confirmButtonText="Oui"
+    cancelButtonText="Non"
+    (cancelEmitter)="closeInfoModal()"
+    (confirmEmitter)="confirmValidateReservationWithoutDeposit()"
+    ></app-information-modal>
+}
+
+

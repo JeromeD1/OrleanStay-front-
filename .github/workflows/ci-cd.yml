@@ -1,0 +1,60 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  deploy:
+    name: Deploy Application
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'  # Déployer uniquement sur main
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Add SSH private key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519_orleans-stay
+          chmod 600 ~/.ssh/id_ed25519_orleans-stay
+          ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+
+      - name: Test SSH connection
+        run: ssh -i ~/.ssh/id_ed25519_orleans-stay -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "echo 'SSH connection successful!'"
+
+      - name: Clone or update project on server
+        run: |
+          ssh -i ~/.ssh/id_ed25519_orleans-stay -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "
+          if [ -d /home/${{ secrets.SERVER_USER }}/orleans-stay-app ]; then
+            if [ -d /home/${{ secrets.SERVER_USER }}/orleans-stay-app/.git ]; then
+              echo 'Repository already exists. Pulling latest changes...';
+              cd /home/${{ secrets.SERVER_USER }}/orleans-stay-app;
+              git reset --hard;
+              git pull origin main;
+            else
+              echo 'Invalid directory exists. Cleaning up and cloning again...';
+              rm -rf /home/${{ secrets.SERVER_USER }}/orleans-stay-app;
+              git clone git@${{ secrets.REPOSITORY_NAME }} /home/${{ secrets.SERVER_USER }}/orleans-stay-app;
+            fi
+          else
+            echo 'Cloning repository...';
+            git clone git@${{ secrets.REPOSITORY_NAME }} /home/${{ secrets.SERVER_USER }}/orleans-stay-app;
+          fi
+          "
+
+      - name: Construction de l'image docker et demarrage du conteneur
+        run: |
+          ssh -i ~/.ssh/id_ed25519_orleans-stay -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "
+          cd /home/${{ secrets.SERVER_USER }}/orleans-stay-app &&
+          docker build -t orleans-stay-app . &&
+          docker stop orleans-stay-app || true &&
+          docker rm orleans-stay-app || true &&
+          docker run -d --name orleans-stay-app -p 80:80 orleans-stay-app
+          "

@@ -1,0 +1,209 @@
+@if(owners().length > 0){
+
+    <form [formGroup]="appartmentForm" (ngSubmit)="updateForm.valid && onSubmit()" #updateForm="ngForm">
+        <h2>Informations générales</h2> 
+    
+        <div class="flex-input">
+            <div class="label-span">
+                <label for="appartName">Nom de l'appartement :</label>
+                @if(updateForm.submitted && appartmentForm.get("name")?.hasError('required')){
+                    <span>Le champ ne peut pas être nul.</span>
+                }
+            </div>
+            <input type="text" placeholder="ex : Chatelet 24" formControlName="name" name="appartName" id="appartName" >
+        </div>
+    
+        <div class="flex-input">
+            <div class="label-span">
+                <label for="ownerSelect">Propriétaire :</label>
+                @if(updateForm.submitted && appartmentForm.get("ownerId")?.hasError('required')){
+                    <span>Le champ ne peut pas être nul.</span>
+                }
+            </div>
+            <select id="ownerSelect" name="ownerSelect" #selectedOwner formControlName="ownerId" [value]="selectedOwner.id">
+                <option *ngFor="let owner of owners()" [value]="owner.id">{{getOwnerNameById(owner.id!)}} </option>
+            </select>
+        </div>
+    
+        <div class="flex-input">
+            <div class="label-span">
+                <label for="appartDescription">Description :</label>
+                @if(updateForm.submitted && appartmentForm.get("description")?.hasError('required')){
+                    <span>Le champ ne peut pas être nul.</span>
+                }
+            </div>
+            <input type="text" placeholder="ex : Longère avec jardin de 3000 m²" formControlName="description" name="appartDescription" id="appartDescription" >
+        </div>
+    
+        <div class="flex-input">
+            <div class="label-span">
+                <label for="appartAddress">Adresse :</label>
+                @if(updateForm.submitted && appartmentForm.get("address")?.hasError('required')){
+                    <span>Le champ ne peut pas être nul.</span>
+                }
+            </div>
+            <input type="text" placeholder="ex : 24 rue des Prairies" formControlName="address" name="appartAddress" id="appartAddress">
+        </div>
+    
+        <div class="flex-input">
+            <div class="label-span">
+                <label for="appartZipcode">Code postal :</label>
+                @if(updateForm.submitted && appartmentForm.get("zipcode")?.hasError('required')){
+                    <span>Le champ ne peut pas être nul.</span>
+                }
+            </div>
+            <input type="text" placeholder="ex : 45 000" formControlName="zipcode" name="appartZipcode" id="appartZipcode">
+            
+        </div>
+    
+        <div class="flex-input">
+            <div class="label-span">
+                <label for="appartCity">Ville :</label>
+                @if(updateForm.submitted && appartmentForm.get("city")?.hasError('required')){
+                    <span>Le champ ne peut pas être nul.</span>
+                }
+            </div>
+            <input type="text" placeholder="ex : Olivet" formControlName="city" name="appartCity" id="appartCity" >
+        </div>
+    
+        <div class="flex-input">
+            <div class="label-span">
+                <label for="appartMapUrl">Url google map :</label>
+                @if(updateForm.submitted && appartmentForm.get("googleMapUrl")?.hasError('required')){
+                    <span>Le champ ne peut pas être nul.</span>
+                }
+            </div>
+            <input type="text" placeholder="Allez chercher sur google map" formControlName="googleMapUrl" name="appartMapUrl" id="appartMapUrl" >
+        </div>
+    
+        <div class="flex-input">
+            <div class="label-span">
+                <label for="appartDistanceCityCenter">Distance du centre ville :</label>
+                @if(updateForm.submitted && appartmentForm.get("distanceCityCenter")?.hasError('required')){
+                    <span>Le champ ne peut pas être nul.</span>
+                }
+            </div>
+            <input type="text" placeholder="ex : 15 min à pied" formControlName="distanceCityCenter" name="appartDistanceCityCenter" id="appartDistanceCityCenter" >
+        </div>
+    
+        <div class="flex-input">
+            <div class="label-span">
+                <label for="appartDistanceTrain">Distance de la gare :</label>
+                @if(updateForm.submitted && appartmentForm.get("distanceTrain")?.hasError('required')){
+                    <span>Le champ ne peut pas être nul.</span>
+                }
+            </div>
+            <input type="text" placeholder="ex : 10 min en tram (3 km)" formControlName="distanceTrain" name="appartDistanceTrain" id="appartDistanceTrain" >
+        </div>
+    
+        <div class="flex-input">
+            <div class="label-span">
+                <label for="appartDistanceTram">Distance du tram :</label>
+                @if(updateForm.submitted && appartmentForm.get("distanceTram")?.hasError('required')){
+                    <span>Le champ ne peut pas être nul.</span>
+                }
+            </div>
+            <input type="text" placeholder="ex : 200 mètres" formControlName="distanceTram" name="appartDistanceTram" id="appartDistanceTram" >
+        </div>
+    
+        <div class="flex-input">
+            <div class="label-span">
+                <label for="appartNightPrice">Prix de la nuitée :</label>
+                @if(updateForm.submitted && appartmentForm.get("nightPrice")?.hasError('required')){
+                    <span>Le champ ne peut pas être nul.</span>
+                }
+            </div>
+            <input type="number" placeholder="ex : 50" formControlName="nightPrice" name="appartNightPrice" id="appartNightPrice"  min="0">
+        </div>
+    
+        <div class="flex-input">
+            <div class="label-span">
+                <label for="appartCaution">Prix de la caution :</label>
+                @if(updateForm.submitted && appartmentForm.get("caution")?.hasError('required')){
+                    <span>Le champ ne peut pas être nul.</span>
+                }
+            </div>
+            <input type="number" placeholder="ex : 300" formControlName="caution" name="appartCaution" id="appartCaution"  min="0">
+        </div>
+
+        <div class="flex-input">
+            <div class="label-span">
+                <label for="prixSup">Prix pour personnes supplémentaires (> 2) :</label>
+                @if(updateForm.submitted && appartmentForm.get("prixPersonneSupplementaire")?.hasError('required')){
+                    <span>Le champ ne peut pas être nul.</span>
+                }
+            </div>
+            <input type="number" placeholder="ex : 15" formControlName="prixPersonneSupplementaire" name="prixSup" id="prixSup"  min="0">
+        </div>
+    
+        <div class="flex-input">
+            <div class="label-span">
+                <label for="appartmenageCourtSejour">Ménage court séjour (&#8249; 3 jours) :</label>
+                @if(updateForm.submitted && appartmentForm.get("menageCourtSejour")?.hasError('required')){
+                    <span>Le champ ne peut pas être nul.</span>
+                }
+            </div>
+            <input type="number" placeholder="ex : 30" formControlName="menageCourtSejour" name="appartmenageCourtSejour" id="appartmenageCourtSejour"  min="0">
+        </div>
+    
+        <div class="flex-input">
+            <div class="label-span">
+                <label for="appartmenageLongSejour">Ménage long séjour (&#8250; 3 jours) :</label>
+                @if(updateForm.submitted && appartmentForm.get("menageLongSejour")?.hasError('required')){
+                    <span>Le champ ne peut pas être nul.</span>
+                }
+            </div>
+            <input type="number" placeholder="ex : 50" formControlName="menageLongSejour" name="appartmenageLongSejour" id="appartmenageLongSejour"  min="0">
+        </div>
+    
+        <div class="flex-input">
+            <div class="label-span">
+                <label for="appartmenageLongueDuree">Ménage longue durée (&#8250; 6 mois) :</label>
+                @if(updateForm.submitted && appartmentForm.get("menageLongueDuree")?.hasError('required')){
+                    <span>Le champ ne peut pas être nul.</span>
+                }
+            </div>
+            <input type="number" placeholder="ex : 90" formControlName="menageLongueDuree" name="appartmenageLongueDuree" id="appartmenageLongueDuree"  min="0">
+        </div>
+        
+        <div class="flex-input">
+            <div class="label-span">
+                <label for="discountSelect"> <p>Réductions : </p> <mat-icon class="icon-plus" (click)="setShowDiscountComponent()">add_circle_outline</mat-icon></label>
+                @if(updateForm.submitted && appartmentForm.get("discountId")?.hasError('required')){
+                    <span>Le champ ne peut pas être nul.</span>
+                }
+            </div>
+            <select id="discountSelect" name="discountSelect" #selectedDiscount formControlName="discountId" > 
+                <option *ngFor="let discount of discounts()"  [value]="discount.id">{{getInfoDiscountById(discount.id!)}} </option>
+            </select>
+        </div>
+    
+        <div class="flex-input">
+            <div class="label-span">
+                <label for="typeSelect">Type de location :</label>
+                @if(updateForm.submitted && appartmentForm.get("type")?.hasError('required')){
+                    <span>Le champ ne peut pas être nul.</span>
+                }
+            </div>
+            <select id="typeSelect" name="typeSelect" #selectedType formControlName="type" >
+                <option *ngFor="let type of appartmentTypes" >{{type}} </option>
+            </select>
+        </div>
+    
+        <div class="flex-input flex-check">
+            <label for="appartActive">Visible par les voyageurs :</label>
+            <mat-checkbox formControlName="active" class="check-active" ></mat-checkbox>
+        </div>
+    
+        <button type="submit">Sauvegarder</button>
+    
+    </form>
+}
+
+@if(showCreateDiscount) {
+    <app-create-discount
+    [discounts]="discounts()"
+    (closeEmitter)="setHideDiscountComponent()"
+    (discountEmitter)="createNewDiscount($event)"
+    ></app-create-discount>
+}

@@ -1,0 +1,86 @@
+@import "../../styles/mixins";
+
+article {
+    @include fieldset-style;
+    @include flex-column-center-center;
+    gap: 24px;
+    width: 900px;
+    max-width: 90vw;
+    padding: 16px;
+    background-color: var(--colorLightestTransparent);
+    flex-grow: 1;
+
+    p {
+    text-align: justify;
+    }
+
+    .container {
+        @include flex-row-around-center-wrap;
+        column-gap: 48px;
+        row-gap: 16px;
+        width: 100%;
+        background-color: var(--colorLightestTransparent);
+
+        .chat-header {
+            color: var(--colorDark)
+        }
+
+        .feedback {
+            @include fieldset-style;
+            background-color: var(--colorLight);
+            flex-grow: 1;
+            flex-shrink: 1;
+            max-width: 680px;
+        }
+
+        .answer {
+            @include fieldset-style;
+            background-color: var(--colorLightest);
+            flex-grow: 1;
+            flex-shrink: 1;
+            max-width: 680px;
+        }
+
+        textarea {
+            flex-grow: 1;
+            flex-shrink: 1;
+            border-radius: 16px;
+            padding: 8px;
+            border: 1px dotted var(--colorDark);
+        }
+
+        .button-brand {
+            @include button-colorBrand;
+        }
+
+        .button-red {
+            @include button-colorRed;
+        }
+
+        button {
+            width: 140px;
+        }
+
+        .button-container {
+            @include flex-column-center-center;
+            gap: 16px;
+        }
+
+    }
+}
+
+@media screen and (max-width: 700px) {
+    article {
+        .container {
+            @include flex-column-center-center;
+
+            .answer, .feedback, textarea {
+                width: 100%;
+            }
+
+            .button-container {
+                @include flex-row-around-center;
+            }
+        }
+    }
+}

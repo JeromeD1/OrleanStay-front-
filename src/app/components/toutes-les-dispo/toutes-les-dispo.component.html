@@ -1,0 +1,17 @@
+<main class="main-toutes-les-dispo">
+
+    <section class="dispo-container">
+        <img src="../../../../../../assets/icons/icon-close-window.png" (click)="closeToutesDispo()" alt="close" class="img-close">
+
+        <mat-calendar 
+        #releasedAtPicker
+        class="calendar"
+        [dateFilter]="filterBookedDates"
+        [selected]="selectedDate"
+        [dateClass]="dateClass">
+        </mat-calendar>
+
+    </section>
+
+
+</main>

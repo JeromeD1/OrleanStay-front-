@@ -3,27 +3,39 @@
         <h1>Connexion</h1>
         <div>
             <label>Login : </label>
-            <input type="text" placeholder="Votre email" #inputLogin="ngModel" [(ngModel)]="login" name="inputLogin" required>
+            <input type="text" placeholder="Votre email" #inputLogin="ngModel" [(ngModel)]="login" name="inputLogin" 
+            required (keypress.enter)="loginForm.valid && onSubmit()">
         </div>
 
         <ng-container *ngIf="inputLogin.errors && loginForm.submitted">
             <span *ngIf="inputLogin.errors?.['required']">Champ obligatoire</span>
         </ng-container>
 
-        <div>
-            <label>Mot de passe : </label>
-            <input type="password" placeholder="Votre mot de passe" #inputPassword="ngModel" [(ngModel)]="password" name="inputPassword" required>
-        </div>
-
-        <ng-container *ngIf="inputPassword.errors && loginForm.submitted">
-            <span *ngIf="inputPassword.errors?.['required']">Champ obligatoire</span>
+        <ng-container *ngIf="!isPasswordForgotten()">
+            <div>
+                <label>Mot de passe : </label>
+                <input type="password" placeholder="Votre mot de passe" #inputPassword="ngModel" [(ngModel)]="password" name="inputPassword" 
+                required (keypress.enter)="loginForm.valid && onSubmit()">
+            </div>
+    
+            <ng-container *ngIf="inputPassword.errors && loginForm.submitted">
+                <span *ngIf="inputPassword.errors?.['required']">Champ obligatoire</span>
+            </ng-container>
         </ng-container>
 
-        <span *ngIf="wrongUserMessage">{{wrongUserMessage}}</span>
+        <span *ngIf="wrongUserMessage() !== ''">{{wrongUserMessage()}}</span>
+
+        <div class="div-checkMDP">
+            <label for="isPasswordForgotten">Mot de passe oublié ?</label>
+            <mat-checkbox id="isPasswordForgotten" name="isPasswordForgotten" [ngModel]="isPasswordForgotten()" 
+            [checked]="isPasswordForgotten()" (change)="setForgottenPassword()"></mat-checkbox>
+        </div>
 
         <div class="div-button">
             <button type="button" (click)="closeLogin()" >Annuler</button>
-            <button type="submit">Se connecter</button>
+            <button type="submit">{{isPasswordForgotten() ? "Réinitialiser MDP" : "Se connecter"}}</button>
         </div>
+
+        <p class="noAccount" (click)="openSignup()">Pas encore de compte ?</p>
     </form>
 </main>

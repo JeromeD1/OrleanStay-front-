@@ -1,0 +1,47 @@
+<main>
+    <section class="retour">
+        <a [routerLink]="['/']" >
+        <p>Retourner à la page d'accueil</p>
+        <img [src]="imageRetour" alt="retour" >
+        </a>
+    </section>
+    <section class="modele" *ngIf="appartment && traveller">
+        <h1>Nouvelle demande de réservation</h1>
+        <br>
+        <p>Bonjour,</p>
+        <br>
+        <p>Je serais intéressé pour réserver un de vos appartements.</p>
+        <p>Voici le détail de ma demande :</p>
+        <br>
+
+        <h2>Infos de réservation</h2>
+        <p>Appartement : {{appartment.description}} </p>
+        <p>Date d'arrivée : {{arrivalDate}} </p>
+        <p>Date de départ : {{departureDate}} </p>
+        <p>Nombre d'adultes : {{reservation.nbAdult}} </p>
+        <p>Nombre d'enfants : {{reservation.nbChild}} </p>
+        <p>Nombre de bébés (- 2ans) : {{reservation.nbBaby}} </p>
+        <br>
+        <p>Nombre de nuits : {{numberNight}} </p>
+        <p>Prix de la réservation : {{travelPrice}} €</p>
+        <br>
+        <h2>Coordonnées du voyageur</h2>
+        <p>Nom : {{traveller.personalInformations.lastname}} </p>
+        <p>Prénom : {{traveller.personalInformations.firstname}} </p>
+        <p>Abresse : {{traveller.personalInformations.address}}, {{traveller.personalInformations.zipcode}} {{traveller.personalInformations.city}}, {{traveller.personalInformations.country}} </p>
+        <p>email : {{traveller.personalInformations.email}}</p>
+        <p>Téléphone : {{traveller.personalInformations.phone}}</p>
+        <br>
+        <br>
+        <p *ngIf="reservation.travellerMessage" class="messageTextarea">{{reservation.travellerMessage}}</p>
+        <div *ngIf="!reservation.travellerMessage">
+            <br>
+            <br>
+            <p>Dans l'attente de votre retour.</p>
+            <p>Cordialement,</p>
+            <p>{{traveller.personalInformations.firstname}} {{traveller.personalInformations.lastname}} </p>
+        </div>
+    </section>
+</main>
+
+
