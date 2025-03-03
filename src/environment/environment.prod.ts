@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
-    BACKEND_BASE_URL: ':8082/api',
+    BACKEND_BASE_URL: '/api',
     superAdmin: "desoucheslocation@gmail.com",
   
     /***** Cloudinary *****/
