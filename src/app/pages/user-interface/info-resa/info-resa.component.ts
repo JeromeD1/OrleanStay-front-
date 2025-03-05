@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, computed, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TravelInfo } from '../../../models/TravelInfo.model';
 import { TravelInfoOverviewComponent } from '../../../components/travel-info-overview/travel-info-overview.component';

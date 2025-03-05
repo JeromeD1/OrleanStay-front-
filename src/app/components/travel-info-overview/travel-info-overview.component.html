@@ -4,7 +4,7 @@
         @if(info.contentType === "TEXT") {
             <p>{{info.content}}</p>
         } @else {
-            <img [src]="info.content" alt="image">
+            <img [src]="info.content" alt="image" [style.max-width]="maxImageWidth()" >
         }
     }
 </section>

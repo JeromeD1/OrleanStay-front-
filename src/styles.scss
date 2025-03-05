@@ -23,6 +23,7 @@
 --colorLightestTransparent: #fafafa85;
 --colorRedText: rgb(150,0,0);
 --colorSuccess: rgb(0,175,0);
+--colorInfoText: rgb(50,75,230);
 }
 
 html, body { height: 100%; }
@@ -94,8 +95,9 @@ h2 {
     }
 
     input, select {
-        width: 300px;
-        max-width: 100%;
+        width: 100%;
+        max-width: 300px;
+        min-width: 150px;
         padding: 8px;
         border-radius: 8px;
         border: none;

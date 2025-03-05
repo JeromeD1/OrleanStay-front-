@@ -76,6 +76,10 @@ form {
     .div-image {
         width: 400px;
         max-width: 95%;
+
+        img {
+            max-width: 100%;
+        }
     }
 }
 
