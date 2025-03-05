@@ -8,8 +8,10 @@ main {
     z-index: 2;
     width: 100vw;
     height: 100vh;
+    min-height: 100vh;
     background-color: #fae7e181;
     backdrop-filter: blur(10px);
+    overflow: auto;
 
     .img-close {
         position: absolute;
@@ -24,39 +26,63 @@ main {
         }
     }
 
-    div {
-        @include flex-column-center-center;
-        gap: 8px;
-        margin: 0;
+    section {
+        width: 95vw;
+        height: 97%;
+        @include flex-column-around-center;
 
-        h2 {margin: 0;}
 
-      &.reduce {
-        transform: scale(0.85);
-      }
-
-        &.buttons {
-            @include flex-row-around-center;
-            width: 80vw;
-            gap: 24px;
-
-            button {
-                width: 200px;
-                max-width: 45%;
-                background-color: var(--colorBrand);
-                border: 3px outset var(--colorMid);
-                font-weight: bold;
-                padding: 8px;
-                border-radius: 16px;
-        
-                &:hover {
-                    cursor: pointer;
-                    filter: sepia();
+        div {
+            @include flex-column-center-center;
+            gap: 8px;
+            margin: 0;
+    
+            h2 {margin: 0;}
+    
+          &.reduce {
+            transform: scale(0.85);
+          }
+    
+            &.buttons {
+                @include flex-row-around-center;
+                width: 80vw;
+                gap: 24px;
+    
+                button {
+                    width: 200px;
+                    max-width: 45%;
+                    background-color: var(--colorBrand);
+                    border: 3px outset var(--colorMid);
+                    font-weight: bold;
+                    padding: 8px;
+                    border-radius: 16px;
+            
+                    &:hover {
+                        cursor: pointer;
+                        filter: sepia();
+                    }
+            
+                    &:active {
+                        border: 3px inset var(--colorMid);
+                    }
                 }
-        
-                &:active {
-                    border: 3px inset var(--colorMid);
-                }
+            }
+        }
+    }
+}
+
+@media screen and (max-height: 700px) {
+    main {
+        section {
+            div.reduce {
+                gap: 0;
+                // transform: scale(0.8);
+                transform-origin: top;
+                margin-bottom: -16px;
+            }
+
+            div.buttons {
+                margin-top: -16px;
             }
         }
     }
