@@ -19,3 +19,15 @@ main {
         }
     }
 }
+
+@media screen and (max-width: 400px) {
+    main {
+        .paginator-container {    
+            .resa-container {
+                .reservation-card-container {
+                    max-width: 95%;
+                }
+            }
+        }
+    }
+}
