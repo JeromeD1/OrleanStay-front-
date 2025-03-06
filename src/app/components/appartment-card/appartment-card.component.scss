@@ -8,11 +8,28 @@
     height: auto;
     background-color: var(--colorLight);
     border-radius: 50px;
-    // box-shadow: 1px 1px 0 2px var(--colorMid);
+    box-sizing: border-box;
     padding: 16px;
 
-    h1 {
-        text-align: center;
+    .title-container {
+        background-color: var(--colorLightest);
+        margin-left: 1px;
+        margin-top: -15px;
+        width: calc(100% + 30px);
+        padding: 16px 24px;
+        box-sizing: border-box;
+        border-top-right-radius: 50px;
+        border-top-left-radius: 50px;
+        margin-bottom: 16px;
+        // border-bottom: 2px solid var(--colorMid);
+        box-shadow: 0 4px 60px -15px var(--colorDark);
+
+        h1 {
+            text-align: center;
+            color: var(--colorDark);
+            text-shadow: 2px 2px 1px var(--colorDarkest);
+            margin: 0;
+        }
     }
 
 
@@ -29,6 +46,7 @@
             max-height: 100%;
             object-fit: contain;
             border-radius: 32px;
+            border: 2px solid var(--colorDark);
         }
 
 
@@ -86,6 +104,14 @@
         @include flex-row-around-center;
         width: 90%;
         margin-top: 32px;
+        background-color: var(--colorLightest);
+        margin-left: 1px;
+        margin-bottom: -15px;
+        width: calc(100% + 30px);
+        padding: 16px;
+        border-bottom-right-radius: 50px;
+        border-bottom-left-radius: 50px;
+        box-shadow: 0 -4px 60px -15px var(--colorDark);
     
         button {
             width: 200px;
@@ -97,7 +123,30 @@
 
 
 @media screen and (max-width:600px) {
-    .main-appartment-card {   
+    .main-appartment-card {  
+        .title-container {
+            background-color: var(--colorLightest);
+            margin-left: 1px;
+            margin-top: -15px;
+            width: calc(100% + 30px);
+            padding: 8px;
+    
+            h1 {
+                text-shadow: 1px 1px 1px var(--colorDarkest);
+            }
+        }
+
+        .caroussel {
+            width: 100%;
+
+            .fleche-caroussel {
+                position: absolute;
+                top: calc(50% - 12px);
+                width: 25px;
+                height: 25px;
+            }
+        }
+        
         .infoResa-container {
             width: 90%;
             @include flex-column-start-start;
@@ -114,7 +163,21 @@
         }
     
         .otherInfo-container{
+            @include flex-row-center-center;
+            gap: 16px;
             margin-top: 16px;
+            background-color: var(--colorLightest);
+            margin-left: 1px;
+            margin-bottom: -15px;
+            width: calc(100% + 30px);
+            padding: 8px;
+            border-bottom-right-radius: 50px;
+            border-bottom-left-radius: 50px;
+            box-shadow: 0 -4px 60px -15px var(--colorDark);
+
+            button {
+                max-width: 120px;
+            }
         }
     }
 }
