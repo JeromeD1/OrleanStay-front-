@@ -136,10 +136,8 @@ export class AdminNavbarComponent implements AfterViewInit, OnDestroy{
       },
       error: (error) => {
         console.error(error)
-        this.notificationService.error(error)
       }
     }
-    
     )
   }
 

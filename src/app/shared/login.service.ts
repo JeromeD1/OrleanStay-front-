@@ -52,7 +52,6 @@ export class LoginService {
         this.appstore.resetTraveller();
         this.appstore.setCurrentUser(null)
         localStorage.setItem("currentUser", JSON.stringify(null))
-        console.log("test");
         
         this.router.navigate(["/"])
       })

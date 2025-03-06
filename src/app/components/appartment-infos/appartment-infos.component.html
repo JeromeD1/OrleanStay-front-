@@ -1,0 +1,26 @@
+
+<form [formGroup]="formInfos" >
+    <ng-container formArrayName="infos">
+        <ng-container *ngFor="let infoGroup of infoArray.controls; let i = index">
+            <ng-container [formGroupName]="i" >
+                    <div class="div-text">
+                        <input type="text" formControlName="info" placeholder="Ecrivez votre texte ici..." (blur)="updateAppartmentInfos()">
+                        <div class="actions">
+                            <select name="position" #position formControlName="positionOrder" (change)="updateAllPositionOrder(infoGroup.getRawValue())">
+                                <option *ngFor="let position of positionOrderOptions" [ngValue]="position" >{{position}} </option>
+                            </select>
+        
+                            <button type="button" (click)="deleteInfo(infoGroup.getRawValue())"><img src="../../../../../../assets/icons/icons-supprimer.png" alt="Supprimer"></button>
+                        </div>
+                    </div>
+            </ng-container>
+        </ng-container>
+    </ng-container>
+</form>
+
+<section class="form-buttons-container">
+    <div>
+        <button type="button" (click)="addNewInfoInForm()">Ajouter une information</button>
+    </div>
+</section>
+
