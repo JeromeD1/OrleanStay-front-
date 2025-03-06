@@ -1,5 +1,5 @@
 export interface Info {
-    id: number;
+    id?: number;
     appartmentId: number;
     positionOrder: number;
     info: string;

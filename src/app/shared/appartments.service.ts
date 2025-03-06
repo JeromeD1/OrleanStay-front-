@@ -68,9 +68,7 @@ export class AppartmentsService {
 
   }
 
-  getActiveAppartments():Observable<Appartment[]> {    
-    console.log("environment.BACKEND_BASE_URL", environment.BACKEND_BASE_URL);
-    
+  getActiveAppartments():Observable<Appartment[]> {     
     return this.http.get<Appartment[]>(environment.BACKEND_BASE_URL + '/appartment/active').pipe(
       map((appartments) => appartments.map(appartment => {
 

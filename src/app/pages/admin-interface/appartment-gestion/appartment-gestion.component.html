@@ -59,6 +59,19 @@
 
             <mat-expansion-panel>
                 <mat-expansion-panel-header>
+                    <mat-panel-title> Gestion des informations sur l'appartement </mat-panel-title>
+                </mat-expansion-panel-header>
+                <section>
+                    <app-appartment-infos
+                    [appartmentId]="selectedAppartment().id"
+                    [initialInfos]="selectedAppartment().infos"
+                    (updateEmitter)="updateSelectedAppartmentWhileChangingPhotoOrder($event)"
+                    ></app-appartment-infos>
+                </section>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
                     <mat-panel-title> Gestion des photos </mat-panel-title>
                 </mat-expansion-panel-header>
                 <section>
