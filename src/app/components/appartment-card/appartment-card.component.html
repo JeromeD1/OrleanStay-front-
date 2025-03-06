@@ -1,5 +1,7 @@
 <main class="main-appartment-card">
-    <h1>{{appartment.description}} </h1>
+    <div class="title-container">
+        <h1>{{appartment.description.toUpperCase()}} </h1>
+    </div>
 
     @if(appartment.photos.length > 0) {
         <section class="caroussel" #caroussel>
@@ -21,9 +23,9 @@
 
     <section class="infoResa-container">
         <div class="div-info">
-            <p>{{appartment.distanceCityCenter}} </p>
-            <p>{{appartment.distanceTrain}} </p>
-            <p>{{appartment.distanceTram}} </p>
+            <p><b>Centre ville : </b>{{appartment.distanceCityCenter}} </p>
+            <p><b>Gare : </b>{{appartment.distanceTrain}} </p>
+            <p><b>Tram : </b>{{appartment.distanceTram}} </p>
             <p>{{nightPrice}} €/nuit ({{(userReservation.nbAdult > 0) ? (userReservation.nbAdult + userReservation.nbChild) + " pers." : "2 pers."}}) </p>
 
         </div>
