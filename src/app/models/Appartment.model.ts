@@ -51,9 +51,7 @@ export class Appartment {
         if(numberOfTravellers > 2) {
             updateNightPrice = this.nightPrice + this.prixPersonneSupplementaire * (numberOfTravellers - 2);
         }
-    
-        console.log("this.nightPrice", this.nightPrice, "nbAdult", nbAdult, "nbChild", nbChild, "numberOfTravellers", numberOfTravellers, "updateNightPrice", updateNightPrice);
-        
+
         if(numberOfDays < 3) {
             cleaningPrice = this.menageCourtSejour;
         } else if(numberOfDays < 190) {

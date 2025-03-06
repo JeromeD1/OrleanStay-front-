@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, WritableSignal, computed, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, WritableSignal, computed, effect, signal } from '@angular/core';
 import { User } from '../../../models/User.model';
 import { AppstoreService } from '../../../shared/appstore.service';
 import { AppartmentsService } from '../../../shared/appartments.service';
@@ -21,11 +21,12 @@ import { ModalChangeAppartmentComponent } from '../../../components/modal-change
 import { CreateAppartmentComponent } from '../../../components/create-appartment/create-appartment.component';
 import { UpdateAppartmentPhotosComponent } from '../../../components/update-appartment-photos/update-appartment-photos.component';
 import { Router, RouterModule } from '@angular/router';
+import { AppartmentInfosComponent } from '../../../components/appartment-infos/appartment-infos.component';
 
 @Component({
   selector: 'app-appartment-gestion',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatSelectModule, MatOptionModule, MatFormFieldModule, UpdateAppartmentComponent, ModalChangeAppartmentComponent, CreateAppartmentComponent, UpdateAppartmentPhotosComponent, MatExpansionModule],
+  imports: [CommonModule, ReactiveFormsModule, MatSelectModule, MatOptionModule, MatFormFieldModule, UpdateAppartmentComponent, ModalChangeAppartmentComponent, CreateAppartmentComponent, UpdateAppartmentPhotosComponent, AppartmentInfosComponent, MatExpansionModule],
   templateUrl: './appartment-gestion.component.html',
   styleUrl: './appartment-gestion.component.scss'
 })
@@ -77,7 +78,7 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
       this.discountService.getDiscounts().pipe(takeUntil(this.destroy$)).subscribe(
         {
           next:() => this.isDiscountsLoaded.set(true),
-          error: (error) => this.notificationService.error(error)
+          error: () => this.notificationService.error("Les jeux de réduction n'ont pas pu être récupérés.")
         })
     } else {
       this.isDiscountsLoaded.set(true)
@@ -116,7 +117,7 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
               this.selectedAppartment.set(this.allAppartments()[0])
               this.isAllAppartmentsLoaded.set(true)
             },
-            error: (error) => this.notificationService.error(error)
+            error: () => this.notificationService.error("Une erreur est survenue lors de la récupération des appartements.")
           }
         )
       } else if (this.currentUser()?.role === "OWNER") {
@@ -126,7 +127,7 @@ export class AppartmentGestionComponent implements OnInit, OnDestroy {
               this.selectedAppartment.set(this.allAppartments()[0])
               this.isAllAppartmentsLoaded.set(true)
             },
-            error: (error) => this.notificationService.error(error)
+            error: () => this.notificationService.error("Une erreur est survenue lors de la récupération des appartements.")
           }
         )
       }

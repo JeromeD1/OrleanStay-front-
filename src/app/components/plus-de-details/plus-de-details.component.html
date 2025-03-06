@@ -14,9 +14,9 @@
                 <p>Caution : {{appartment().caution}}€ par chèque (non encaissé) ou liquide</p>
                 <br>
                 <h2>Localisation</h2>
-                <p>{{appartment().distanceCityCenter}}</p>
-                <p>{{appartment().distanceTram}}</p>
-                <p>{{appartment().distanceTrain}} </p>
+                <p>Distance centre ville : {{appartment().distanceCityCenter}}</p>
+                <p>Distance tramway : {{appartment().distanceTram}}</p>
+                <p>Distance gare : {{appartment().distanceTrain}} </p>
                 <br>
                 <h2>Autres</h2>
                 <p *ngFor="let info of infos()" >{{info.info}} </p>

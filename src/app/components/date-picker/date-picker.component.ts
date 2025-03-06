@@ -132,13 +132,8 @@ setMaxCheckinDate(): void {
 
 
 setMinCheckoutDate(): void {
-  console.log("this.importedCheckinDate", this.importedCheckinDate);
-  
-  if(this.importedCheckinDate) {
-    console.log("test");
-    
+  if(this.importedCheckinDate) {    
     this._minCheckoutDate = new Date(this.importedCheckinDate); // On crée une nouvelle instance de Date pour éviter 
-    console.log(this._minCheckoutDate);
     
     //la mutation de l'objet original c'est pour que _minCheckinDate et minCheckoutDate ne fassent pas référence à la même 
     //instance de Date

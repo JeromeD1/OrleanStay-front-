@@ -9,6 +9,7 @@ import { Owner } from '../models/Owner.model'
 import { Photo } from '../models/Photo.model'
 import { SomeFunctionsService } from './some-functions.service'
 import { Feedback } from '../models/Feedback.model'
+import { Info } from '../models/Info.model'
 
 @Injectable({
   providedIn: 'root'
@@ -178,9 +179,6 @@ export class AppstoreService {
         return Appartment.createFromOtherAppartment(appartment)
       })
     )
-
-    console.log("this._allAppartments()",this._allAppartments(), "this._activeAppartments()", this._activeAppartments());
-    
   }
 
   updateAppartment(appartment: Appartment): void {
@@ -270,42 +268,42 @@ export class AppstoreService {
     });
   });
 
-  this._allAppartments.update(allAppartments => {
-    return allAppartments.map(appartment => {
-      if (appartment.id === photos[0].appartmentId) {
-       // Création d'un nouvel objet Appartment avec les photos mises à jour
-        const updatedAppartment = new Appartment(
-          appartment.id,
-          appartment.ownerId,
-          appartment.discounts,
-          appartment.name,
-          appartment.description,
-          appartment.address,
-          appartment.zipcode,
-          appartment.city,
-          appartment.distanceCityCenter,
-          appartment.distanceTrain,
-          appartment.distanceTram,
-          appartment.googleMapUrl,
-          appartment.nightPrice,
-          appartment.caution,
-          appartment.prixPersonneSupplementaire,
-          appartment.menageCourtSejour,
-          appartment.menageLongSejour,
-          appartment.menageLongueDuree,
-          appartment.type,
-          appartment.active,
-          appartment.infos,
-          photos,  
-          appartment.reservations,
-          appartment.comments
-        );
+    this._allAppartments.update(allAppartments => {
+      return allAppartments.map(appartment => {
+        if (appartment.id === photos[0].appartmentId) {
+        // Création d'un nouvel objet Appartment avec les photos mises à jour
+          const updatedAppartment = new Appartment(
+            appartment.id,
+            appartment.ownerId,
+            appartment.discounts,
+            appartment.name,
+            appartment.description,
+            appartment.address,
+            appartment.zipcode,
+            appartment.city,
+            appartment.distanceCityCenter,
+            appartment.distanceTrain,
+            appartment.distanceTram,
+            appartment.googleMapUrl,
+            appartment.nightPrice,
+            appartment.caution,
+            appartment.prixPersonneSupplementaire,
+            appartment.menageCourtSejour,
+            appartment.menageLongSejour,
+            appartment.menageLongueDuree,
+            appartment.type,
+            appartment.active,
+            appartment.infos,
+            photos,  
+            appartment.reservations,
+            appartment.comments
+          );
 
-        return updatedAppartment;
-      }
-      return appartment;
+          return updatedAppartment;
+        }
+        return appartment;
+      });
     });
-  });
     
   }
 
@@ -436,6 +434,89 @@ export class AppstoreService {
       item.id === this._currentUsedAppartment()!.id ? this._currentUsedAppartment()! : item 
     )))
   }
+
+
+  /*********************** */
+  updateInfosInAppartment(infos: Info[], appartmentId: number) {
+    this._activeAppartments.update(allAppartments => {
+      return allAppartments.map(appartment => {
+        if (appartment.id == appartmentId) {
+          // Création d'un nouvel objet Appartment avec les photos mises à jour
+          const updatedAppartment = new Appartment(
+            appartment.id,
+            appartment.ownerId,
+            appartment.discounts,
+            appartment.name,
+            appartment.description,
+            appartment.address,
+            appartment.zipcode,
+            appartment.city,
+            appartment.distanceCityCenter,
+            appartment.distanceTrain,
+            appartment.distanceTram,
+            appartment.googleMapUrl,
+            appartment.nightPrice,
+            appartment.caution,
+            appartment.prixPersonneSupplementaire,
+            appartment.menageCourtSejour,
+            appartment.menageLongSejour,
+            appartment.menageLongueDuree,
+            appartment.type,
+            appartment.active,
+            infos,
+            appartment.photos,  
+            appartment.reservations,
+            appartment.comments
+          );
+  
+          return updatedAppartment;
+        }
+        return appartment;
+      });
+    });
+  
+      this._allAppartments.update(allAppartments => {
+        return allAppartments.map(appartment => {
+          if (appartment.id == appartmentId) {
+          // Création d'un nouvel objet Appartment avec les photos mises à jour
+            const updatedAppartment = new Appartment(
+              appartment.id,
+              appartment.ownerId,
+              appartment.discounts,
+              appartment.name,
+              appartment.description,
+              appartment.address,
+              appartment.zipcode,
+              appartment.city,
+              appartment.distanceCityCenter,
+              appartment.distanceTrain,
+              appartment.distanceTram,
+              appartment.googleMapUrl,
+              appartment.nightPrice,
+              appartment.caution,
+              appartment.prixPersonneSupplementaire,
+              appartment.menageCourtSejour,
+              appartment.menageLongSejour,
+              appartment.menageLongueDuree,
+              appartment.type,
+              appartment.active,
+              infos,
+              appartment.photos,  
+              appartment.reservations,
+              appartment.comments
+            );
+  
+            return updatedAppartment;
+          }
+          return appartment;
+        });
+      });
+      
+    }
+
+
+  /************************** */
+
 
   /********Functions related to currentUser *************/
   getCurrentUser(): WritableSignal<User | null> {
